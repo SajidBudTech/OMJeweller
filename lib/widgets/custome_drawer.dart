@@ -52,7 +52,7 @@ class AppDrawer extends StatelessWidget {
                     //arguments: category,
                   );
                 }),
-                _createDrawerItem(context: context,position: 3,text: "Refer a Friend"),
+                //_createDrawerItem(context: context,position: 3,text: "Refer a Friend"),
                 _createDrawerItem(context: context,position: 4,text: "Feedback & Suggestions",onTap: (){
                   Navigator.pop(context);
                   Navigator.pushNamed(
@@ -69,7 +69,9 @@ class AppDrawer extends StatelessWidget {
                     //arguments: category,
                   );
                 }),
-                _createDrawerItem(context: context,position: 6,text: "Review on Google"),
+                _createDrawerItem(context: context,position: 6,text: "Review on Google",onTap: (){
+
+                }),
                  UiSpacer.verticalSpace(space: 40),
             ListTile(
               contentPadding: EdgeInsets.zero,

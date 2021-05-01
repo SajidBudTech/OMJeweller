@@ -11,6 +11,8 @@ import 'package:flutter_om_jeweller/widgets/appbars/empty_appbar.dart';
 import 'package:flutter_om_jeweller/widgets/custom_bottom_navigation_appbar.dart';
 import 'package:flutter_om_jeweller/widgets/custome_drawer.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_om_jeweller/constants/string/app.string.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -142,16 +144,10 @@ class _HomePageState extends State<HomePage> {
                 );
                 break;
               case 2:
-               /* Navigator.pushNamed(
-                  context,
-                  AppRoutes.wishListPage,
-                );*/
+                _launchCaller();
                 break;
               case 3:
-              /*  Navigator.pushNamed(
-                  context,
-                  AppRoutes.wishListPage,
-                );*/
+                _launchWhatsapp();
                 break;
               case 4:
                 Navigator.pushNamed(
@@ -163,4 +159,25 @@ class _HomePageState extends State<HomePage> {
          },
       );
   }
+
+
+  _launchWhatsapp() async {
+    const url = "https://wa.me/"+AppStrings.defaultAdminNumber+"?text=Welcome to All Ayurvedic, How can we assist you?";
+    var encoded = Uri.encodeFull(url);
+    if (await canLaunch(encoded)) {
+      await launch(encoded);
+    } else {
+      throw 'Could not launch $encoded';
+    }
+  }
+
+  _launchCaller() async {
+    const url = "tel:"+AppStrings.defaultAdminNumber;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 }

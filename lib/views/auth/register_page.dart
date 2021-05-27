@@ -17,17 +17,20 @@ import 'package:flutter_om_jeweller/widgets/appbars/empty_appbar.dart';
 import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
 import 'package:flutter_om_jeweller/widgets/inputs/custom_text_form_field.dart';
 import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
+import 'package:flutter_om_jeweller/bloc/register.bloc.dart';
+import 'package:flutter_om_jeweller/data/models/user_data.dart';
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({Key key}) : super(key: key);
+  RegisterPage({Key key,this.user}) : super(key: key);
 
+  User user;
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
   //login bloc
-  LoginBloc _loginBloc = LoginBloc();
+  RegisterBloc _registerBloc = RegisterBloc();
   //email focus node
   final emailFocusNode = new FocusNode();
   //password focus node
@@ -38,36 +41,31 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
 
     //listen to the need to show a dialog alert or a normal snackbar alert type
-    _loginBloc.showAlert.listen((show) {
+    _registerBloc.showAlert.listen((show) {
       //when asked to show an alert
       if (show) {
         EdgeAlert.show(
           context,
-          title: _loginBloc.dialogData.title,
-          description: _loginBloc.dialogData.body,
-          backgroundColor: _loginBloc.dialogData.backgroundColor,
-          icon: _loginBloc.dialogData.iconData,
+          title: _registerBloc.dialogData.title,
+          description: _registerBloc.dialogData.body,
+          backgroundColor: _registerBloc.dialogData.backgroundColor,
+          icon: _registerBloc.dialogData.iconData,
         );
       }
     });
 
     //listen to state of the ui
-    _loginBloc.uiState.listen((uiState) async {
+    _registerBloc.uiState.listen((uiState) async {
       if (uiState == UiState.redirect) {
         // await Navigator.popUntil(context, (route) => false);
-        Navigator.pushNamed(context, AppRoutes.homeRoute);
-        // Navigator.pushNamedAndRemoveUntil(
-        //   context,
-        //   AppRoutes.homeRoute,
-        //   (route) => false,
-        // );
+        Navigator.pushNamed(context, AppRoutes.verifyOTPRoute,arguments: _registerBloc.user);
       }
     });
   }
 
   @override
   void dispose() {
-    _loginBloc.dispose();
+    _registerBloc.dispose();
     super.dispose();
   }
 
@@ -121,28 +119,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               textAlign: TextAlign.start,
                               textDirection: AppTextDirection.defaultDirection,
                             ),
-                           /* UiSpacer.verticalSpace(space: 50),
-                            StreamBuilder<bool>(
-                              stream: _loginBloc.validMobileNumber,
-                              builder: (context, snapshot) {
-                                return CustomTextFormField(
-                                  left: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  top: 0,
-                                  hintText: AuthStrings.registerPhone,
-                                  labelText: AuthStrings.registerPhone,
-                                  keyboardType: TextInputType.phone,
-                                  textInputAction: TextInputAction.next,
-                                  textEditingController: _loginBloc.mobileNumberTEC,
-                                  errorText: snapshot.error,
-                                  onChanged: _loginBloc.validateMobileNumber,
-                                );
-                              },
-                            ),*/
                             UiSpacer.verticalSpace(space: 50),
                             StreamBuilder<bool>(
-                              stream: _loginBloc.validMobileNumber,
+                              stream: _registerBloc.validName,
                               builder: (context, snapshot) {
                                 return CustomTextFormField(
                                   left: 0,
@@ -153,17 +132,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                   hintTextStyle: AppTextStyle.h4TitleTextStyle(fontWeight: FontWeight.w300),
                                   hintText: AuthStrings.registerName,
                                   labelText: AuthStrings.registerName,
-                                  keyboardType: TextInputType.phone,
+                                  keyboardType: TextInputType.name,
                                   textInputAction: TextInputAction.next,
-                                  textEditingController: _loginBloc.mobileNumberTEC,
+                                  textEditingController: _registerBloc.nameTEC,
                                   errorText: snapshot.error,
-                                  onChanged: _loginBloc.validateMobileNumber,
+                                  //onChanged: _registerBloc.validLastName,
                                 );
                               },
                             ),
                             UiSpacer.verticalSpace(space: 50),
                             StreamBuilder<bool>(
-                              stream: _loginBloc.validMobileNumber,
+                              stream: _registerBloc.validEmailAddress,
                               builder: (context, snapshot) {
                                 return CustomTextFormField(
                                   left: 0,
@@ -172,11 +151,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                   top: 0,
                                   hintText: AuthStrings.registerEmail,
                                   labelText: AuthStrings.registerEmail,
-                                  keyboardType: TextInputType.phone,
+                                  keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
-                                  textEditingController: _loginBloc.mobileNumberTEC,
+                                  textEditingController: _registerBloc.emailAddressTEC,
                                   errorText: snapshot.error,
-                                  onChanged: _loginBloc.validateMobileNumber,
+                                  onChanged: _registerBloc.validateEmailAddress,
                                 );
                               },
                             ),
@@ -184,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             //login button
                             //listen to the uistate to know the appropriated state to put the login button
                             StreamBuilder<UiState>(
-                              stream: _loginBloc.uiState,
+                              stream: _registerBloc.uiState,
                               builder: (context, snapshot) {
                                 final uiState = snapshot.data;
 
@@ -192,10 +171,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                   padding: AppPaddings.mediumButtonPadding(),
                                   color: AppColor.accentColor,
                                   onPressed: uiState != UiState.loading
-                                      ?  (){Navigator.pushNamed(
-                                    context,
-                                    AppRoutes.homeRoute,
-                                  );}
+                                      ?  (){
+
+                                    /*Navigator.pushNamed(
+                                           context,
+                                          AppRoutes.homeRoute,
+                                       );*/
+                                    _registerBloc.processSendOTP(mobile: widget.user.cutomerMobile);
+                                  }
                                       : null,
                                   child: uiState != UiState.loading
                                       ? Text(

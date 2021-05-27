@@ -3,6 +3,7 @@ import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
+import 'package:flutter_om_jeweller/data/models/avaialable_slot.dart';
 
 class AvailableSlotListViewItem extends StatefulWidget {
   const AvailableSlotListViewItem({
@@ -14,7 +15,7 @@ class AvailableSlotListViewItem extends StatefulWidget {
   }) : super(key: key);
 
   // final NotificationModel notification;
-  final String notification;
+  final AvailableSlot notification;
   final Function onPressed;
   final SELECTED_POSITION;
   final current_index;
@@ -34,13 +35,14 @@ class _AvailableSlotListViewItemState extends State<AvailableSlotListViewItem> {
        // margin: EdgeInsets.only(left: 8,right: 8),
         //padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
         decoration: BoxDecoration(
-            border: Border.all(color: widget.SELECTED_POSITION==widget.current_index?AppColor.accentColor:AppColor.hintTextColor(context)),
+            border: Border.all(color: widget.notification.active?Color(0xFFD4D4D4):(widget.SELECTED_POSITION==widget.current_index?AppColor.accentColor:AppColor.hintTextColor(context))),
             borderRadius: BorderRadius.circular(8)
         ),
         child:Text(
-          widget.notification,
+          widget.notification.slot,
           style: AppTextStyle.h4TitleTextStyle(
-              color: widget.SELECTED_POSITION==widget.current_index?AppColor.accentColor:AppColor.textColor(context),
+
+              color: widget.notification.active?Color(0xFFD4D4D4):(widget.SELECTED_POSITION==widget.current_index?AppColor.accentColor:AppColor.textColor(context)),
               fontWeight: FontWeight.w400
           ),
           textAlign: TextAlign.start,

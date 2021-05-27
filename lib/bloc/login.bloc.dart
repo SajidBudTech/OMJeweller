@@ -10,10 +10,13 @@ import 'package:flutter_om_jeweller/utils/validators.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
+import 'package:flutter_om_jeweller/data/repositories/auth.repository.dart';
+import 'package:flutter_om_jeweller/constants/app_routes.dart';
+import 'package:flutter_om_jeweller/data/models/user_data.dart';
 
 class LoginBloc extends BaseBloc {
   //Auth repository
- // AuthRepository _authRepository = new AuthRepository();
+  AuthRepository _authRepository = new AuthRepository();
 
   //text editing controller
   TextEditingController mobileNumberTEC = new TextEditingController();
@@ -28,6 +31,11 @@ class LoginBloc extends BaseBloc {
   Stream<bool> get validPasswordAddress => _passwordValid.stream;
 
 
+  bool loginButtonStatus=false;
+
+  bool OTP_OR_REGISTER=false;
+
+  User user;
   @override
   void initBloc() {
     super.initBloc();
@@ -40,17 +48,16 @@ class LoginBloc extends BaseBloc {
   }
 
   //process login when user tap on the login button
-  void processLogin() async {
-    final email = mobileNumberTEC.text;
-    final password = passwordTEC.text;
+  void processOTP({BuildContext context}) async {
+    final mobile = mobileNumberTEC.text;
+    //final password = passwordTEC.text;
 
     //check if the user entered email & password are valid
-    if (validateEmailAddress(email) && validatePassword(password)) {
+    if (validateMobileNumber(mobile)) {
       //update ui state
       setUiState(UiState.loading);
-     /* final resultDialogData = await _authRepository.login(
-        email: email,
-        password: password,
+      final resultDialogData = await _authRepository.loginOTP(
+         mobile: mobile
       );
 
       //update ui state after operation
@@ -58,6 +65,18 @@ class LoginBloc extends BaseBloc {
 
       //checking if operation was successful before either showing an error or redirect to home page
       if (resultDialogData.dialogType == DialogType.success) {
+       // setUiState(UiState.redirect);
+        user=User();
+        user.cutomerMobile=mobile;
+        if(resultDialogData.title!="go to registration"){
+          OTP_OR_REGISTER=true;
+          user.otp=int.parse(resultDialogData.title);
+          user.loginRegister=true;
+        }else{
+          OTP_OR_REGISTER=false;
+          user.loginRegister=false;
+        }
+       // goToVerifyOTP(context);
         setUiState(UiState.redirect);
       } else {
         //prepare the data model to be used to show the alert on the view
@@ -67,7 +86,7 @@ class LoginBloc extends BaseBloc {
         dialogData.iconData = FlutterIcons.error_mdi;
         //notify listners to show show alert
         setShowAlert(true);
-      }*/
+      }
     }
   }
 
@@ -98,16 +117,29 @@ class LoginBloc extends BaseBloc {
     //validating if password, contains at least one uppercase and length is of 6 minimum charater
     if (!(mobileNumberTEC.text.length==10)) {
       _mobileValid.addError(AuthStrings.invalidPhoneMessage);
+      loginButtonStatus=false;
       return false;
     } else {
       _mobileValid.add(true);
+      loginButtonStatus=true;
       return true;
     }
   }
 
-  void goToVerifyOTP() {
+  void goToVerifyOTP(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      AppRoutes.verifyOTPRoute,
+      arguments: user
+    );
+  }
 
-
+  void goToRegister(BuildContext context) {
+    Navigator.pushNamed(
+        context,
+        AppRoutes.registerRoute,
+        arguments: user
+    );
   }
 
 

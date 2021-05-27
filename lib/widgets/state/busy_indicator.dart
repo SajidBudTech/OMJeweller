@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_om_jeweller/constants/app_color.dart';
 
 class BusyIndicator extends StatelessWidget {
   const BusyIndicator({Key key}) : super(key: key);
@@ -11,6 +12,7 @@ class BusyIndicator extends StatelessWidget {
         height: 20,
         child: CircularProgressIndicator(
           strokeWidth: 2,
+          backgroundColor: AppColor.disableColor,
         ),
       ),
     );

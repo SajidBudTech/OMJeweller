@@ -11,18 +11,23 @@ import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/constants/string/app.string.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
-import 'package:flutter_om_jeweller/data/models/wishlist_data.dart';
-import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VisitStoreListViewItem extends StatefulWidget {
   VisitStoreListViewItem({
     Key key,
-    @required this.vendor,
+    @required this.address,
+    @required this.location,
+    @required this.phone,
   }) : super(key: key);
 
-  final String vendor;
+  final String address;
+  final String location;
+  final String phone;
+
   @override
   _VisitStoreListViewItemState createState() => _VisitStoreListViewItemState();
 }
@@ -35,6 +40,10 @@ class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
     _controller.complete(controller);
   }
 
+  String address;
+  bool isLocationAvailable = false;
+  Location location = new Location();
+  LocationData currentLocationData;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +86,7 @@ class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
                    Container(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            "OM JEWELLERS, BORIVALI",
+                            widget.location,
                             style: AppTextStyle.h4TitleTextStyle(
                               fontWeight: FontWeight.w500,
                               color: AppColor.textColor(context),
@@ -91,7 +100,8 @@ class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
                           child:
                           InkWell(
                             onTap: (){
-
+                              address=widget.address;
+                              getLocationPermissionStatus();
                             },
                             child:SvgPicture.asset("assets/images/map_direction.svg")
                           )
@@ -101,7 +111,7 @@ class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
 
               //product types and minimum order amount
              Text(
-                "Ground Floor, Shangrila Apartments, LT Road,Near Borivali Station, Borivali West, Mumbai,Maharashtra 400092",
+                 widget.address,
                 style: AppTextStyle.h5TitleTextStyle(
                   color: AppColor.hintTextColor(context),
                   fontWeight: FontWeight.w400
@@ -123,7 +133,7 @@ class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
                     //overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    "02261587000",
+                    widget.phone,
                     style: AppTextStyle.h5TitleTextStyle(
                         color: AppColor.textColor(context),
                         fontWeight: FontWeight.w500
@@ -144,5 +154,54 @@ class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
       ]),
     );
     // );
+  }
+
+
+  void launchMap() async {
+    currentLocationData = await location.getLocation();
+    String url = 'https://www.google.com/maps/dir/?api=1&origin' +
+        currentLocationData.latitude.toString() +
+        "," +
+        currentLocationData.longitude.toString() +
+        '=&destination={$address}&travelmode=driving&dir_action=navigate';
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
+  }
+
+  void getLocationPermissionStatus() async {
+    PermissionStatus _permissionGranted;
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.granted) {
+      isLocationAvailable = true;
+      launchMap();
+    } else {
+      requestLocationPermission();
+    }
+  }
+
+//request location permission
+  void requestLocationPermission() async {
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        isLocationAvailable = false;
+        launchMap();
+      } else {
+        isLocationAvailable = true;
+        launchMap();
+      }
+    } else {
+      launchMap();
+    }
   }
 }

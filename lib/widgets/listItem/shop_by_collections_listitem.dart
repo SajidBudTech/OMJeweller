@@ -6,53 +6,94 @@ import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
+import 'package:flutter_om_jeweller/data/models/collection.dart';
+import 'package:flutter_om_jeweller/data/models/page_arguments.dart';
+import 'package:flutter_om_jeweller/constants/app_routes.dart';
+import 'package:flutter_om_jeweller/constants/api.dart';
+import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 
 class ShopByCollectionListViewItem extends StatelessWidget {
-  final String category;
-  final Function(String) onPressed;
+  final Collection collection;
   const ShopByCollectionListViewItem({
-    this.category,
-    this.onPressed,
+    this.collection,
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => this.onPressed(this.category),
-      highlightColor: Colors.transparent,
-      splashColor: AppColor.newprimaryColor.withOpacity(0.5),
-      child: Card(
-             elevation: 0,
-             margin: EdgeInsets.only(right: 20),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16)
-              ),
-            child:Container(
-               width: (AppSizes.getScreenWidth(context))-40,
-               decoration: BoxDecoration(
-                 image: DecorationImage(
-                   image: AssetImage(
-                     category,
-                   ),
-                   fit: BoxFit.cover
-                 ),
-                 borderRadius: BorderRadius.circular(10)
-               ),
-
-            //    child:Image.asset(category,
-            //     fit:BoxFit.cover,
-            // ),
-          //
-          //UiSpacer.verticalSpace(space: 5),
-          /*Text(
-            this.category.name,
-            style: AppTextStyle.h4TitleTextStyle(
-              color: AppColor.textColor(context),
+        onTap: () {
+          Navigator.pushNamed(
+              context,
+              AppRoutes.productListPageRoute,
+              arguments: PageArguments(
+                category: null,
+                subCategory: null,
+                collection: collection
+              )
+          );
+        },
+        highlightColor: Colors.transparent,
+        splashColor: AppColor.newprimaryColor.withOpacity(0.5),
+        child: Card(
+            elevation: 0,
+            margin: EdgeInsets.only(right: 12),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)
             ),
-          )*/
+            child: Container(
+                width: 250,
+                child:
+
+               /* Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      flex: 8,
+                      child:*/
+
+                      ClipRRect(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(10.0),
+                             bottomRight: Radius.circular(10.0)),
+                          child:
+                          CachedNetworkImage(
+                            imageUrl: Api.downloadUrlPath +collection.collectionImage,
+                            fit: BoxFit.cover,
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                          )
+                      ),
+
+                    ),
+                    /*Expanded(
+                        flex: 2,
+                        child: Container(
+                          // color: AppColor.primaryColorDark,
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFFE8D1),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10.0),
+                                    bottomRight: Radius.circular(10.0))
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              collection.collectionName,
+                              style: AppTextStyle.h4TitleTextStyle(
+                                  color: AppColor.textColor(context),
+                                  fontWeight: FontWeight.w500
+                              ),
+                              textAlign: TextAlign.center,
+                              textDirection: AppTextDirection.defaultDirection,
+                            )))*/
+
+                /*  ],
+                ))*/
         )
-      )
     );
       //  ],
      // ),

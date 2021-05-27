@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_om_jeweller/bloc/base.bloc.dart';
 import 'package:flutter_om_jeweller/bloc/login.bloc.dart';
+import 'package:flutter_om_jeweller/bloc/otp.bloc.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
@@ -18,45 +19,68 @@ import 'package:flutter_om_jeweller/widgets/appbars/empty_appbar.dart';
 import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
 import 'package:flutter_om_jeweller/widgets/inputs/custom_text_form_field.dart';
 import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
+import 'package:flutter_om_jeweller/data/models/user_data.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class VerifyOTPPage extends StatefulWidget {
-  VerifyOTPPage({Key key}) : super(key: key);
+  VerifyOTPPage({Key key, this.user}) : super(key: key);
 
+  User user;
   @override
   _VerifyOTPPageState createState() => _VerifyOTPPageState();
 }
 
 class _VerifyOTPPageState extends State<VerifyOTPPage> {
   //login bloc
-  LoginBloc _loginBloc = LoginBloc();
+  OTPBloc _otpBloc = OTPBloc();
   //email focus node
-  final emailFocusNode = new FocusNode();
+
+  final firstFocusNode = new FocusNode();
   //password focus node
-  final passwordFocusNode = new FocusNode();
+  final secondFocusNode = new FocusNode();
+  final threeFocusNode = new FocusNode();
+  final fourthFocusNode = new FocusNode();
+
+
+  void callShowOTP() {
+    EdgeAlert.show(
+      context,
+      title:widget.user.otp.toString(),
+      description: "OTP Sent Successfully!",
+      backgroundColor: AppColor.successfulColor,
+      icon: FlutterIcons.done_mdi,
+    );
+
+    print(widget.user.otp.toString());
+
+  }
 
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () async {
+      callShowOTP();
+    });
 
     //listen to the need to show a dialog alert or a normal snackbar alert type
-    _loginBloc.showAlert.listen((show) {
+    _otpBloc.showAlert.listen((show) {
       //when asked to show an alert
       if (show) {
         EdgeAlert.show(
           context,
-          title: _loginBloc.dialogData.title,
-          description: _loginBloc.dialogData.body,
-          backgroundColor: _loginBloc.dialogData.backgroundColor,
-          icon: _loginBloc.dialogData.iconData,
+          title: _otpBloc.dialogData.title,
+          description: _otpBloc.dialogData.body,
+          backgroundColor: _otpBloc.dialogData.backgroundColor,
+          icon: _otpBloc.dialogData.iconData,
         );
       }
     });
 
     //listen to state of the ui
-    _loginBloc.uiState.listen((uiState) async {
+    _otpBloc.uiState.listen((uiState) async {
       if (uiState == UiState.redirect) {
         // await Navigator.popUntil(context, (route) => false);
-        Navigator.pushNamed(context, AppRoutes.homeRoute);
+         Navigator.pushNamed(context, AppRoutes.homeRoute);
         // Navigator.pushNamedAndRemoveUntil(
         //   context,
         //   AppRoutes.homeRoute,
@@ -66,9 +90,11 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
     });
   }
 
+
+
   @override
   void dispose() {
-    _loginBloc.dispose();
+    _otpBloc.dispose();
     super.dispose();
   }
 
@@ -76,37 +102,39 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
   Widget build(BuildContext context) {
     return
 
-  /*    Container(
+        /*    Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [Color(0xFFFFDBB6), Color(0xFFFFFFFF)])),
         child: */
-      AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-      ),
-    child:Scaffold(
-          primary: false,
-          bottomSheet: getBottomWidget(),
-          appBar: EmptyAppBar(),
-          extendBodyBehindAppBar: true,
-          backgroundColor: AppColor.appBackground(context),
-          body: Stack(
-            children: [
-              //body
-              CustomScrollView(
-                slivers: <Widget>[
-               /*   SliverPadding(
+        AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+            ),
+            child: Scaffold(
+              primary: false,
+              bottomSheet: getBottomWidget(),
+              appBar: EmptyAppBar(),
+              extendBodyBehindAppBar: true,
+              backgroundColor: AppColor.appBackground(context),
+              body: Stack(
+                children: [
+                  //body
+                  CustomScrollView(
+                    slivers: <Widget>[
+                      /*   SliverPadding(
                       padding: EdgeInsets.only(),
                       sliver: SliverList(
                           delegate: SliverChildListDelegate([
                             //page title*/
-                            SliverToBoxAdapter(child:UiSpacer.verticalSpace(space:89)),
-                            SliverPadding(padding: EdgeInsets.only(left: 32,right: 32),
-                            sliver: SliverList(
-                            delegate: SliverChildListDelegate([
+                      SliverToBoxAdapter(
+                          child: UiSpacer.verticalSpace(space: 89)),
+                      SliverPadding(
+                          padding: EdgeInsets.only(left: 32, right: 32),
+                          sliver: SliverList(
+                              delegate: SliverChildListDelegate([
                             Text(
                               AuthStrings.otpTitle,
                               style: AppTextStyle.h1TitleTextStyle(
@@ -119,17 +147,17 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                             Text(
                               "We have sent and OTP to your mobile number",
                               style: AppTextStyle.h4TitleTextStyle(
-                                color: AppColor.hintTextColor(context),
-                                fontWeight: FontWeight.w400
-                              ),
+                                  color: AppColor.hintTextColor(context),
+                                  fontWeight: FontWeight.w400),
                               textAlign: TextAlign.start,
                               textDirection: AppTextDirection.defaultDirection,
                             )
-                            ])))  ,
+                          ]))),
 
-          SliverPadding(padding: EdgeInsets.only(left: 32,right: 14),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
+                      SliverPadding(
+                          padding: EdgeInsets.only(left: 32, right: 14),
+                          sliver: SliverList(
+                              delegate: SliverChildListDelegate([
                             UiSpacer.verticalSpace(space: 24),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -137,9 +165,9 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
-                                    flex:1,
+                                    flex: 1,
                                     child: StreamBuilder<bool>(
-                                      stream: _loginBloc.validMobileNumber,
+                                      stream: _otpBloc.validFirst,
                                       builder: (context, snapshot) {
                                         return CustomTextFormField(
                                           left: 0,
@@ -148,20 +176,35 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                                           bottom: 0,
                                           textAlign: TextAlign.center,
                                           hintText: AuthStrings.otpHint,
-                                          hintTextStyle: AppTextStyle.h2TitleTextStyle(color: AppColor.hintTextColor(context),fontWeight: FontWeight.w100),
+                                          hintTextStyle:
+                                              AppTextStyle.h2TitleTextStyle(
+                                                  color: AppColor.hintTextColor(
+                                                      context),
+                                                  fontWeight: FontWeight.w100),
                                           keyboardType: TextInputType.phone,
                                           textInputAction: TextInputAction.next,
-                                          textStyle: AppTextStyle.h1TitleTextStyle(fontWeight: FontWeight.w300),
-                                          textEditingController: _loginBloc.mobileNumberTEC,
+                                          textStyle:
+                                              AppTextStyle.h1TitleTextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                          textEditingController:
+                                              _otpBloc.firstDigitTEC,
                                           errorText: snapshot.error,
-                                          onChanged: _loginBloc.validateMobileNumber,
+                                          onChanged: (value) {
+                                            if (value.toString().length == 1) {
+                                              FocusScope.of(context)
+                                                  .requestFocus(
+                                                      secondFocusNode);
+                                            }
+                                          },
+                                          focusNode: firstFocusNode,
+                                          nextFocusNode: secondFocusNode,
                                         );
                                       },
                                     )),
                                 Expanded(
-                                    flex:1,
+                                    flex: 1,
                                     child: StreamBuilder<bool>(
-                                      stream: _loginBloc.validMobileNumber,
+                                      stream: _otpBloc.validSecond,
                                       builder: (context, snapshot) {
                                         return CustomTextFormField(
                                           left: 0,
@@ -170,20 +213,34 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                                           bottom: 0,
                                           textAlign: TextAlign.center,
                                           hintText: AuthStrings.otpHint,
-                                          hintTextStyle: AppTextStyle.h2TitleTextStyle(color: AppColor.hintTextColor(context),fontWeight: FontWeight.w100),
+                                          hintTextStyle:
+                                              AppTextStyle.h2TitleTextStyle(
+                                                  color: AppColor.hintTextColor(
+                                                      context),
+                                                  fontWeight: FontWeight.w100),
                                           keyboardType: TextInputType.phone,
                                           textInputAction: TextInputAction.next,
-                                          textStyle: AppTextStyle.h1TitleTextStyle(fontWeight: FontWeight.w300),
-                                          textEditingController: _loginBloc.mobileNumberTEC,
+                                          textStyle:
+                                              AppTextStyle.h1TitleTextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                          textEditingController:
+                                              _otpBloc.secondDigitTEC,
                                           errorText: snapshot.error,
-                                          onChanged: _loginBloc.validateMobileNumber,
+                                          onChanged: (value) {
+                                            if (value.toString().length == 1) {
+                                              FocusScope.of(context)
+                                                  .requestFocus(threeFocusNode);
+                                            }
+                                          },
+                                          focusNode: secondFocusNode,
+                                          nextFocusNode: threeFocusNode,
                                         );
                                       },
                                     )),
                                 Expanded(
-                                    flex:1,
+                                    flex: 1,
                                     child: StreamBuilder<bool>(
-                                      stream: _loginBloc.validMobileNumber,
+                                      stream: _otpBloc.validThree,
                                       builder: (context, snapshot) {
                                         return CustomTextFormField(
                                           left: 0,
@@ -192,20 +249,34 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                                           bottom: 0,
                                           textAlign: TextAlign.center,
                                           hintText: AuthStrings.otpHint,
-                                          hintTextStyle: AppTextStyle.h2TitleTextStyle(color: AppColor.hintTextColor(context),fontWeight: FontWeight.w100),
+                                          hintTextStyle:
+                                              AppTextStyle.h2TitleTextStyle(
+                                                  color: AppColor.hintTextColor(
+                                                      context),
+                                                  fontWeight: FontWeight.w100),
                                           keyboardType: TextInputType.phone,
                                           textInputAction: TextInputAction.next,
-                                          textStyle: AppTextStyle.h1TitleTextStyle(fontWeight: FontWeight.w300),
-                                          textEditingController: _loginBloc.mobileNumberTEC,
+                                          textStyle:
+                                              AppTextStyle.h1TitleTextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                          textEditingController:
+                                              _otpBloc.threeDigitTEC,
                                           errorText: snapshot.error,
-                                          onChanged: _loginBloc.validateMobileNumber,
+                                          onChanged: (value) {
+                                            if (value.toString().length == 1) {
+                                              FocusScope.of(context)
+                                                  .requestFocus(fourthFocusNode);
+                                            }
+                                          },
+                                          focusNode: threeFocusNode,
+                                          nextFocusNode: fourthFocusNode,
                                         );
                                       },
                                     )),
                                 Expanded(
-                                    flex:1,
+                                    flex: 1,
                                     child: StreamBuilder<bool>(
-                                      stream: _loginBloc.validMobileNumber,
+                                      stream: _otpBloc.validFourth,
                                       builder: (context, snapshot) {
                                         return CustomTextFormField(
                                           left: 0,
@@ -214,109 +285,164 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                                           bottom: 0,
                                           textAlign: TextAlign.center,
                                           hintText: AuthStrings.otpHint,
-                                          hintTextStyle: AppTextStyle.h2TitleTextStyle(color: AppColor.hintTextColor(context),fontWeight: FontWeight.w100),
+                                          hintTextStyle:
+                                              AppTextStyle.h2TitleTextStyle(
+                                                  color: AppColor.hintTextColor(
+                                                      context),
+                                                  fontWeight: FontWeight.w100),
                                           keyboardType: TextInputType.phone,
                                           textInputAction: TextInputAction.next,
-                                          textStyle: AppTextStyle.h1TitleTextStyle(fontWeight: FontWeight.w300),
-                                          textEditingController: _loginBloc.mobileNumberTEC,
+                                          textStyle:
+                                              AppTextStyle.h1TitleTextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                          textEditingController:
+                                              _otpBloc.fourthDigitTEC,
                                           errorText: snapshot.error,
-                                          onChanged: _loginBloc.validateMobileNumber,
+                                          onChanged: (value) {
+                                            _verifyOtp();
+                                          },
                                         );
                                       },
                                     )),
                               ],
                             ),
-                            ]))),
-                            //email/phone number textformfield
-                            SliverToBoxAdapter(child:UiSpacer.verticalSpace(space: 30)),
-                           SliverToBoxAdapter(child:
-                           Container(
-                             padding: EdgeInsets.only(left: 32,right: 32),
-                             alignment: Alignment.bottomLeft,
-                            child:Text(
-                              "Resend OTP in 00:28",
-                              style: AppTextStyle.h4TitleTextStyle(
-                                color: AppColor.hintTextColor(context),
-                              ),
-                              textAlign: TextAlign.start,
-                              textDirection: AppTextDirection.defaultDirection,
-                            ))),
-                  SliverToBoxAdapter(child:UiSpacer.verticalSpace(space: 40)),
-                            //login button
-                            //listen to the uistate to know the appropriated state to put the login button
-                  SliverToBoxAdapter(
-                      child: Container(
-                          padding: EdgeInsets.only(left: 32,right: 32),
-                          child:StreamBuilder<UiState>(
-                              stream: _loginBloc.uiState,
-                              builder: (context, snapshot) {
-                                final uiState = snapshot.data;
-
-                                return CustomButton(
-                                  padding: AppPaddings.mediumButtonPadding(),
-                                  color: AppColor.accentColor,
-                                  onPressed: uiState != UiState.loading
-                                      ? (){Navigator.pushNamed(
-                                    context,
-                                    AppRoutes.registerRoute,
-                                     );}
-                                      : null,
-                                  child: uiState != UiState.loading
-                                      ? Text(
-                                    AuthStrings.otpButtonTitle,
-                                    style: AppTextStyle.h4TitleTextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500
-                                    ),
-                                    textAlign: TextAlign.start,
-                                    textDirection:
+                          ]))),
+                      //email/phone number textformfield
+                      SliverToBoxAdapter(
+                          child: UiSpacer.verticalSpace(space: 30)),
+                      SliverToBoxAdapter(
+                          child: Container(
+                              padding: EdgeInsets.only(left: 32, right: 32),
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                "Resend OTP in 00:28",
+                                style: AppTextStyle.h4TitleTextStyle(
+                                  color: AppColor.hintTextColor(context),
+                                ),
+                                textAlign: TextAlign.start,
+                                textDirection:
                                     AppTextDirection.defaultDirection,
-                                  )
-                                      : PlatformCircularProgressIndicator(),
-                                );
-                              },
-                            ))
-                      ),
-                          //])))
+                              ))),
+                      SliverToBoxAdapter(
+                          child: UiSpacer.verticalSpace(space: 40)),
+                      //login button
+                      //listen to the uistate to know the appropriated state to put the login button
+                      SliverToBoxAdapter(
+                          child: Container(
+                              padding: EdgeInsets.only(left: 32, right: 32),
+                              color: Colors.transparent,
+                              child: StreamBuilder<UiState>(
+                                stream: _otpBloc.uiState,
+                                builder: (context, snapshot) {
+                                  final uiState = snapshot.data;
+                                  return CustomButton(
+                                    padding: AppPaddings.mediumButtonPadding(),
+                                    color: AppColor.accentColor,
+                                    onPressed: uiState != UiState.loading
+                                        ? () {
+                                      if(widget.user.loginRegister){
+                                        _otpBloc.processLogin(
+                                            mobile:
+                                            widget.user.cutomerMobile,
+                                            serverOTP:
+                                            widget.user.otp.toString());
+                                      }else{
+                                        _otpBloc.processRegister(
+                                            mobile:
+                                            widget.user.cutomerMobile,
+                                            serverOTP:
+                                            widget.user.otp.toString(),
+                                        name: widget.user.customerName,
+                                        email: widget.user.customerEmail);
+                                      }
+                                          }
+                                        : null,
+                                    child: uiState != UiState.loading
+                                        ? Text(
+                                            AuthStrings.otpButtonTitle,
+                                            style:
+                                                AppTextStyle.h4TitleTextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                            textAlign: TextAlign.start,
+                                            textDirection: AppTextDirection
+                                                .defaultDirection,
+                                          )
+                                        : PlatformCircularProgressIndicator(),
+                                  );
+                                },
+                              ))),
+                      //])))
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
-        ));
+            ));
 
     //);
   }
 
-   Widget getBottomWidget() {
-     TextStyle defaultStyle = AppTextStyle.h5TitleTextStyle(color: AppColor.textColor(context),fontWeight: FontWeight.w400);
-     TextStyle linkStyle = AppTextStyle.h5TitleTextStyle(color: AppColor.accentColor,fontWeight: FontWeight.w400,decoration: TextDecoration.underline);
-     return Container(
-          color: Color(0xFFFFFDFB),
-          height: 56,
-          alignment: Alignment.center,
-         child:RichText(
-           textAlign: TextAlign.center,
-       text: TextSpan(
-         style: defaultStyle,
-         children: <TextSpan>[
-           TextSpan(text: 'By verifying OTP, you agree to our\n'),
-           TextSpan(
-               text: 'Terms & Conditions',
-               style: linkStyle,
-               recognizer: TapGestureRecognizer()
-                 ..onTap = () {
-                   print('Terms of Service"');
-                 }),
-           TextSpan(text: ' and '),
-           TextSpan(
-               text: 'Privacy Policy',
-               style: linkStyle,
-               recognizer: TapGestureRecognizer()
-                 ..onTap = () {
-                   print('Privacy Policy"');
-                 }),
-         ],
-       ),
-     ));
+  void _verifyOtp() {
+    final code = _otpBloc.firstDigitTEC.text +
+        _otpBloc.secondDigitTEC.text +
+        _otpBloc.threeDigitTEC.text +
+        _otpBloc.fourthDigitTEC.text;
+    if (code.length == 4) {
+        if(widget.user.loginRegister){
+          _otpBloc.processLogin(
+              mobile:
+              widget.user.cutomerMobile,
+              serverOTP:
+              widget.user.otp.toString());
+        }else{
+          _otpBloc.processRegister(
+              mobile:
+              widget.user.cutomerMobile,
+              serverOTP:
+              widget.user.otp.toString(),
+              name: widget.user.customerName,
+              email: widget.user.customerEmail);
+        }
+    }
   }
+
+  Widget getBottomWidget() {
+    TextStyle defaultStyle = AppTextStyle.h5TitleTextStyle(
+        color: AppColor.textColor(context), fontWeight: FontWeight.w400);
+    TextStyle linkStyle = AppTextStyle.h5TitleTextStyle(
+        color: AppColor.accentColor,
+        fontWeight: FontWeight.w400,
+        decoration: TextDecoration.underline);
+    return Container(
+        color: Color(0xFFFFFDFB),
+        height: 56,
+        alignment: Alignment.center,
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: defaultStyle,
+            children: <TextSpan>[
+              TextSpan(text: 'By verifying OTP, you agree to our\n'),
+              TextSpan(
+                  text: 'Terms & Conditions',
+                  style: linkStyle,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      print('Terms of Service"');
+                    }),
+              TextSpan(text: ' and '),
+              TextSpan(
+                  text: 'Privacy Policy',
+                  style: linkStyle,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      print('Privacy Policy"');
+                    }),
+            ],
+          ),
+        ));
+  }
+
+
 }

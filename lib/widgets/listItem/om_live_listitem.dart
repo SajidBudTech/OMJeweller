@@ -66,7 +66,7 @@ class _OMLiveListItemsState extends State<OMLiveListItems> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BannerViewModel>.reactive(
       viewModelBuilder: () => BannerViewModel(),
-      onModelReady: (model) => model.fetchBanners(),
+      onModelReady: (model) => model.fetchOMLive(),
       builder: (context, model, child) {
         return model.isBusy
             ? Padding(
@@ -80,7 +80,7 @@ class _OMLiveListItemsState extends State<OMLiveListItems> {
                       actionButtonStyle: AppTextStyle.h4TitleTextStyle(
                         color: Colors.red,
                       ),
-                      actionFunction: () => model.fetchBanners(),
+                      actionFunction: () => model.fetchScrollingBanners(),
                     ),
                   )
                 : Container(

@@ -11,6 +11,7 @@ import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
+import 'package:flutter_om_jeweller/views/home/advertiment_banner_page.dart';
 import 'package:flutter_om_jeweller/views/home/card_gold_rate.dart';
 import 'package:flutter_om_jeweller/views/home/social_views.dart';
 import 'package:flutter_om_jeweller/widgets/banner_slider.dart';
@@ -25,6 +26,11 @@ import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_it
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_om_jeweller/views/home/hallmark_logo.dart';
+import 'package:flutter_om_jeweller/data/models/category.dart';
+import 'package:flutter_om_jeweller/data/models/subcategory.dart';
+import 'package:flutter_om_jeweller/data/models/collection.dart';
+import 'package:flutter_om_jeweller/data/models/page_arguments.dart';
 
 class MainHomePage extends StatefulWidget {
   const MainHomePage({Key key}) : super(key: key);
@@ -59,7 +65,49 @@ class _MainHomePageState extends State<MainHomePage>
                 ),
                 child: BannerSlider(
                   //search base on the category select from the banner
-                  onBannerTapped:model.openCategorySearchPage
+                  onBannerTapped: (value){
+                    if(value.bannertype=="category"){
+                      Category category=Category();
+                      category.categoryID=value.bannerID;
+                      category.categoryName=value.bannertype;
+                      Navigator.pushNamed(
+                          context,
+                          AppRoutes.productListPageRoute,
+                          arguments: PageArguments(
+                              category: category,
+                              subCategory: null,
+                              collection: null
+                          )
+                      );
+                    }else if(value.bannertype=="subcategory"){
+                      Subcategory subategory=Subcategory();
+                      subategory.subcategoryID=value.bannerID;
+                      subategory.subcategoryName=value.bannertype;
+                      Navigator.pushNamed(
+                          context,
+                          AppRoutes.productListPageRoute,
+                          arguments: PageArguments(
+                              category: null,
+                              subCategory: subategory,
+                              collection: null
+                          )
+                      );
+                    }else if(value.bannertype=="collection"){
+                      Collection collection=Collection();
+                      collection.collectionID=value.bannerID;
+                      collection.collectionName=value.bannertype;
+                      Navigator.pushNamed(
+                          context,
+                          AppRoutes.productListPageRoute,
+                          arguments: PageArguments(
+                              category: null,
+                              subCategory: null,
+                              collection: collection
+                          )
+                      );
+                    }
+
+                  },
                 ),
               ),
             ),
@@ -90,7 +138,7 @@ class _MainHomePageState extends State<MainHomePage>
                 alignment: Alignment.center,
                   padding: EdgeInsets.only(bottom: 12),
                   child:Text(
-                'Shop by Collections',
+                'Shop by Products',
                 style: AppTextStyle.h4TitleTextStyle(
                   color: AppColor.accentColor,
                     fontWeight: FontWeight.w600
@@ -99,180 +147,20 @@ class _MainHomePageState extends State<MainHomePage>
                 textDirection: AppTextDirection.defaultDirection,
               )),
             ),
-
-         SliverToBoxAdapter(
-             child: Container(
-                 width: double.infinity,
-                 height:178,
-                 child: model.categoriesLoadingState == LoadingState.Loading
-                 //the loadinng shimmer
-                     ? Padding(
-                   padding: EdgeInsets.symmetric(
-                     horizontal: AppPaddings.contentPaddingSize,
-                   ),
-                   child: VendorShimmerListViewItem(),
-                 )
-                 // the faild view
-                     : model.categoriesLoadingState == LoadingState.Failed
-                     ? LoadingStateDataView(
-                   stateDataModel: StateDataModel(
-                     showActionButton: true,
-                     actionButtonStyle: AppTextStyle.h4TitleTextStyle(
-                       color: Colors.red,
-                     ),
-                     actionFunction: model.getCategories,
-                   ),
-                 )
-                     : ListView.separated(
-                   shrinkWrap: true,
-                   scrollDirection: Axis.horizontal,
-                   itemCount: model.categories.length,
-                   padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
-                   separatorBuilder: (context, index) =>
-                       UiSpacer.horizontalSpace(space: 0),
-                   itemBuilder: (context, index) {
-                     return ShopByCollectionListViewItem(
-                       category: model.categories[index],
-                       onPressed: model.openCategorySearchPage,
-                     );
-                   },
-                 ),
-
-         )
-         ),
             SliverToBoxAdapter(
-                child: Container(
-                  width: double.infinity,
-                  height:188,
-                  margin: EdgeInsets.only(top: 12),
-                  child: model.categoriesLoadingState == LoadingState.Loading
-                  //the loadinng shimmer
-                      ? Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppPaddings.contentPaddingSize,
-                    ),
-                    child: VendorShimmerListViewItem(),
-                  )
-                  // the faild view
-                      : model.categoriesLoadingState == LoadingState.Failed
-                      ? LoadingStateDataView(
-                    stateDataModel: StateDataModel(
-                      showActionButton: true,
-                      actionButtonStyle: AppTextStyle.h4TitleTextStyle(
-                        color: Colors.red,
-                      ),
-                      actionFunction: model.getCategories,
-                    ),
-                  )
-                      : ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: model.categoriesbottomone.length,
-                    padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
-                    separatorBuilder: (context, index) =>
-                        UiSpacer.horizontalSpace(space: 0),
-                    itemBuilder: (context, index) {
-                      return ShopByCollectionBottomListViewItem(
-                        category: model.categoriesbottomone[index],
-                        onPressed: model.openCategorySearchPage,
-                      );
-                    },
-                  ),
-
-                )
+                child: AdvertismentSliderPage()
             ),
             SliverToBoxAdapter(
-                child: Container(
-                  width: double.infinity,
-                  height:188,
-                  margin: EdgeInsets.only(top: 12),
-                  child: model.categoriesLoadingState == LoadingState.Loading
-                  //the loadinng shimmer
-                      ? Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppPaddings.contentPaddingSize,
-                    ),
-                    child: VendorShimmerListViewItem(),
-                  )
-                  // the faild view
-                      : model.categoriesLoadingState == LoadingState.Failed
-                      ? LoadingStateDataView(
-                    stateDataModel: StateDataModel(
-                      showActionButton: true,
-                      actionButtonStyle: AppTextStyle.h4TitleTextStyle(
-                        color: Colors.red,
-                      ),
-                      actionFunction: model.getCategories,
-                    ),
-                  )
-                      : ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: model.categoriesbottomtwo.length,
-                    padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
-                    separatorBuilder: (context, index) =>
-                        UiSpacer.horizontalSpace(space: 0),
-                    itemBuilder: (context, index) {
-                      return ShopByCollectionBottomListViewItem(
-                        category: model.categoriesbottomtwo[index],
-                        onPressed: model.openCategorySearchPage,
-                      );
-                    },
-                  ),
-
-                )
-            ),
-            SliverToBoxAdapter(
-                child: Container(
-                  width: double.infinity,
-                  height:178,
-                  margin: EdgeInsets.only(top: 12),
-                  child: model.categoriesLoadingState == LoadingState.Loading
-                  //the loadinng shimmer
-                      ? Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppPaddings.contentPaddingSize,
-                    ),
-                    child: VendorShimmerListViewItem(),
-                  )
-                  // the faild view
-                      : model.categoriesLoadingState == LoadingState.Failed
-                      ? LoadingStateDataView(
-                    stateDataModel: StateDataModel(
-                      showActionButton: true,
-                      actionButtonStyle: AppTextStyle.h4TitleTextStyle(
-                        color: Colors.red,
-                      ),
-                      actionFunction: model.getCategories,
-                    ),
-                  )
-                      : ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: model.categories.length,
-                    padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
-                    separatorBuilder: (context, index) =>
-                        UiSpacer.horizontalSpace(space: 0),
-                    itemBuilder: (context, index) {
-                      return ShopByCollectionListViewItem(
-                        category: model.categories[index],
-                        onPressed: model.openCategorySearchPage,
-                      );
-                    },
-                  ),
-
-                )
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 24),
+              child:UiSpacer.verticalSpace(space: 12),
             ),
             SliverToBoxAdapter(
               child:UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
             ),
             SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 24),
+              child:UiSpacer.verticalSpace(space: 18),
             ),
-            SliverToBoxAdapter(
+
+            /*SliverToBoxAdapter(
                 child: Container(
                   width: double.infinity,
                   height:160,
@@ -311,23 +199,14 @@ class _MainHomePageState extends State<MainHomePage>
                   ),
 
                 )
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 24),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.divider(thickness: 8,color: AppColor.newDividerColor),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 18),
-            ),
+            ),*/
             SliverToBoxAdapter(
               child:
               Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.only(bottom: 12),
+                  padding: EdgeInsets.only(bottom: 13),
                   child:Text(
-                    'Shop by Products',
+                    'New Arrivals',
                     style: AppTextStyle.h4TitleTextStyle(
                       color: AppColor.accentColor,
                         fontWeight: FontWeight.w600
@@ -363,14 +242,13 @@ class _MainHomePageState extends State<MainHomePage>
                       : ListView.separated(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: model.productList.length,
+                    itemCount: model.categories.length,
                     padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
                     separatorBuilder: (context, index) =>
                         UiSpacer.horizontalSpace(space: 0),
                     itemBuilder: (context, index) {
                       return ShopByProductListViewItem(
-                        category: model.productList[index],
-                        onPressed: model.openCategorySearchPage,
+                         category: model.categories[index],
                       );
                     },
                   ),
@@ -432,6 +310,70 @@ class _MainHomePageState extends State<MainHomePage>
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(bottom: 12),
                   child:Text(
+                    'Shop by Collections',
+                    style: AppTextStyle.h4TitleTextStyle(
+                        color: AppColor.accentColor,
+                        fontWeight: FontWeight.w600
+                    ),
+                    textAlign: TextAlign.start,
+                    textDirection: AppTextDirection.defaultDirection,
+                  )
+              ),
+            ),
+            SliverToBoxAdapter(
+                child: Container(
+                  width: double.infinity,
+                  height:178,
+                  child: model.collectionLoadingState == LoadingState.Loading
+                  //the loadinng shimmer
+                      ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppPaddings.contentPaddingSize,
+                    ),
+                    child: VendorShimmerListViewItem(),
+                  )
+                  // the faild view
+                      : model.collectionLoadingState == LoadingState.Failed
+                      ? LoadingStateDataView(
+                    stateDataModel: StateDataModel(
+                      showActionButton: true,
+                      actionButtonStyle: AppTextStyle.h4TitleTextStyle(
+                        color: Colors.red,
+                      ),
+                      actionFunction: model.getCategories,
+                    ),
+                  )
+                      : ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: model.collections.length,
+                    padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
+                    separatorBuilder: (context, index) =>
+                        UiSpacer.horizontalSpace(space: 0),
+                    itemBuilder: (context, index) {
+                      return ShopByCollectionListViewItem(
+                        collection: model.collections[index],
+                      );
+                    },
+                  ),
+
+                )
+            ),
+            SliverToBoxAdapter(
+              child:UiSpacer.verticalSpace(space: 24),
+            ),
+            SliverToBoxAdapter(
+              child:UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
+            ),
+            SliverToBoxAdapter(
+              child:UiSpacer.verticalSpace(space: 18),
+            ),
+            SliverToBoxAdapter(
+              child:
+              Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(bottom: 12),
+                  child:Text(
                     'We are on SOCIAL',
                     style: AppTextStyle.h4TitleTextStyle(
                         color: AppColor.accentColor,
@@ -474,7 +416,7 @@ class _MainHomePageState extends State<MainHomePage>
             SliverToBoxAdapter(
               child:Padding(
                   padding: EdgeInsets.only(left: 20,right: 20),
-                  child:SocialViews()
+                  child: HallMarkLogo()
               ),
             ),
             SliverToBoxAdapter(

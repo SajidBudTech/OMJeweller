@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/available_slot_listview_item.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_om_jeweller/data/models/wishlist_data.dart';
+import 'package:flutter_om_jeweller/data/models/avaialable_slot.dart';
 
 class AnimatedSlotListViewItem extends StatelessWidget {
   final int index;
-  final String vendor;
+  final AvailableSlot vendor;
   final Widget listViewItem;
   const AnimatedSlotListViewItem(
       {this.index, this.vendor, this.listViewItem, Key key})

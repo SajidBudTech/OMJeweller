@@ -34,6 +34,8 @@ import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_om_jeweller/widgets/expandable/expandable_listview_item.dart';
 import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
+import 'package:flutter_om_jeweller/bloc/appointment.bloc.dart';
+import 'package:edge_alert/edge_alert.dart';
 
 class FeedBackPage extends StatefulWidget {
   FeedBackPage({Key key}) : super(key: key);
@@ -44,7 +46,7 @@ class FeedBackPage extends StatefulWidget {
 
 class _FeedBackPageState extends State<FeedBackPage> {
   //SearchVendorsBloc instance
-  final LoginBloc _loginBloc = LoginBloc();
+  AppointmentBloc _appointmentBloc = AppointmentBloc();
 
   //search bar focus node
   final _searchBarFocusNode = FocusNode();
@@ -55,19 +57,44 @@ class _FeedBackPageState extends State<FeedBackPage> {
   @override
   void initState() {
     super.initState();
+    SELECTED_ITEM="";
+
+    _appointmentBloc.showAlert.listen((show) {
+      //when asked to show an alert
+      if (show) {
+        EdgeAlert.show(
+          context,
+          title: _appointmentBloc.dialogData.title,
+          description: _appointmentBloc.dialogData.body,
+          backgroundColor: _appointmentBloc.dialogData.backgroundColor,
+          icon: _appointmentBloc.dialogData.iconData,
+        );
+        setState(() {
+          SELECTED_ITEM="";
+          _appointmentBloc.shareFeedbackTEC.text="";
+          _activebutton(SELECTED_ITEM,_appointmentBloc.shareFeedbackTEC.text);
+        });
+      }else{
+        EdgeAlert.show(
+          context,
+          title: _appointmentBloc.dialogData.title,
+          description: _appointmentBloc.dialogData.body,
+          backgroundColor: _appointmentBloc.dialogData.backgroundColor,
+          icon: _appointmentBloc.dialogData.iconData,
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    _appointmentBloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<MainHomeViewModel>.reactive(
-        viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
-        builder: (context, model, child) => AnnotatedRegion<
+    return AnnotatedRegion<
                 SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle(
               statusBarColor: AppColor.newprimaryColor,
@@ -129,11 +156,9 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                               key: expansionTile,
                                               title: Text(
                                                 SELECTED_ITEM==""?"Select a Category":SELECTED_ITEM,
-                                                style: AppTextStyle
-                                                    .h4TitleTextStyle(
+                                                style: AppTextStyle.h4TitleTextStyle(
                                                   fontWeight: FontWeight.w300,
-                                                  color: AppColor.hintTextColor(
-                                                      context),
+                                                  color:SELECTED_ITEM==""?AppColor.hintTextColor(context):AppColor.textColor(context),
                                                 ),
                                                 //overflow: TextOverflow.ellipsis,
                                                 textDirection: AppTextDirection
@@ -145,10 +170,8 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                                     'Product & Quality',
                                                     style: AppTextStyle
                                                         .h5TitleTextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: AppColor.textColor(
-                                                          context),
+                                                      fontWeight: FontWeight.w500,
+                                                      color: AppColor.hintTextColor(context),
                                                     ),
                                                     //overflow: TextOverflow.ellipsis,
                                                     textDirection:
@@ -158,8 +181,8 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                                   onTap: () {
                                                     setState(() {
                                                       SELECTED_ITEM="Product & Quality";
-                                                      expansionTile.currentState
-                                                          .collapse();
+                                                      expansionTile.currentState.collapse();
+                                                      _activebutton(SELECTED_ITEM,_appointmentBloc.shareFeedbackTEC.text);
                                                     });
                                                   },
                                                 ),
@@ -183,6 +206,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                                       SELECTED_ITEM="Designs";
                                                       expansionTile.currentState
                                                           .collapse();
+                                                      _activebutton(SELECTED_ITEM,_appointmentBloc.shareFeedbackTEC.text);
                                                     });
                                                   },
                                                 ),
@@ -206,6 +230,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                                       SELECTED_ITEM="App & Website";
                                                       expansionTile.currentState
                                                           .collapse();
+                                                      _activebutton(SELECTED_ITEM,_appointmentBloc.shareFeedbackTEC.text);
                                                     });
                                                   },
                                                 ),
@@ -227,15 +252,14 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                                   onTap: () {
                                                     setState(() {
                                                       SELECTED_ITEM="General";
-                                                      expansionTile.currentState
-                                                          .collapse();
+                                                      expansionTile.currentState.collapse();
+                                                      _activebutton(SELECTED_ITEM,_appointmentBloc.shareFeedbackTEC.text);
                                                     });
                                                   },
                                                 ),
                                               ],
                                               rotateWidget: Icon(
-                                                Icons
-                                                    .keyboard_arrow_down,
+                                                Icons.keyboard_arrow_down,
                                                 color: Color(0xFF2C2C2C),
                                                 size: 20,
                                               ),
@@ -255,7 +279,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                             BorderRadius.circular(8),
                                           ),
                                       child:StreamBuilder<bool>(
-                                        stream: _loginBloc.validMobileNumber,
+                                        stream: _appointmentBloc.validFeedBack,
                                         builder: (context, snapshot) {
                                           return CustomCommentTextFormField(
                                             left: 20,
@@ -268,9 +292,9 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                             hintText: "Share your feedback here",
                                             keyboardType: TextInputType.multiline,
                                             textInputAction: TextInputAction.next,
-                                            textEditingController: _loginBloc.mobileNumberTEC,
-                                            //errorText: snapshot.error,
-                                            //onChanged: _loginBloc.validateMobileNumber,
+                                            textEditingController: _appointmentBloc.shareFeedbackTEC,
+                                            errorText: snapshot.error,
+                                            onChanged: (value){_activebutton(SELECTED_ITEM,value);},
                                           );
                                         },
                                       )),
@@ -282,17 +306,30 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                       child:Container(
                                         margin: EdgeInsets.only(left: 20,right: 20),
                                       child:StreamBuilder<UiState>(
-                                        stream: _loginBloc.uiState,
+                                        stream: _appointmentBloc.uiState,
                                         builder: (context, snapshot) {
                                           final uiState = snapshot.data;
 
                                           return CustomButton(
                                             padding: AppPaddings.mediumButtonPadding(),
                                             color: AppColor.accentColor,
-                                            onPressed: uiState != UiState.loading
+                                            disabledColor: AppColor.disableColor,
+                                            onPressed: _appointmentBloc.feedBackButtonStatus
                                                 ?  (){
-
-                                                 }
+                                                    if(SELECTED_ITEM!="") {
+                                                      _appointmentBloc
+                                                          .submitFeedBack(
+                                                          category: SELECTED_ITEM);
+                                                    }else{
+                                                      EdgeAlert.show(
+                                                        context,
+                                                        title: "Please select type of category",
+                                                        description: "Select category for which you want to submit your feedback.",
+                                                        backgroundColor: AppColor.accentColor,
+                                                        icon: FlutterIcons.error_mdi,
+                                                      );
+                                                    }
+                                                  }
                                                 : null,
                                             child: uiState != UiState.loading
                                                 ? Text(
@@ -354,11 +391,17 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                   ]))),
                         ]),
                   ),
-                ))));
+                ))
+    );
+ //   );
 
     //);
   }
-
+  _activebutton(String cat,String desc) async{
+    setState(() {
+      _appointmentBloc.validateForm(cat,desc);
+    });
+  }
 /*void showSortBottomSheetDialog() {
     CustomDialog.showCustomBottomSheet(context, content: SortProductPage());
   }

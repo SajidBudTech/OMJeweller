@@ -6,54 +6,58 @@ import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
+import 'package:flutter_om_jeweller/data/models/category.dart';
+import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
+import 'package:flutter_om_jeweller/widgets/listItem/shop_by_subcategory_listitem.dart';
 
 class ShopByCategoryListViewItem extends StatelessWidget {
-  final String category;
-  final Function(String) onPressed;
+  final Category category;
+  //final Function(String) onPressed;
   const ShopByCategoryListViewItem({
     this.category,
-    this.onPressed,
+   // this.onPressed,
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: () => this.onPressed(this.category),
-        highlightColor: Colors.transparent,
-        splashColor: AppColor.accentColor.withOpacity(0.5),
-        child: Card(
-            elevation: 0,
-            margin: EdgeInsets.all(4),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16)
-            ),
-            child:Container(
-              width: (AppSizes.getScreenWidth(context)/3)-22,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                        category,
-                      ),
-                      fit: BoxFit.cover
-                  ),
-                  borderRadius: BorderRadius.circular(10)
-              ),
-
-              //    child:Image.asset(category,
-              //     fit:BoxFit.cover,
-              // ),
-              //
-              //UiSpacer.verticalSpace(space: 5),
-              /*Text(
-            this.category.name,
-            style: AppTextStyle.h4TitleTextStyle(
-              color: AppColor.textColor(context),
-            ),
-          )*/
-            )
-        )
-    );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.only(bottom: 12),
+        child:Text(
+          category.categoryName,
+          style: AppTextStyle.h16TitleTextStyle(
+              color: AppColor.accentColor,
+              fontWeight: FontWeight.w600
+          ),
+          textAlign: TextAlign.start,
+          textDirection: AppTextDirection.defaultDirection,
+        )),
+      Container(
+          width: double.infinity,
+          height:195,
+          child: ListView.separated(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: category.subcategory.length,
+            padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
+            separatorBuilder: (context, index) =>
+                UiSpacer.horizontalSpace(space: 0),
+            itemBuilder: (context, index) {
+              return ShopBySubCategoryListViewItem(
+                  subCategory: category.subcategory[index],
+              );
+            },
+          ),
+        ),
+        UiSpacer.verticalSpace(space: 24),
+        UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
+        UiSpacer.verticalSpace(space: 18),
+       ],
+       );
     //  ],
     // ),
     // );

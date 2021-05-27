@@ -13,9 +13,13 @@ class AuthStrings {
   static const String registerSubTitle = "Sign up to get started";
   static const String oregisterButtonTitle = "Register";
 
+
+
   static const String registerPhone = "Phone Number *";
   static const String registerName = "Name *";
   static const String registerEmail = "Email *";
+  static const String registerDOB = "Date Of Birth";
+  static const String anniversaryDate = "Anniversary Date";
 
   static const String unAuthtitle = "Unauthorized";
   static const String unAuthbody = "You must sign-in to access this section";
@@ -37,6 +41,13 @@ class AuthStrings {
   static const String processTitle = "Authenticating";
   static const String processCompleteTitle = "Login Successful!";
   static const String processFailedTitle = "Login Failed!";
+
+
+  static const String processRegisterCompleteTitle = "Registeration Successful!";
+  static const String processRegisterFailedTitle = "Registration Failed!";
+
+  static const String processUpdateCompleteTitle = "Profile Updated Successful!";
+  static const String processUpdateFailedTitle = "Updated Profile Failed!";
 
   static const String processErrorMessage =
       "There was an error while authenticating your account. Please try again later";

@@ -1,18 +1,31 @@
 // ViewModel
 import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
+import 'package:flutter_om_jeweller/data/models/category.dart';
+import 'package:flutter_om_jeweller/data/models/collection.dart';
 import 'package:flutter_om_jeweller/data/models/wishlist_data.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
+import 'package:flutter_om_jeweller/data/repositories/home.repository.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/base.viewmodel.dart';
 
 class MainHomeViewModel extends MyBaseViewModel {
+
+  HomePageRepository _homePageRepository= HomePageRepository();
+
   //
   LoadingState categoriesLoadingState = LoadingState.Loading;
+  LoadingState collectionLoadingState = LoadingState.Loading;
+
+
   LoadingState nearbyLoadingState = LoadingState.Loading;
   LoadingState popularsLoadingState = LoadingState.Loading;
   int listingStyle = 2;
 
-  List<String> categories = [];
+  List<Category> categories = [];
+
+  List<Collection> collections = [];
+
+
   List<String> categoriesbottomone = [];
   List<String> categoriesbottomtwo = [];
   List<String> categoriesnewArrival = [];
@@ -24,6 +37,8 @@ class MainHomeViewModel extends MyBaseViewModel {
 
   List<String> storeCallList = [];
   List<String> storeVisitList = [];
+  List<String> storeVisitType = [];
+  List<String> storeVisitTypeImage = [];
 
 
   List<String> sortlist=["New Arrivals",
@@ -47,11 +62,67 @@ class MainHomeViewModel extends MyBaseViewModel {
     this.viewContext = context;
   }
 
+
+
+
+  void getCategories() async {
+    //add null data so listener can show shimmer widget to indicate loading
+    categoriesLoadingState = LoadingState.Loading;
+    notifyListeners();
+
+    try {
+      categories = await _homePageRepository.getCategories();
+      categoriesLoadingState = LoadingState.Done;
+      notifyListeners();
+    } catch (error) {
+      categoriesLoadingState = LoadingState.Failed;
+      notifyListeners();
+    }
+  }
+
+  void getCollection() async {
+    //add null data so listener can show shimmer widget to indicate loading
+    collectionLoadingState = LoadingState.Loading;
+    notifyListeners();
+
+    try {
+      collections = await _homePageRepository.getCollection();
+      collectionLoadingState = LoadingState.Done;
+      notifyListeners();
+    } catch (error) {
+      collectionLoadingState = LoadingState.Failed;
+      notifyListeners();
+    }
+  }
+
+  void getStoreVisitData() async{
+    categoriesLoadingState = LoadingState.Loading;
+    notifyListeners();
+    storeCallList.add('Phone Call');
+    storeCallList.add('Video Call');
+
+    storeVisitList.add('Borivali');
+    storeVisitList.add('Mulund');
+
+
+    storeVisitType.add("Store Visit");
+    storeVisitType.add("Request a Call");
+
+    storeVisitTypeImage.add("assets/images/store_visit.svg");
+    storeVisitTypeImage.add("assets/images/request_call.svg");
+
+    
+    categoriesLoadingState = LoadingState.Done;
+    notifyListeners();
+  }
+
   void initialise() {
 
-    categoriesLoadingState=LoadingState.Done;
-    categories.add('assets/images/ugaani.png');
-    categories.add('assets/images/jodha.png');
+      getCategories();
+      getCollection();
+    //categoriesLoadingState=LoadingState.Done;
+    //categories.add('assets/images/ugaani.png');
+    //categories.add('assets/images/jodha.png');
 
 
     //categoriesLoadingState=LoadingState.Done;
@@ -286,7 +357,7 @@ class MainHomeViewModel extends MyBaseViewModel {
     notifyListeners();
   }*/
 
-  void openCategorySearchPage(dynamic data) {
+   void openCategoryProductPage({int index}){
     //
    /* var category;
     if (data is CategoryBanner) {
@@ -299,24 +370,29 @@ class MainHomeViewModel extends MyBaseViewModel {
     Navigator.pushNamed(
       viewContext,
       AppRoutes.productListPageRoute,
-      //arguments: category,
+      arguments: categories[index],
     );
+
   }
 
-  void getCategories() async {
-    //add null data so listener can show shimmer widget to indicate loading
-   /* categoriesLoadingState = LoadingState.Loading;
-    notifyListeners();
-
-    try {
-      categories = await categoryRepository.getCategories();
-      categoriesLoadingState = LoadingState.Done;
-      notifyListeners();
-    } catch (error) {
-      categoriesLoadingState = LoadingState.Failed;
-      notifyListeners();
+  void openCategorySearchPage(dynamic category) {
+    //
+    /* var category;
+    if (data is CategoryBanner) {
+      category = data.category;
+    } else {
+      category = data;
     }*/
+
+    //navigate to search vendors page
+    /*Navigator.pushNamed(
+      viewContext,
+      AppRoutes.productListPageRoute,
+     // arguments: categories[index],
+    );*/
   }
+
+
 
   void goToMyAppointPage(dynamic data) async {
     //add null data so listener can show shimmer widget to indicate loading

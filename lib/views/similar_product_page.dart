@@ -10,33 +10,34 @@ import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
-import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/product_page.viewmodel.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
-import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
-import 'package:flutter_om_jeweller/widgets/listItem/store_location_listitem.dart';
-import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/similar_product_list_view_item.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
 
 class SimilarProductPage extends StatefulWidget {
   SimilarProductPage({
     Key key,
+    this.categoryId
   }) : super(key: key);
+
+
+  int categoryId;
 
   @override
   _SimilarProductPageState createState() => _SimilarProductPageState();
 }
 
 class _SimilarProductPageState extends State<SimilarProductPage> {
-  LoginBloc _loginBloc = LoginBloc();
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<MainHomeViewModel>.reactive(
-        viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
+    return ViewModelBuilder<ProductPageViewModel>.reactive(
+        viewModelBuilder: () => ProductPageViewModel(),
+        onModelReady: (model) => model.getProductsByCategory(categoryId: widget.categoryId),
         builder: (context, model, child) => Container(
           color: AppColor.newprimaryColor,
           padding: AppPaddings.defaultPadding(),
@@ -60,7 +61,7 @@ class _SimilarProductPageState extends State<SimilarProductPage> {
                 Container(
                   width: double.infinity,
                   height: AppSizes.getScreenheight(context)/2.6,
-                  child: model.categoriesLoadingState == LoadingState.Loading
+                  child: model.productByCategoryLoadingState == LoadingState.Loading
                   //the loadinng shimmer
                       ? Padding(
                     padding: EdgeInsets.symmetric(
@@ -69,26 +70,27 @@ class _SimilarProductPageState extends State<SimilarProductPage> {
                     child: VendorShimmerListViewItem(),
                   )
                   // the faild view
-                      : model.categoriesLoadingState == LoadingState.Failed
+                      : model.productByCategoryLoadingState == LoadingState.Failed
                       ? LoadingStateDataView(
                     stateDataModel: StateDataModel(
                       showActionButton: true,
                       actionButtonStyle: AppTextStyle.h4TitleTextStyle(
                         color: Colors.red,
                       ),
-                      actionFunction: model.getCategories,
+                      actionFunction: model.getProductsByCategory,
                     ),
                   )
                       : ListView.separated(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: model.wishlistList.length,
+                    itemCount: model.productbyCategoryList.length,
                     //padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
                     separatorBuilder: (context, index) =>
                         UiSpacer.horizontalSpace(space: 0),
                     itemBuilder: (context, index) {
                       return SimilarProdcutListViewItem(
-                        vendor:model.wishlistList[index],
+                        product:model.productbyCategoryList[index],
+                        platinumRate: model.platiniumRate,
                       );
                     },
                   ),

@@ -39,7 +39,7 @@ class CustomTextFormField extends StatefulWidget {
     this.left=20,
     this.right=20,
     this.top=5,
-    this.bottom=5
+    this.bottom=5,
   }) : super(key: key);
 
   final InputBorder border;

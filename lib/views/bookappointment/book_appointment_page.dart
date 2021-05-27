@@ -9,31 +9,17 @@ import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
-import 'package:flutter_om_jeweller/constants/string/auth.string.dart';
-import 'package:flutter_om_jeweller/constants/string/search.strings.dart';
-import 'package:flutter_om_jeweller/data/models/loading_state.dart';
-import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
-import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
 import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
-import 'package:flutter_om_jeweller/widgets/appbars/empty_appbar.dart';
-import 'package:flutter_om_jeweller/widgets/appbars/leading_app_bar.dart';
 import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
-import 'package:flutter_om_jeweller/widgets/empty/empty_product.dart';
-import 'package:flutter_om_jeweller/widgets/empty/empty_wishlist.dart';
-import 'package:flutter_om_jeweller/widgets/inputs/textinput_edittext_textfield.dart';
-import 'package:flutter_om_jeweller/widgets/listItem/animated_product_listitem.dart';
-import 'package:flutter_om_jeweller/widgets/listItem/product_listview_item.dart';
-import 'package:flutter_om_jeweller/widgets/listItem/wishlist_list_item.dart';
 import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
-import 'package:flutter_om_jeweller/widgets/search/search_bar.dart';
-import 'package:flutter_om_jeweller/widgets/search/search_groupedlist_view.dart';
-import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
-import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:flutter_om_jeweller/widgets/storelocationlist/store_location_content.dart';
 import 'package:flutter_om_jeweller/widgets/storelocationlist/store_call_content.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_om_jeweller/bloc/appointment.bloc.dart';
+import 'package:flutter_om_jeweller/constants/string/app.string.dart';
+import 'package:edge_alert/edge_alert.dart';
 
 class BookAppointmentPage extends StatefulWidget {
   BookAppointmentPage({Key key}) : super(key: key);
@@ -44,7 +30,7 @@ class BookAppointmentPage extends StatefulWidget {
 
 class _BookAppointmentPageState extends State<BookAppointmentPage> {
   //SearchVendorsBloc instance
-  final ProductSearchBloc _searchVendorsBloc = ProductSearchBloc();
+  final AppointmentBloc _appointmentBloc = AppointmentBloc();
 
   //search bar focus node
   final _searchBarFocusNode = FocusNode();
@@ -57,23 +43,24 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
   void initState() {
     super.initState();
     _searchBarFocusNode.requestFocus();
-    _searchVendorsBloc.initBloc();
+    _appointmentBloc.initBloc();
+    AppStrings.selectedTypeofvisit="";
   }
 
   @override
   void dispose() {
     super.dispose();
-    _searchVendorsBloc.dispose();
+    _appointmentBloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<MainHomeViewModel>.reactive(
+    return /*ViewModelBuilder<MainHomeViewModel>.reactive(
         viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
+        onModelReady: (model) => model.getStoreVisitData(),
         builder: (context, model, child) =>
 
-           /* Container(
+           *//* Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -104,7 +91,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         alignment: Alignment.topLeft,
                         padding: EdgeInsets.only(bottom: 0),
                         child:Text(
-                          'Hi, Suhani Desai',
+                          'Hi, '+(_appointmentBloc.userName==null?"":_appointmentBloc.userName),
                           style: AppTextStyle.h4TitleTextStyle(
                               color: AppColor.hintTextColor(context),
                               fontWeight: FontWeight.w400
@@ -159,6 +146,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                               setState(() {
                                 SELECTED_STORE_VISIT=true;
                                 SELECTED_REQUEST_CALL=false;
+                                AppStrings.selectedTypeofvisit="Store Visit";
                               });
                             },
                           child:Container(
@@ -206,6 +194,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                               setState(() {
                                 SELECTED_STORE_VISIT=false;
                                 SELECTED_REQUEST_CALL=true;
+                                AppStrings.selectedTypeofvisit="Request a Call";
                               });
 
                             },
@@ -246,7 +235,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                   ),
                   SliverToBoxAdapter(child:UiSpacer.verticalSpace(space: 40)),
                   SliverToBoxAdapter(child:StreamBuilder<UiState>(
-                    stream: _loginBloc.uiState,
+                    stream: _appointmentBloc.uiState,
                     builder: (context, snapshot) {
                       final uiState = snapshot.data;
                       return Padding(padding: EdgeInsets.only(left: 20,right: 20),
@@ -256,12 +245,21 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         color: AppColor.accentColor,
                         onPressed: uiState != UiState.loading
                             ?  (){
-                          if(SELECTED_STORE_VISIT){
-                            showStoreVisitBottomDialog();
+                          if(AppStrings.selectedTypeofvisit!="") {
+                            if (SELECTED_STORE_VISIT) {
+                              showStoreVisitBottomDialog();
+                            } else {
+                              showCallBottomDialog();
+                            }
                           }else{
-                            showCallBottomDialog();
+                            EdgeAlert.show(
+                              context,
+                              title: "Please select appointment type!",
+                              description: "select one of available appointment option.",
+                              backgroundColor: AppColor.accentColor,
+                              icon: FlutterIcons.error_mdi,
+                            );
                           }
-
                         }
                             : null,
                         child: uiState != UiState.loading
@@ -281,9 +279,10 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
 
 
 
-                ])),
-          ),
-        );
+                ])
+            ),
+          );
+       // );
     //);
   }
 

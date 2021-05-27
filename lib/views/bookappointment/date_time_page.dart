@@ -31,11 +31,20 @@ import 'package:flutter_om_jeweller/widgets/search/search_groupedlist_view.dart'
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/appoinement.viewmodel.dart';
+import 'package:flutter_om_jeweller/constants/string/app.string.dart';
+import 'package:intl/intl.dart';
+import 'package:edge_alert/edge_alert.dart';
+import 'package:flutter_om_jeweller/constants/validation_messages.dart';
+import 'package:flutter_om_jeweller/data/models/appointment.dart';
+import 'package:flutter_om_jeweller/bloc/appointment.bloc.dart';
+
 
 class SelectDateTimePage extends StatefulWidget {
-  SelectDateTimePage({Key key,this.DETAILS_PAGE}) : super(key: key);
+  SelectDateTimePage({Key key,this.DETAILS_PAGE,this.appointment}) : super(key: key);
 
   final bool DETAILS_PAGE;
+  final Appointment appointment;
 
   @override
   _SelectDateTimePageState createState() => _SelectDateTimePageState();
@@ -43,32 +52,41 @@ class SelectDateTimePage extends StatefulWidget {
 
 class _SelectDateTimePageState extends State<SelectDateTimePage> {
   //SearchVendorsBloc instance
-  final ProductSearchBloc _searchVendorsBloc = ProductSearchBloc();
-
-  //search bar focus node
-  final _searchBarFocusNode = FocusNode();
-  LoginBloc _loginBloc = LoginBloc();
+  AppointmentBloc _appointmentBloc = AppointmentBloc();
 
   int SELECTED_POSITION=-1;
 
   @override
   void initState() {
     super.initState();
-    _searchBarFocusNode.requestFocus();
-    _searchVendorsBloc.initBloc();
+
+    _appointmentBloc.showAlert.listen((show) {
+      //when asked to show an alert
+      if (show) {
+        Navigator.pushNamed(context, AppRoutes.homeRoute);
+      }else{
+        EdgeAlert.show(
+          context,
+          title: _appointmentBloc.dialogData.title,
+          description: _appointmentBloc.dialogData.body,
+          backgroundColor: AppColor.accentColor,
+          icon: _appointmentBloc.dialogData.iconData,
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
-    _searchVendorsBloc.dispose();
+    _appointmentBloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<MainHomeViewModel>.reactive(
-        viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
+    return ViewModelBuilder<AppointmentViewModel>.reactive(
+        viewModelBuilder: () => AppointmentViewModel(),
+        onModelReady: (model) => model.fetchAppointmentDetailsDateWise(),
         builder: (context, model, child) =>
 
            /* Container(
@@ -116,7 +134,24 @@ class _SelectDateTimePageState extends State<SelectDateTimePage> {
                                   )),
                             ),*/
                             SliverToBoxAdapter(
-                              child:WeekCalendarPage()
+                              child:WeekCalendarPage(
+                                onDaySelected: (DateTime selectedDay,List<dynamic> event,List<dynamic> orver){
+                                  // if(model.courtLoadingState!=LoadingState.Loading) {
+                                  SELECTED_POSITION=-1;
+                                  AppStrings.selectedBookTime="";
+                                  AppStrings.selectedBookDate = DateFormat("yyyy-MM-dd").format(selectedDay);
+                                  model.fetchAppointmentDetailsDateWise();
+                                  /* }else{
+                                     EdgeAlert.show(
+                                       context,
+                                       title:"Loading Please wait....",
+                                       description: "Data loading for "+model.selectedDate,
+                                       backgroundColor: AppColor.failedColor,
+                                       icon: FlutterIcons.loading_mco,
+                                     );
+                                   }*/
+                                },
+                              )
                             ),
                             /*SliverToBoxAdapter(
                               child: UiSpacer.verticalSpace(space: 15),
@@ -146,14 +181,14 @@ class _SelectDateTimePageState extends State<SelectDateTimePage> {
                             ),
                             SliverPadding(
                                 padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
-                                sliver: model.categoriesLoadingState ==
+                                sliver: model.appointmentLoadingState ==
                                     LoadingState.Loading
                                 //the loadinng shimmer
                                     ? SliverToBoxAdapter(
                                   child: VendorShimmerListViewItem(),
                                 )
                                 // the faild view
-                                    : model.categoriesLoadingState ==
+                                    : model.appointmentLoadingState ==
                                     LoadingState.Failed
                                     ? SliverToBoxAdapter(
                                   child: LoadingStateDataView(
@@ -196,9 +231,20 @@ class _SelectDateTimePageState extends State<SelectDateTimePage> {
                                           current_index: index,
                                           SELECTED_POSITION: SELECTED_POSITION,
                                           onPressed: (){
+                                           if(!model.availableslotList[index].active){
                                            setState(() {
                                              SELECTED_POSITION=index;
+                                             AppStrings.selectedBookTime=model.availableslotList[index].slot;
                                            });
+                                           }else{
+                                             EdgeAlert.show(
+                                               context,
+                                               title: "No Available Slot",
+                                               description: ValidationMessages.slotNotAvailable,
+                                               backgroundColor: AppColor.accentColor,
+                                               icon: FlutterIcons.error_mdi,
+                                             );
+                                           }
                                           },
                                         ),
                                       );
@@ -212,29 +258,41 @@ class _SelectDateTimePageState extends State<SelectDateTimePage> {
                               padding: AppPaddings.defaultPadding(),
                                color: Colors.white,
                             child:StreamBuilder<UiState>(
-                                stream: _loginBloc.uiState,
+                                stream: _appointmentBloc.uiState,
                                 builder: (context, snapshot) {
                                   final uiState = snapshot.data;
                                   return  CustomButton(
                                         padding: AppPaddings.mediumButtonPadding(),
                                         color: AppColor.accentColor,
                                         onPressed: uiState != UiState.loading
-                                            ?  (){
-                                         // showBottomDialog();
-                                          if(widget.DETAILS_PAGE){
-                                            Navigator.pushNamed(
-                                              context,
-                                              AppRoutes.fillDetailsRoute,
-                                              //arguments: category,
-                                            );
+                                            ?  () {
+                                          // showBottomDialog();
+                                          if (AppStrings.selectedBookTime != "") {
+                                            if (widget.DETAILS_PAGE) {
+                                              Navigator.pushNamed(
+                                                context,
+                                                AppRoutes.fillDetailsRoute,
+                                                //arguments: category,
+                                              );
+                                            } else {
+                                              /*Navigator.pushNamed(
+                                                context,
+                                                AppRoutes.confirmedBokkingRoute,
+                                                //arguments: category,
+                                              );*/
+                                              widget.appointment.appointmentDate=AppStrings.selectedBookDate;
+                                              widget.appointment.appointmentTime=AppStrings.selectedBookTime;
+                                              _appointmentBloc.editAppointment(appointment: widget.appointment);
+                                            }
                                           }else{
-                                            Navigator.pushNamed(
+                                            EdgeAlert.show(
                                               context,
-                                              AppRoutes.confirmedBokkingRoute,
-                                              //arguments: category,
+                                              title: "Please select appointment time!",
+                                              description: "Select Your appointment time",
+                                              backgroundColor: AppColor.accentColor,
+                                              icon: FlutterIcons.error_mdi,
                                             );
                                           }
-
                                         }
                                             : null,
                                         child: uiState != UiState.loading

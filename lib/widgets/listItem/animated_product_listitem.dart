@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/product_listview_item.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_om_jeweller/data/models/wishlist_data.dart';
 
 class AnimatedProdcutListViewItem extends StatelessWidget {
   final int index;
-  final Wishlist vendor;
+  final Product product;
   final Widget listViewItem;
+  final double platinumRate;
   const AnimatedProdcutListViewItem(
-      {this.index, this.vendor, this.listViewItem, Key key})
+      {this.index, this.product, this.listViewItem,this.platinumRate, Key key})
       : super(key: key);
 
   @override
@@ -21,7 +23,8 @@ class AnimatedProdcutListViewItem extends StatelessWidget {
         child: FadeInAnimation(
           child: listViewItem ??
               ProductListViewItem(
-                vendor: vendor,
+                product: product,
+                platinumRate: platinumRate,
               ),
         ),
       ),

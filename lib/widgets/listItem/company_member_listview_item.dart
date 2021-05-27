@@ -21,10 +21,12 @@ class CompanyListViewItem extends StatefulWidget {
     Key key,
     @required this.name,
     @required this.post,
+    @required this.image,
   }) : super(key: key);
 
   final String name;
   final String post;
+  final String image;
   @override
   _CompanyListViewItemState createState() => _CompanyListViewItemState();
 }
@@ -45,6 +47,7 @@ class _CompanyListViewItemState extends State<CompanyListViewItem> {
       color: Colors.white,
       // margin: EdgeInsets.only(bottom: 4),
       child: Column(children: <Widget>[
+        widget.image==''?
         Container(
           // alignment: Alignment.topRight,
           // margin: EdgeInsets.only(top: 16),
@@ -52,6 +55,14 @@ class _CompanyListViewItemState extends State<CompanyListViewItem> {
           decoration: BoxDecoration(
             color: Color(0xFFC4C4C4),
             borderRadius: BorderRadius.circular(8),
+          ),
+        ):ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Image.asset(
+            widget.image,
+            height: 147,
+            fit: BoxFit.cover,
+            width: double.infinity,
           ),
         ),
         Container(

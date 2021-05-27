@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
+import 'package:flutter_om_jeweller/data/models/advertisment_banner.dart';
 import 'package:flutter_om_jeweller/data/models/category_banner.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/banner.viewmodel.dart';
@@ -17,45 +18,39 @@ import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
+import 'package:flutter_om_jeweller/data/models/appointment.dart';
+import 'package:flutter_om_jeweller/data/models/datetime.arguments.dart';
+import 'package:flutter_om_jeweller/bloc/appointment.bloc.dart';
+import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyAppointmentSlider extends StatefulWidget {
-  final Function(CategoryBanner) onBannerTapped;
-  MyAppointmentSlider({@required this.onBannerTapped, Key key}) : super(key: key);
+ // final Function(AdvertismentBanner) onBannerTapped;
+  final List<Appointment> appointments;
+  MyAppointmentSlider({@required this.appointments, Key key}) : super(key: key);
 
   @override
   _MyAppointmentSliderState createState() => _MyAppointmentSliderState();
 }
 
 class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
+
+  AppointmentBloc _appointmentBloc = AppointmentBloc();
+  String address;
+  bool isLocationAvailable = false;
+  Location location = new Location();
+  LocationData currentLocationData;
+
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<BannerViewModel>.reactive(
-      viewModelBuilder: () => BannerViewModel(),
-      onModelReady: (model) => model.fetchBanners(),
-      builder: (context, model, child) {
-        return model.isBusy
-            ? Padding(
-          padding: AppPaddings.defaultPadding(),
-          child: VendorShimmerListViewItem(),
-        )
-            : model.hasError
-            ? LoadingStateDataView(
-          stateDataModel: StateDataModel(
-            showActionButton: true,
-            actionButtonStyle: AppTextStyle.h4TitleTextStyle(
-              color: Colors.red,
-            ),
-            actionFunction: () => model.fetchBanners(),
-          ),
-        )
-            :
-        Container(
+    return Container(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               CarouselSlider(
-                items: _getPageSliders(model.banners,context),
+                items: _getPageSliders(widget.appointments,context),
                 options: CarouselOptions(
                   autoPlay: false,
                   enableInfiniteScroll: false,
@@ -71,14 +66,12 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
             ],
           ),
         );
-      },
-    );
-  }
+     }
 
   int _current = 0;
-  List<Widget> _getPageSliders(List<CategoryBanner> banners, BuildContext context) {
-    return banners
-        .map((banner) => Container(
+  List<Widget> _getPageSliders(List<Appointment> appointments, BuildContext context) {
+    return appointments
+        .map((appointment) => Container(
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -106,7 +99,7 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                 alignment: Alignment.topLeft,
                  margin: EdgeInsets.only(bottom: 13),
                 child:Text(
-                  "In Store Visit appointment at Om Jewellers - Borivali",
+                  "In "+appointment.appointmentType+" appointment at Om Jewellers - "+appointment.appointmentDetail,
                   style: AppTextStyle.h16TitleTextStyle(
                     fontWeight: FontWeight.w500,
                     color: AppColor.textColor(context),
@@ -123,7 +116,7 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                 Padding(
                     padding: EdgeInsets.only(left: 8),
                     child: Text(
-                      'January 25',
+                      DateFormat("MMMM dd").format(DateFormat("yyyy-MM-dd").parse(appointment.appointmentDate)),
                       style: AppTextStyle.h5TitleTextStyle(
                           color: AppColor.textColor(context),
                           fontWeight: FontWeight.w400),
@@ -133,7 +126,8 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
               ],
             ),
             UiSpacer.verticalSpace(space: 13),
-        Row(
+         Visibility(
+           child:Row(
               children: [
                 SvgPicture.asset(
                   'assets/images/my_app_time.svg',
@@ -141,7 +135,7 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                 Padding(
                     padding: EdgeInsets.only(left: 8),
                     child: Text(
-                      '12:30 PM',
+                      appointment.appointmentTime,
                       style: AppTextStyle.h5TitleTextStyle(
                           color: AppColor.textColor(context),
                           fontWeight: FontWeight.w400),
@@ -149,12 +143,15 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                       textDirection: AppTextDirection.defaultDirection,
                     ))
               ],
-            ),
+            )
+         ),
     //),
         /* Expanded(
            child:*/
             UiSpacer.verticalSpace(space: 13),
-           Row(
+           Visibility(
+               visible: appointment.appointmentType=="Store Visit",
+             child:Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,7 +164,7 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                     child:Padding(
                         padding: EdgeInsets.only(left: 8),
                     child:Text(
-                      'Ground Floor, Shangrila Apartments, LT Road, Near Borivali Station, Borivali West, Mumbai,Maharashtra 400092',
+                      appointment.appointmentDetail=="Borivali"?_appointmentBloc.storeaddresses[0]:_appointmentBloc.storeaddresses[1],
                       style: AppTextStyle.h5TitleTextStyle(
                           color: AppColor.textColor(context),
                           fontWeight: FontWeight.w400),
@@ -176,10 +173,13 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                     ))
                 ),
               ],
-            ),
+            )
+           ),
        // ),
             UiSpacer.verticalSpace(space: 3),
-            Container(
+            Visibility(
+                visible: appointment.appointmentType=="Store Visit",
+              child:Container(
               padding: EdgeInsets.only(left: 22),
                 alignment:Alignment.topLeft,
                 child:InkWell(
@@ -193,11 +193,15 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                     textDirection: AppTextDirection.defaultDirection,
                   ),
                   onTap: (){
-
+                    address = appointment.appointmentDetail=="Borivali"?_appointmentBloc.storeaddresses[0]:_appointmentBloc.storeaddresses[1];
+                    getLocationPermissionStatus();
                   },
-                )),
+                ))
+            ),
             UiSpacer.verticalSpace(space: 13),
-             Row(
+             Visibility(
+               visible: appointment.appointmentType=="Store Visit",
+               child:Row(
               children: [
                 SvgPicture.asset(
                   'assets/images/my_app_call.svg',
@@ -205,7 +209,7 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                 Padding(
                     padding: EdgeInsets.only(left: 8),
                     child: Text(
-                      '02261587000',
+                        appointment.appointmentDetail=="Borivali"?_appointmentBloc.storePhone[0]:_appointmentBloc.storePhone[1],
                       style: AppTextStyle.h5TitleTextStyle(
                           color: AppColor.textColor(context),
                           fontWeight: FontWeight.w400),
@@ -213,7 +217,7 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                       textDirection: AppTextDirection.defaultDirection,
                     ))
               ],
-            ),
+            )),
             UiSpacer.verticalSpace(space: 24),
             Container(
               alignment: Alignment.topLeft,
@@ -225,7 +229,10 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
                   Navigator.pushNamed(
                     context,
                     AppRoutes.dateTimeRoute,
-                    arguments: false,
+                    arguments: DateTimeArguments(
+                      appointment: appointment,
+                      status: false
+                    ),
                   );
                 },
               ),
@@ -252,5 +259,54 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
       ),
     )
         .toList();
+  }
+
+
+  void launchMap() async {
+    currentLocationData = await location.getLocation();
+    String url = 'https://www.google.com/maps/dir/?api=1&origin' +
+        currentLocationData.latitude.toString() +
+        "," +
+        currentLocationData.longitude.toString() +
+        '=&destination={$address}&travelmode=driving&dir_action=navigate';
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
+  }
+
+  void getLocationPermissionStatus() async {
+    PermissionStatus _permissionGranted;
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.granted) {
+      isLocationAvailable = true;
+      launchMap();
+    } else {
+      requestLocationPermission();
+    }
+  }
+
+//request location permission
+  void requestLocationPermission() async {
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        isLocationAvailable = false;
+        launchMap();
+      } else {
+        isLocationAvailable = true;
+        launchMap();
+      }
+    } else {
+      launchMap();
+    }
   }
 }

@@ -6,10 +6,13 @@ import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
-import 'package:flutter_om_jeweller/constants/app_paddings.dart';
+import 'package:flutter_om_jeweller/constants/string/app.string.dart';
+import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
+import 'package:flutter_om_jeweller/bloc/profile.bloc.dart';
 
 class AppDrawer extends StatelessWidget {
 
+  String userName=AuthBloc.getUserName();
   List<String> drawerIcon=["assets/images/dra_appointment.svg","assets/images/dra_about.svg","assets/images/dra_visit.svg",
     "assets/images/dra_refer.svg","assets/images/dra_feedback.svg","assets/images/dra_faq.svg","assets/images/dra_review.svg"];
   @override
@@ -90,7 +93,10 @@ class AppDrawer extends StatelessWidget {
                       textDirection: AppTextDirection.defaultDirection,
                     )
                 ),
-              onTap: () {},
+              onTap: () {
+                 Navigator.pop(context);
+                _processLogout(context);
+              },
             ),
                 // _createDrawerItem(icon: Icons.collections_bookmark, text: 'Steps'),
                 // _createDrawerItem(icon: Icons.face, text: 'Authors'),
@@ -123,6 +129,15 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
+  void _processLogout(BuildContext context) async {
+    AuthBloc.prefs.setBool(AppStrings.authenticated, false);
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.loginRoute,
+          (route) => false,
+    );
+  }
+
   Widget _createHeader(BuildContext context) {
     return DrawerHeader(
         margin: EdgeInsets.only(top: 60),
@@ -140,7 +155,7 @@ class AppDrawer extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(bottom: 3),
                       child:Text(
-                        'Hi, Suhani Shah',
+                        'Hi, '+userName,
                         style: AppTextStyle.h3TitleTextStyle(
                             color: AppColor.textColor(context),
                             fontWeight: FontWeight.w500

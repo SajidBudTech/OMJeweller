@@ -19,6 +19,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_om_jeweller/bloc/base.bloc.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
+import 'package:flutter_om_jeweller/bloc/fillDetails.bloc.dart';
+import 'package:edge_alert/edge_alert.dart';
 
 class FillDetailsPage extends StatefulWidget {
   FillDetailsPage({Key key}) : super(key: key);
@@ -29,23 +31,30 @@ class FillDetailsPage extends StatefulWidget {
 
 class _FillDetailsPageState extends State<FillDetailsPage> {
   //SearchVendorsBloc instance
-  final ProductSearchBloc _searchVendorsBloc = ProductSearchBloc();
-
-  //search bar focus node
-  final _searchBarFocusNode = FocusNode();
-  LoginBloc _loginBloc = LoginBloc();
-
+  FillDetailsBloc _fillDetailsBloc=FillDetailsBloc();
   @override
   void initState() {
     super.initState();
-    _searchBarFocusNode.requestFocus();
-    _searchVendorsBloc.initBloc();
+    _fillDetailsBloc.initBloc();
+    _fillDetailsBloc.showAlert.listen((show) {
+      //when asked to show an alert
+      if (show) {
+        EdgeAlert.show(
+          context,
+          title: _fillDetailsBloc.dialogData.title,
+          description: _fillDetailsBloc.dialogData.body,
+          backgroundColor: _fillDetailsBloc.dialogData.backgroundColor,
+          icon: _fillDetailsBloc.dialogData.iconData,
+        );
+      }
+    });
+
   }
 
   @override
   void dispose() {
     super.dispose();
-    _searchVendorsBloc.dispose();
+    _fillDetailsBloc.dispose();
   }
 
   @override
@@ -80,7 +89,7 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
                     padding: EdgeInsets.only(bottom: 8),
                     child: Row(children: <Widget>[
                       Text(
-                        'Lorem Ipsum Lorem Ipsum',
+                        'Please fill appointment person details',
                         style: AppTextStyle.h4TitleTextStyle(
                             color: AppColor.textColor(context),
                             fontWeight: FontWeight.w500),
@@ -99,7 +108,7 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
               SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
               SliverToBoxAdapter(
                   child:StreamBuilder<bool>(
-                    stream: _loginBloc.validMobileNumber,
+                    stream: _fillDetailsBloc.validName,
                     builder: (context, snapshot) {
                       return  CustomHintLableTextFormField(
                         isFixedHeight: false,
@@ -113,16 +122,16 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
                             color: AppColor.textColor(context)
                         ),
                         textInputAction: TextInputAction.next,
-                        textEditingController: _loginBloc.mobileNumberTEC,
+                        textEditingController: _fillDetailsBloc.nameTEC,
                         errorText: snapshot.error,
-                        onChanged: _loginBloc.validateMobileNumber,
+                        onChanged: _fillDetailsBloc.validateName,
                       );
                     },
                   )),
               SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
               SliverToBoxAdapter(
                   child:StreamBuilder<bool>(
-                    stream: _loginBloc.validMobileNumber,
+                    stream: _fillDetailsBloc.validmobile,
                     builder: (context, snapshot) {
                       return  CustomHintLableTextFormField(
                           isFixedHeight: false,
@@ -136,16 +145,16 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
                               color: AppColor.textColor(context)
                           ),
                           textInputAction: TextInputAction.next,
-                          textEditingController: _loginBloc.mobileNumberTEC,
+                          textEditingController: _fillDetailsBloc.mobileTEC,
                           errorText: snapshot.error,
-                          onChanged: _loginBloc.validateMobileNumber
+                          onChanged: _fillDetailsBloc.validateMobile
                       );
                     },
                   )),
               SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
               SliverToBoxAdapter(
                   child:StreamBuilder<bool>(
-                    stream: _loginBloc.validMobileNumber,
+                    stream: _fillDetailsBloc.validEmailAddress,
                     builder: (context, snapshot) {
                       return  CustomHintLableTextFormField(
                         isFixedHeight: false,
@@ -159,9 +168,9 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
                             color: AppColor.textColor(context)
                         ),
                         textInputAction: TextInputAction.next,
-                        textEditingController: _loginBloc.passwordTEC,
+                        textEditingController: _fillDetailsBloc.emailAddressTEC,
                         errorText: snapshot.error,
-                        onChanged: _loginBloc.validateEmailAddress,
+                        onChanged: _fillDetailsBloc.validateEmailAddress,
                        // suffixWidget: Icon(FlutterIcons.arrow_down_sli,size: 12,color: Colors.black,),
 
                       );
@@ -170,7 +179,7 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
               SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
               SliverToBoxAdapter(
                   child:StreamBuilder<bool>(
-                    stream: _loginBloc.validMobileNumber,
+                    stream: _fillDetailsBloc.validproduct,
                     builder: (context, snapshot) {
                       return  CustomHintLableTextFormField(
                           isFixedHeight: false,
@@ -184,9 +193,9 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
                               color: AppColor.textColor(context)
                           ),
                           textInputAction: TextInputAction.next,
-                          textEditingController: _loginBloc.mobileNumberTEC,
+                          textEditingController: _fillDetailsBloc.productTEC,
                           errorText: snapshot.error,
-                          onChanged: _loginBloc.validateMobileNumber
+                          //onChanged: _fillDetailsBloc.validateMobileNumber
                       );
                     },
                   )),
@@ -194,7 +203,7 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
 
               SliverToBoxAdapter(
                   child:StreamBuilder<UiState>(
-                stream: _loginBloc.uiState,
+                stream: _fillDetailsBloc.uiState,
                 builder: (context, snapshot) {
                   final uiState = snapshot.data;
 
@@ -202,11 +211,7 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
                     padding: AppPaddings.mediumButtonPadding(),
                     color: AppColor.accentColor,
                     onPressed: uiState != UiState.loading
-                        ?  (){
-                      Navigator.pushNamed(
-                      context,
-                      AppRoutes.confirmedBokkingRoute,
-                    );}
+                        ?  (){_fillDetailsBloc.processAppointmnetBooking(context: context);}
                         : null,
                     child: uiState != UiState.loading
                         ? Text(

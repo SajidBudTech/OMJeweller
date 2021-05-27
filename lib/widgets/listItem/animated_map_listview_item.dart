@@ -5,10 +5,13 @@ import 'package:flutter_om_jeweller/data/models/wishlist_data.dart';
 
 class AnimatedMapListViewItem extends StatelessWidget {
   final int index;
-  final String vendor;
+  final String address;
+  final String location;
+  final String phone;
+
   final Widget listViewItem;
   const AnimatedMapListViewItem(
-      {this.index, this.vendor, this.listViewItem, Key key})
+      {this.index, this.address,this.location,this.phone, this.listViewItem, Key key})
       : super(key: key);
 
   @override
@@ -21,7 +24,9 @@ class AnimatedMapListViewItem extends StatelessWidget {
         child: FadeInAnimation(
           child: listViewItem ??
               VisitStoreListViewItem(
-                vendor: vendor,
+                address: address,
+                location: location,
+                phone: phone,
               ),
         ),
       ),

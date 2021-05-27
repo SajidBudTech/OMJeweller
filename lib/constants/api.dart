@@ -4,21 +4,44 @@ class Api {
   // static const baseUrl = "https://testbud.in/ayurvedaadmin/public/api";
 
    //static const LIVE URL  = "https://thelifeshaper.com/api";
-     static const baseUrl = "https://testbud.in/ayurvedaadmin/public/api";
+     static const baseUrl = "https://testbud.in/omjewellers/public/api";
  // static const baseUrl = "https://173db198c876.ngrok.io/ayurveda_new/public/api";
 
-  static const login = "/login";
+     static const downloadUrlPath = "https://testbud.in/omjewellers/public/contentupload/";
+     static const ProductdownloadUrlPath = "https://testbud.in/omjewellers/public";
+
+  static const login = "/customerlogin";
+  static const loginOTP = "/login_otp";
+  static const sendOTP = "/send_otp";
+  static const register = "/customerregister";
+
+
+
   static const loginSocial = "/login/social";
-  static const register = "/register";
   static const otp = "/otp";
   static const logout = "/logout";
   static const forgotPassword = "/password/reset/init";
 
   static const changePassword = "/password/change";
-  static const updateProfile = "/user/update";
+  static const updateProfile = "/update_user";
 
-  static const banners = "/banners";
-  static const categories = "/categories";
+  static const scrollingbanners = "/get_scrolling_banner";
+  static const advertismentbanners = "/get_adevertisment_banner";
+  static const categories = "/get_category";
+  static const collections = "/get_collection";
+  static const goldRate = "/get_purity";
+  static const getProductByCategory = "/get_product_by_category";
+  static const getProductBySubCategory = "/get_product_by_subcategory";
+  static const getProductByCollection = "/get_product_by_collection";
+  static const addtowishlist = "/add_to_wishlist";
+  static const removeFromWishList = "/remove_from_wishlist";
+  static const wishlistProduct = "/wishlist_product";
+  static const addAppointmentBook = "/appointment_add";
+  static const editAppointmentBook = "/appointment_edit";
+  static const myAppointmentBooking = "/appointment_list";
+  static const submitFeedBack = "/add_feedback";
+
+
   static const vendors = "/v2/vendors";
   static const deliveryAddress = "/delivery/addresses";
 

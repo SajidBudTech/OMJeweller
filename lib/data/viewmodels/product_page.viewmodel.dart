@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
+import 'package:flutter_om_jeweller/data/models/category.dart';
+import 'package:flutter_om_jeweller/data/models/loading_state.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
+import 'package:flutter_om_jeweller/data/repositories/product.repository.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/base.viewmodel.dart';
+import 'package:flutter_om_jeweller/data/models/subcategory.dart';
+import 'package:flutter_om_jeweller/data/models/collection.dart';
+import 'package:flutter_om_jeweller/data/models/gold_rate.dart';
+import 'package:flutter_om_jeweller/data/repositories/home.repository.dart';
+import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
 
 
 class ProductPageViewModel extends MyBaseViewModel {
@@ -9,16 +18,32 @@ class ProductPageViewModel extends MyBaseViewModel {
   //show the empty space between the appbar and the tab with its reach top
   bool makeAppBarTransparent = true;
 
-  //Vendor repository
-  //VendorRepository _vendorRepository = VendorRepository();
+  LoadingState productByCategoryLoadingState = LoadingState.Loading;
+  LoadingState productBySubCategoryLoadingState = LoadingState.Loading;
+  LoadingState productByWishlistLoadingState = LoadingState.Loading;
+  //Product repository
+  ProductRepository _productRepository = ProductRepository();
 
+  HomePageRepository _bannerRepository = HomePageRepository();
+
+
+  List<GoldRate> goldRate=[];
+
+  List<Product> productbyCategoryList=[];
+
+  List<Product> productbyWishList=[];
+
+
+  double platiniumRate;
   //menus of the vendor
   //List<Menu> menus = [];
 
   //Vendor model
  // Vendor vendor;
 
-  ProductPageViewModel();
+  ProductPageViewModel(){
+    getGoldRate();
+  }
 
   initialise() {
     vendorPageStrollController.addListener(updateAppBarBackgroundColor);
@@ -54,9 +79,97 @@ class ProductPageViewModel extends MyBaseViewModel {
     notifyListeners();
   }
 
+
+  void getProductsByCategory({Category category,int categoryId}) async {
+    //add null data so listener can show shimmer widget to indicate loading
+    productByCategoryLoadingState = LoadingState.Loading;
+    notifyListeners();
+    final int userId=AuthBloc.getUserID();
+    try {
+      productbyCategoryList = await _productRepository.getProductByCategories(userID: userId,categoryId: category!=null?category.categoryID:categoryId);
+      productByCategoryLoadingState = LoadingState.Done;
+      notifyListeners();
+    } catch (error) {
+      productByCategoryLoadingState = LoadingState.Failed;
+      notifyListeners();
+    }
+  }
+
+  void getProductsBySubCategory({Subcategory subcategory}) async {
+    //add null data so listener can show shimmer widget to indicate loading
+    productByCategoryLoadingState = LoadingState.Loading;
+    notifyListeners();
+    final int userId=AuthBloc.getUserID();
+    try {
+      productbyCategoryList = await _productRepository.getProductBySubCategories(userID: userId,subCategoryId: subcategory.subcategoryID);
+      productByCategoryLoadingState = LoadingState.Done;
+      notifyListeners();
+    } catch (error) {
+      productByCategoryLoadingState = LoadingState.Failed;
+      notifyListeners();
+    }
+  }
+
+  void getProductsByCollection({Collection collection}) async {
+    //add null data so listener can show shimmer widget to indicate loading
+    productByCategoryLoadingState = LoadingState.Loading;
+    notifyListeners();
+    final int userId=AuthBloc.getUserID();
+    try {
+      productbyCategoryList = await _productRepository.getProductByCollection(userID: userId,collectionId: collection.collectionID);
+      productByCategoryLoadingState = LoadingState.Done;
+      notifyListeners();
+    } catch (error) {
+      productByCategoryLoadingState = LoadingState.Failed;
+      notifyListeners();
+    }
+  }
+
+
   @override
   void dispose() {
     super.dispose();
     vendorPageStrollController.dispose();
   }
+
+  void getGoldRate() async{
+    //add null data so listener can show shimmer widget to indicate loading
+    setBusy(true);
+
+    try {
+
+      goldRate = await _bannerRepository.getGoldRate();
+
+      for(GoldRate goldone in goldRate){
+        if(goldone.purityName=="Platinium"){
+          platiniumRate=(double.parse(goldone.purityPrice));
+        }
+      }
+
+    } catch (error) {
+      setError(error);
+      print("Error getting banners ==> $error");
+    }
+    setBusy(false);
+
+  }
+
+
+  void getWishListProducts() async {
+    //add null data so listener can show shimmer widget to indicate loading
+    productByWishlistLoadingState = LoadingState.Loading;
+    notifyListeners();
+
+    final int userId=AuthBloc.getUserID();
+    try {
+      productbyWishList = await _productRepository.getWishListProduct(userID: userId);
+      productByWishlistLoadingState = LoadingState.Done;
+      notifyListeners();
+    } catch (error) {
+      productByWishlistLoadingState = LoadingState.Failed;
+      notifyListeners();
+    }
+  }
+
+
 }

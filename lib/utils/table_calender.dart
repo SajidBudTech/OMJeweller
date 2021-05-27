@@ -4,6 +4,9 @@ import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class WeekCalendarPage extends StatefulWidget {
+
+  WeekCalendarPage({Key key,this.onDaySelected}):super();
+  final Function onDaySelected;
   @override
   _WeekCalendarPageState createState() => _WeekCalendarPageState();
 }
@@ -26,6 +29,7 @@ class _WeekCalendarPageState extends State<WeekCalendarPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TableCalendar(
+              startDay: DateTime.now(),
               initialCalendarFormat: CalendarFormat.week,
               calendarStyle: CalendarStyle(
                 todayColor: AppColor.textColor(context),
@@ -47,9 +51,7 @@ class _WeekCalendarPageState extends State<WeekCalendarPage> {
                   formatButtonShowsNext: false,
                   formatButtonVisible: false),
               startingDayOfWeek: StartingDayOfWeek.monday,
-              onDaySelected: (date, events, _) {
-                print(date.toUtc());
-              },
+              onDaySelected: widget.onDaySelected,
               builders: CalendarBuilders(
                 dowWeekdayBuilder: (context, value) => Container(
                   // margin: const EdgeInsets.only(left: 20.0,right: 20),

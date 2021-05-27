@@ -10,6 +10,7 @@ import 'package:flutter_om_jeweller/constants/string/search.strings.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/product_page.viewmodel.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/widgets/appbars/empty_appbar.dart';
 import 'package:flutter_om_jeweller/widgets/appbars/leading_app_bar.dart';
@@ -19,8 +20,6 @@ import 'package:flutter_om_jeweller/widgets/empty/empty_wishlist.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/animated_product_listitem.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/product_listview_item.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/wishlist_list_item.dart';
-import 'package:flutter_om_jeweller/widgets/search/search_bar.dart';
-import 'package:flutter_om_jeweller/widgets/search/search_groupedlist_view.dart';
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
@@ -33,40 +32,14 @@ class WishlistPage extends StatefulWidget {
 }
 
 class _WishlistPageState extends State<WishlistPage> {
-  //SearchVendorsBloc instance
-  final ProductSearchBloc _searchVendorsBloc = ProductSearchBloc();
 
-  //search bar focus node
-  final _searchBarFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _searchBarFocusNode.requestFocus();
-    _searchVendorsBloc.initBloc();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _searchVendorsBloc.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<MainHomeViewModel>.reactive(
-        viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
+    return ViewModelBuilder<ProductPageViewModel>.reactive(
+        viewModelBuilder: () => ProductPageViewModel(),
+        onModelReady: (model) => model.getWishListProducts(),
         builder: (context, model, child) =>
-
-            /*Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0xFFFFDBB6), Color(0xFFFFFFFF)])),
-            child:*/
-
             Scaffold(
                 body:
                 Container(
@@ -83,20 +56,20 @@ class _WishlistPageState extends State<WishlistPage> {
                           Container(
                             child: LeadingAppBar(
                               title: "Wishlist",
-                              subTitle: "22 Items",
+                              subTitle: model.productbyWishList.length.toString()+" Items",
                             ),
                           ),
                           Expanded(child: CustomScrollView(slivers: [
                             SliverPadding(
                                 padding: AppPaddings.defaultPadding(),
-                                sliver: model.categoriesLoadingState ==
+                                sliver: model.productByWishlistLoadingState ==
                                     LoadingState.Loading
                                 //the loadinng shimmer
                                     ? SliverToBoxAdapter(
                                   child: VendorShimmerListViewItem(),
                                 )
                                 // the faild view
-                                    : model.categoriesLoadingState ==
+                                    : model.productByWishlistLoadingState ==
                                     LoadingState.Failed
                                     ? SliverToBoxAdapter(
                                   child: LoadingStateDataView(
@@ -107,12 +80,12 @@ class _WishlistPageState extends State<WishlistPage> {
                                         color: Colors.red,
                                       ),
                                       actionFunction: () =>
-                                      model.wishlistList,
+                                      model.getWishListProducts(),
                                     ),
                                   ),
                                 )
                                 // the vendors list
-                                    : model.wishlistList.length == 0
+                                    : model.productbyWishList.length == 0
                                     ? SliverToBoxAdapter(
                                     child: Center(
                                       child: EmptyWishlist(),
@@ -125,20 +98,21 @@ class _WishlistPageState extends State<WishlistPage> {
                                     crossAxisCount: 2,
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 10,
-                                    childAspectRatio: 1 / 1.84,
+                                    childAspectRatio: 0.54,
                                   ),
                                   delegate: SliverChildBuilderDelegate(
                                         (context, index) {
                                       return AnimatedProdcutListViewItem(
                                         index: index,
-                                        vendor: model.wishlistList[index],
+                                        product: model.productbyWishList[index],
                                         listViewItem:
                                         WishlistListViewItem(
-                                          vendor:model.wishlistList[index],
+                                          product: model.productbyWishList[index],
+                                          platinumRate: model.platiniumRate,
                                         ),
                                       );
                                     },
-                                    childCount: model.wishlistList.length,
+                                    childCount: model.productbyWishList.length,
                                   ),
                                 )),
 

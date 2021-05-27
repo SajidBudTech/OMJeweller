@@ -59,9 +59,22 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: HomeStrings.BottomBarhome,
         ),
         BottomNavigationBarItem(
+          icon: new SvgPicture.asset(
+            "assets/images/product_svg.svg",
+            color: currentPageIndex == 1
+                ? AppColor.bottomNavigationItemSelectedColor(
+              context,
+            )
+                : AppColor.bottomNavigationItemUnselectedColor(
+              context,
+            ),
+          ),
+          label: HomeStrings.BottomBarProduct,
+        ),
+        BottomNavigationBarItem(
           icon:new SvgPicture.asset(
             "assets/images/appoint_icon.svg",
-            color: currentPageIndex == 1
+            color: currentPageIndex == 2
                 ? AppColor.bottomNavigationItemSelectedColor(
               context,
                 )
@@ -74,7 +87,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: new SvgPicture.asset(
             "assets/images/profile_icon.svg",
-            color: currentPageIndex == 2
+            color: currentPageIndex == 3
                 ? AppColor.bottomNavigationItemSelectedColor(
                     context,
                   )
@@ -82,11 +95,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
                     context,
                   ),
              ),
-
-          /*Icon(
-            FlutterIcons.profile_ant,
-            size: 20,
-          ),*/
           label: HomeStrings.BottomBarProfile,
         ),
       ],

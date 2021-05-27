@@ -7,6 +7,7 @@ import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/constants/string/search.strings.dart';
+import 'package:flutter_om_jeweller/data/models/category.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
@@ -26,78 +27,56 @@ import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_it
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/product_page.viewmodel.dart';
+import 'package:flutter_om_jeweller/data/models/subcategory.dart';
+import 'package:flutter_om_jeweller/data/models/collection.dart';
 
 class ProductPage extends StatefulWidget {
-  ProductPage({Key key}) : super(key: key);
+  ProductPage({Key key,this.category,this.subcategory,this.collection}) : super(key: key);
 
+  Category category;
+  Subcategory subcategory;
+  Collection collection;
   @override
   _ProductPageState createState() => _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
   //SearchVendorsBloc instance
-  final ProductSearchBloc _searchVendorsBloc = ProductSearchBloc();
-
-  //search bar focus node
-  final _searchBarFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _searchBarFocusNode.requestFocus();
-    _searchVendorsBloc.initBloc();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _searchVendorsBloc.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<MainHomeViewModel>.reactive(
-        viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
+    return ViewModelBuilder<ProductPageViewModel>.reactive(
+        viewModelBuilder: () => ProductPageViewModel(),
+        onModelReady: (model) => widget.category==null?(widget.subcategory==null?
+        model.getProductsByCollection(collection: widget.collection):model.getProductsBySubCategory(subcategory: widget.subcategory)):
+        model.getProductsByCategory(category: widget.category),
         builder: (context, model, child) =>
-
-/*            Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0xFFFFDBB6), Color(0xFFFFFFFF)])),
-            child: */
-
             Scaffold(
                 backgroundColor: AppColor.newprimaryColor,
                 body: Container(
-             /* decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0xFFFFDBB6), Color(0xFFFFFFFF)])),*/
               child: SafeArea(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Container(
                         child: LeadingAppBar(
-                          title: "Product Name",
-                          subTitle: "22 Items",
+                          title: widget.category==null?(widget.subcategory==null?widget.collection.collectionName:widget.subcategory.subcategoryName):
+                                  widget.category.categoryName,
+                          subTitle: model.productByCategoryLoadingState !=
+                              LoadingState.Loading?model.productbyCategoryList.length.toString()+" Items":"0 Items",
                         ),
                       ),
                       Expanded(child: CustomScrollView(slivers: [
                         SliverPadding(
                             padding: AppPaddings.defaultPadding(),
-                            sliver: model.categoriesLoadingState ==
+                            sliver: model.productByCategoryLoadingState ==
                                 LoadingState.Loading
                             //the loadinng shimmer
                                 ? SliverToBoxAdapter(
                               child: VendorShimmerListViewItem(),
                             )
                             // the faild view
-                                : model.categoriesLoadingState ==
+                                : model.productByCategoryLoadingState ==
                                 LoadingState.Failed
                                 ? SliverToBoxAdapter(
                               child: LoadingStateDataView(
@@ -108,15 +87,17 @@ class _ProductPageState extends State<ProductPage> {
                                     color: Colors.red,
                                   ),
                                   actionFunction: () =>
-                                  model.wishlistList,
+                                  widget.category==null?(widget.subcategory==null?
+                                  model.getProductsByCollection(collection: widget.collection):model.getProductsBySubCategory(subcategory: widget.subcategory)):
+                                  model.getProductsByCategory(category: widget.category),
                                 ),
                               ),
                             )
                             // the vendors list
-                                : model.wishlistList.length == 0
+                                : model.productbyCategoryList.length == 0
                                 ? SliverToBoxAdapter(
                                 child: Center(
-                                  child: EmptyWishlist(),
+                                  child: EmptyProduct(),
                                 ))
                                 :
                             //grid listing type
@@ -126,28 +107,27 @@ class _ProductPageState extends State<ProductPage> {
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
-                                childAspectRatio: 1 / 1.67,
+                                childAspectRatio: 0.60,
                               ),
                               delegate: SliverChildBuilderDelegate(
                                     (context, index) {
                                   return AnimatedProdcutListViewItem(
                                     index: index,
-                                    vendor: model.wishlistList[index],
-                                    /*listViewItem:
-                                    SimilarProdcutListViewItem(
-                                      vendor:
-                                      model.wishlistList[index],
-                                    ),*/
-                                  );
+                                    product: model.productbyCategoryList[index],
+                                    platinumRate: model.platiniumRate,
+                                   );
                                 },
-                                childCount: model.wishlistList.length,
+                                childCount: model.productbyCategoryList.length,
                               ),
                             )),
 
 
 
                       ])),
-                      Container(
+
+                      Visibility(
+                        visible: model.productbyCategoryList.length > 0,
+                          child:Container(
                         margin: EdgeInsets.all(2),
                         color: Colors.white,
                         padding: EdgeInsets.symmetric(
@@ -226,7 +206,7 @@ class _ProductPageState extends State<ProductPage> {
                                 )))
                           ],
                         ),
-                      ),
+                      )),
                     ]),
               ),
             )));

@@ -23,11 +23,7 @@ import 'package:flutter_om_jeweller/widgets/myappointment_slider.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/animated_map_listview_item.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/product_listview_item.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/company_member_listview_item.dart';
-import 'package:flutter_om_jeweller/widgets/sort_page_content/sort_page.dart';
-import 'package:flutter_om_jeweller/widgets/fliters/filter_content_page.dart';
-import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
-import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
-import 'package:stacked/stacked.dart';
+import 'package:flutter_om_jeweller/bloc/appointment.bloc.dart';
 import 'package:flutter_om_jeweller/widgets/connector/horizontal_connector_dash.dart';
 import 'package:flutter_om_jeweller/widgets/connector/vertical_connector_dash.dart';
 import 'package:flutter_om_jeweller/widgets/connector/horizontal_right_connector.dart';
@@ -41,30 +37,25 @@ class AboutBrandPage extends StatefulWidget {
 
 class _AboutBrandPageState extends State<AboutBrandPage> {
   //SearchVendorsBloc instance
-  final ProductSearchBloc _searchVendorsBloc = ProductSearchBloc();
+  final AppointmentBloc _appointmentBloc = AppointmentBloc();
 
   //search bar focus node
-  final _searchBarFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _searchBarFocusNode.requestFocus();
-    _searchVendorsBloc.initBloc();
+    _appointmentBloc.initBloc();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _searchVendorsBloc.dispose();
+    _appointmentBloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<MainHomeViewModel>.reactive(
-        viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
-        builder: (context, model, child) => AnnotatedRegion<
+    return  AnnotatedRegion<
                 SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle(
               statusBarColor: AppColor.newprimaryColor,
@@ -95,8 +86,7 @@ class _AboutBrandPageState extends State<AboutBrandPage> {
                                     ),
                                     child: AboutBannerSlider(
                                         //search base on the category select from the banner
-                                        onBannerTapped:
-                                            model.openCategorySearchPage),
+                                        onBannerTapped: (){}),
                                   ),
                                 ),
                                 SliverToBoxAdapter(
@@ -134,39 +124,7 @@ class _AboutBrandPageState extends State<AboutBrandPage> {
                                 ),
                                 SliverPadding(
                                     padding: AppPaddings.defaultPadding(),
-                                    sliver: model.categoriesLoadingState ==
-                                            LoadingState.Loading
-                                        //the loadinng shimmer
-                                        ? SliverToBoxAdapter(
-                                            child: VendorShimmerListViewItem(),
-                                          )
-                                        // the faild view
-                                        : model.categoriesLoadingState ==
-                                                LoadingState.Failed
-                                            ? SliverToBoxAdapter(
-                                                child: LoadingStateDataView(
-                                                  stateDataModel:
-                                                      StateDataModel(
-                                                    showActionButton: true,
-                                                    actionButtonStyle:
-                                                        AppTextStyle
-                                                            .h4TitleTextStyle(
-                                                      color: Colors.red,
-                                                    ),
-                                                    actionFunction: () =>
-                                                        model.wishlistList,
-                                                  ),
-                                                ),
-                                              )
-                                            // the vendors list
-                                            : model.wishlistList.length == 0
-                                                ? SliverToBoxAdapter(
-                                                    child: Center(
-                                                    child: EmptyWishlist(),
-                                                  ))
-                                                :
-                                                //grid listing type
-                                                SliverGrid(
+                                    sliver: SliverGrid(
                                                     gridDelegate:
                                                         SliverGridDelegateWithFixedCrossAxisCount(
                                                       crossAxisCount: 2,
@@ -179,23 +137,15 @@ class _AboutBrandPageState extends State<AboutBrandPage> {
                                                       (context, index) {
                                                         return AnimatedMapListViewItem(
                                                           index: index,
-                                                          vendor: model
-                                                                  .CompanyNameList[
-                                                              index],
-                                                          listViewItem:
-                                                              CompanyListViewItem(
-                                                            name: model
-                                                                    .CompanyNameList[
-                                                                index],
-                                                            post: model
-                                                                    .CompanyPostList[
-                                                                index],
+                                                          address: _appointmentBloc.CompanyNameList[index],
+                                                          listViewItem: CompanyListViewItem(
+                                                            name: _appointmentBloc.CompanyNameList[index],
+                                                            post: _appointmentBloc.CompanyPostList[index],
+                                                            image: _appointmentBloc.CompanyPostImage[index],
                                                           ),
                                                         );
                                                       },
-                                                      childCount: model
-                                                          .CompanyNameList
-                                                          .length,
+                                                      childCount: _appointmentBloc.CompanyNameList.length,
                                                     ),
                                                   )),
                                 SliverToBoxAdapter(
@@ -358,9 +308,14 @@ class _AboutBrandPageState extends State<AboutBrandPage> {
                                         ],
                                       )),
                                 ),
+                                SliverToBoxAdapter(
+                                  child: UiSpacer.verticalSpace(space: 19),
+                                )
+
 
                               ]))),
-                    ]))))));
+                    ])))));
+    //);
 
     //);
   }

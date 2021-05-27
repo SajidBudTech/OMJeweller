@@ -39,5 +39,13 @@ class AppStrings {
 
   static String FlutterAppBadgetConstant = "flutterNotificationBadget";
 
+  static String selectedTypeofvisit="";
+  static String selectedTypeDetails="";
+  static String selectedBookDate="";
+  static String selectedBookTime="";
+  static String selectedProduct="";
+
+
+
 
 }

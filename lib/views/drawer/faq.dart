@@ -128,7 +128,7 @@ class _FAQPageState extends State<FAQPage> {
                                           (context, index) {
                                         return AnimatedMapListViewItem(
                                           index: index,
-                                          vendor: model.productList[index],
+                                          address: model.productList[index],
                                           listViewItem: FAQListViewItem(
                                             vendor: model.productList[index],
                                           ),

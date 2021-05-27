@@ -36,7 +36,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-
     //listen to the need to show a dialog alert or a normal snackbar alert type
     _loginBloc.showAlert.listen((show) {
       //when asked to show an alert
@@ -55,12 +54,18 @@ class _LoginPageState extends State<LoginPage> {
     _loginBloc.uiState.listen((uiState) async {
       if (uiState == UiState.redirect) {
         // await Navigator.popUntil(context, (route) => false);
-        Navigator.pushNamed(context, AppRoutes.homeRoute);
+       // Navigator.pushNamed(context, AppRoutes.homeRoute);
         // Navigator.pushNamedAndRemoveUntil(
         //   context,
         //   AppRoutes.homeRoute,
         //   (route) => false,
         // );
+        if(_loginBloc.OTP_OR_REGISTER){
+          Navigator.pushNamed(context, AppRoutes.verifyOTPRoute,arguments: _loginBloc.user);
+        }else{
+          Navigator.pushNamed(context, AppRoutes.registerRoute,arguments: _loginBloc.user);
+        }
+
       }
     });
   }
@@ -153,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                   textInputAction: TextInputAction.next,
                                   textEditingController: _loginBloc.mobileNumberTEC,
                                   errorText: snapshot.error,
-                                  onChanged: _loginBloc.validateMobileNumber,
+                                  onChanged:_activebutton
                                 );
                               },
                             )),
@@ -163,21 +168,21 @@ class _LoginPageState extends State<LoginPage> {
                         UiSpacer.verticalSpace(space: 45),
                         //login button
                         //listen to the uistate to know the appropriated state to put the login button
-                        StreamBuilder<UiState>(
+
+                           StreamBuilder<UiState>(
                           stream: _loginBloc.uiState,
                           builder: (context, snapshot) {
                             final uiState = snapshot.data;
-
                             return CustomButton(
                               padding: AppPaddings.mediumButtonPadding(),
                               color: AppColor.accentColor,
-                              onPressed: uiState != UiState.loading
-                                  ?  (){Navigator.pushNamed(
-                                          context,
-                                           AppRoutes.verifyOTPRoute,
-                                        );}
-                                  : null,
-                              child: uiState != UiState.loading
+                              disabledColor: AppColor.disableColor,
+                              onPressed: _loginBloc.loginButtonStatus
+                                  ?  (){
+                                     _loginBloc.processOTP(context: context);
+                                   }
+                                : null,
+                                child: uiState != UiState.loading
                                   ? Text(
                                       AuthStrings.loginButtonTitle,
                                       style: AppTextStyle.h4TitleTextStyle(
@@ -199,7 +204,12 @@ class _LoginPageState extends State<LoginPage> {
           ),
         )
       );
-
   //  );
+   }
+
+    _activebutton(String value) async{
+     setState(() {
+       _loginBloc.validateMobileNumber(value);
+     });
    }
 }

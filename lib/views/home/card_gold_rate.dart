@@ -27,7 +27,7 @@ class _CardGoldRateState extends State<CardGoldRate> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BannerViewModel>.reactive(
       viewModelBuilder: () => BannerViewModel(),
-      onModelReady: (model) => model.fetchBanners(),
+      onModelReady: (model) => model.fetchGoldRate(),
       builder: (context, model, child) {
         return model.isBusy
             ? Padding(
@@ -41,7 +41,7 @@ class _CardGoldRateState extends State<CardGoldRate> {
             actionButtonStyle: AppTextStyle.h4TitleTextStyle(
               color: Colors.red,
             ),
-            actionFunction: () => model.fetchBanners(),
+            actionFunction: () => model.fetchGoldRate(),
           ),
         )
             :
@@ -53,7 +53,15 @@ class _CardGoldRateState extends State<CardGoldRate> {
         ),
         child:Container(
           padding: EdgeInsets.only(top: 12,bottom: 13),
-          color: AppColor.goldRateBackColor,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            gradient: LinearGradient(
+              colors: <Color>[
+                Color(0XFFEF9783),
+                Color(0XFFD36F50),
+              ],
+            ),
+          ),
           child: Column(
             mainAxisAlignment:MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -61,7 +69,7 @@ class _CardGoldRateState extends State<CardGoldRate> {
               Text(
                 'Current Rate',
                 style: AppTextStyle.h3TitleTextStyle(
-                  color: AppColor.accentColor,
+                  color: Colors.white,
                   fontWeight: FontWeight.w600
                 ),
                 textAlign: TextAlign.start,
@@ -78,7 +86,7 @@ class _CardGoldRateState extends State<CardGoldRate> {
               UiSpacer.verticalSpace(space: 12),
               Padding(padding: EdgeInsets.only(left: 20,right: 20),
               child:DashLine(
-                color: AppColor.accentColor,
+                color: Colors.white,
                 height: 0.5,
               )),
               UiSpacer.verticalSpace(space: 12),
@@ -91,18 +99,18 @@ class _CardGoldRateState extends State<CardGoldRate> {
                       child:Column(
                        children: [
                          Text(
-                           '18 Karat Gold Rate',
-                           style: AppTextStyle.h7TitleTextStyle(
-                             color: AppColor.textColor(context),
+                           '18 Karat',
+                           style: AppTextStyle.h5TitleTextStyle(
+                             color: Colors.white,
                              fontWeight: FontWeight.w400
                            ),
                            textAlign: TextAlign.start,
                            textDirection: AppTextDirection.defaultDirection,
                          ),
                          Text(
-                           '₹43,870',
-                           style: AppTextStyle.h4TitleTextStyle(
-                             color: AppColor.accentColor,
+                           'Rs.'+model.karate18Price,
+                           style: AppTextStyle.h16TitleTextStyle(
+                             color: Colors.white,
                            ),
                            textAlign: TextAlign.start,
                            textDirection: AppTextDirection.defaultDirection,
@@ -117,7 +125,7 @@ class _CardGoldRateState extends State<CardGoldRate> {
                     lineLength: 48,
                     lineThickness: 0.5,
                     dashLength: 2.0,
-                    dashColor: AppColor.accentColor,
+                    dashColor: Colors.white,
                     dashGapLength: 3.0,
                     dashGapColor: Colors.transparent,
                   )),
@@ -126,18 +134,18 @@ class _CardGoldRateState extends State<CardGoldRate> {
                       child:Column(
                         children: [
                           Text(
-                            '22 Karat Gold Rate',
-                            style: AppTextStyle.h7TitleTextStyle(
-                              color: AppColor.textColor(context),
+                            '22 Karat',
+                            style: AppTextStyle.h5TitleTextStyle(
+                              color: Colors.white,
                                 fontWeight: FontWeight.w400
                             ),
                             textAlign: TextAlign.start,
                             textDirection: AppTextDirection.defaultDirection,
                           ),
                           Text(
-                            '₹43,870',
-                            style: AppTextStyle.h4TitleTextStyle(
-                              color: AppColor.accentColor,
+                            'Rs.'+model.karate22Price,
+                            style: AppTextStyle.h16TitleTextStyle(
+                              color: Colors.white,
                             ),
                             textAlign: TextAlign.start,
                             textDirection: AppTextDirection.defaultDirection,
@@ -148,52 +156,6 @@ class _CardGoldRateState extends State<CardGoldRate> {
 
                 ],
               ),
-             /* Container(
-                alignment: Alignment.topRight,
-                margin: EdgeInsets.only(right: 16,top: 8),
-                child: Text(
-                  'Updated on 15 March 2021 at 12:00 AM',
-                  style: AppTextStyle.h6TitleTextStyle(
-                    color: AppColor.hintTextColor(context),
-                  ),
-                  textAlign: TextAlign.start,
-                  textDirection: AppTextDirection.defaultDirection,
-                ),
-              )*/
-
-              /*CarouselSlider(
-                items: _getImageSliders(model.banners),
-                options: CarouselOptions(
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                  aspectRatio: 2.4,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _current = index;
-                    });
-                  },
-                ),
-              ),*/
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: model.banners.map(
-                      (banner) {
-                    int index = model.banners.indexOf(banner);
-                    return Container(
-                      width: 12.0,
-                      height: 4.0,
-                      margin: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 2.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: _current == index
-                            ? AppColor.primaryColorDark
-                            : AppColor.accentColor,
-                      ),
-                    );
-                  },
-                ).toList(),
-              ),*/
             ],
           ),
         )

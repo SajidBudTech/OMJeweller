@@ -18,6 +18,10 @@ import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
+import 'package:flutter_om_jeweller/constants/string/app.string.dart';
+import 'package:edge_alert/edge_alert.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_om_jeweller/data/models/datetime.arguments.dart';
 
 class StoreCallContent extends StatefulWidget {
   StoreCallContent({
@@ -34,11 +38,12 @@ class _StoreCallContentState extends State<StoreCallContent> {
   LoginBloc _loginBloc = LoginBloc();
 
   int SELECTED_POSITION=-1;
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainHomeViewModel>.reactive(
         viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
+        onModelReady: (model) => model.getStoreVisitData(),
         builder: (context, model, child) => Container(
           padding: AppPaddings.defaultPadding(),
           child:Column(
@@ -95,6 +100,7 @@ class _StoreCallContentState extends State<StoreCallContent> {
                         onPressed: (){
                           setState(() {
                             SELECTED_POSITION=index;
+                            AppStrings.selectedTypeDetails=model.storeCallList[index];
                           });
                         },
                       );
@@ -113,11 +119,24 @@ class _StoreCallContentState extends State<StoreCallContent> {
                           color: AppColor.accentColor,
                           onPressed: uiState != UiState.loading
                               ?  (){
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.dateTimeRoute,
-                              arguments: true,
-                            );
+                            if(SELECTED_POSITION!=-1) {
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.dateTimeRoute,
+                                arguments: DateTimeArguments(
+                                    appointment: null,
+                                    status: true
+                                ),
+                              );
+                            }else{
+                              EdgeAlert.show(
+                                context,
+                                title: "Please select call type!",
+                                description: "select one of call option.",
+                                backgroundColor: AppColor.accentColor,
+                                icon: FlutterIcons.error_mdi,
+                              );
+                            }
                           }
                               : null,
                           child: uiState != UiState.loading

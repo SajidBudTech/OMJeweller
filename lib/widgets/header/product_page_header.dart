@@ -1,22 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_om_jeweller/constants/app_color.dart';
-import 'package:flutter_om_jeweller/constants/app_paddings.dart';
-import 'package:flutter_om_jeweller/constants/app_sizes.dart';
-import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
-import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
-import 'package:flutter_om_jeweller/constants/string/app.string.dart';
+import 'package:flutter_om_jeweller/constants/api.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_om_jeweller/views/similar_product_page.dart';
 import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
+import 'package:flutter_om_jeweller/constants/app_sizes.dart';
+import 'package:flutter_om_jeweller/constants/app_color.dart';
 
 class ProductPageHeader extends StatelessWidget {
   const ProductPageHeader({
     Key key,
-    @required this.vendor,
+    @required this.product,
   }) : super(key: key);
 
-  final String vendor;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +28,27 @@ class ProductPageHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                   ),
-                  child:Image.asset(
+                  child:CachedNetworkImage(
+                    imageUrl: Api.ProductdownloadUrlPath + (product.productImage==null?"":product.productImage),
+                    placeholder: (context, url) => Container(
+                      height: (AppSizes.getScreenheight(context)*0.55),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        Icon(Icons.error),
+                    height: (AppSizes.getScreenheight(context)*0.55),
+                    fit: BoxFit.fitHeight,
+                    width: double.infinity,
+                  ),
+                  /*Image.asset(
                   "assets/images/product_image.png",
                   //height: AppSizes.vendorPageImageHeight,
                   height: (AppSizes.getScreenheight(context)*0.55),
                   fit: BoxFit.fitHeight,
                   width: double.infinity,
-                )
+                )*/
               ),
              // ),
               Positioned(
@@ -132,7 +144,10 @@ class ProductPageHeader extends StatelessWidget {
 
     CustomDialog.showCustomBottomSheet(
       context,
-      content: SimilarProductPage(),
+      backgroundColor: AppColor.newprimaryColor,
+      content: SimilarProductPage(
+        categoryId: product.categoryID,
+      ),
     );
   }
 }

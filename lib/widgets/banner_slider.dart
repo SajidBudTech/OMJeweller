@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
+import 'package:flutter_om_jeweller/data/models/advertisment_banner.dart';
 import 'package:flutter_om_jeweller/data/models/category_banner.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/banner.viewmodel.dart';
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
+import 'package:flutter_om_jeweller/constants/api.dart';
 
 class BannerSlider extends StatefulWidget {
-  final Function(CategoryBanner) onBannerTapped;
+  final Function(AdvertismentBanner) onBannerTapped;
   BannerSlider({@required this.onBannerTapped, Key key}) : super(key: key);
 
   @override
@@ -24,7 +26,7 @@ class _BannerSliderState extends State<BannerSlider> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BannerViewModel>.reactive(
       viewModelBuilder: () => BannerViewModel(),
-      onModelReady: (model) => model.fetchBanners(),
+      onModelReady: (model) => model.fetchScrollingBanners(),
       builder: (context, model, child) {
         return model.isBusy
             ? Padding(
@@ -38,18 +40,19 @@ class _BannerSliderState extends State<BannerSlider> {
             actionButtonStyle: AppTextStyle.h4TitleTextStyle(
               color: Colors.red,
             ),
-            actionFunction: () => model.fetchBanners(),
+            actionFunction: () => model.fetchScrollingBanners(),
           ),
         )
             : Container(
           child: Column(
             children: [
               CarouselSlider(
-                items: _getImageSliders(model.banners),
+                items: _getImageSliders(model.scrollingBanners),
                 options: CarouselOptions(
                   autoPlay: true,
                   enlargeCenterPage: false,
                   aspectRatio: 2.4,
+                  viewportFraction: 1,
                   onPageChanged: (index, reason) {
                     setState(() {
                       _current = index;
@@ -59,9 +62,9 @@ class _BannerSliderState extends State<BannerSlider> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: model.banners.map(
+                children: model.scrollingBanners.map(
                       (banner) {
-                    int index = model.banners.indexOf(banner);
+                    int index = model.scrollingBanners.indexOf(banner);
                     return Container(
                       width: 7.0,
                       height: 7.0,
@@ -84,7 +87,7 @@ class _BannerSliderState extends State<BannerSlider> {
   }
 
   int _current = 0;
-  List<Widget> _getImageSliders(List<CategoryBanner> banners) {
+  List<Widget> _getImageSliders(List<AdvertismentBanner> banners) {
     return banners
         .map(
           (banner) => Container(
@@ -96,10 +99,9 @@ class _BannerSliderState extends State<BannerSlider> {
           ),*/
           child: InkWell(
             onTap: () => widget.onBannerTapped(banner),
-            child: Image(
-               image: AssetImage(banner.image),
-              //imageUrl: banner.image,
-              fit: BoxFit.fill,
+            child: CachedNetworkImage(
+              imageUrl: Api.downloadUrlPath+banner.bannerImage,
+              fit: BoxFit.cover,
               width: MediaQuery.of(context).size.width,
             ),
           ),

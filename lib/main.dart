@@ -46,8 +46,13 @@ void main() async {
   if (AuthBloc.firstTimeOnApp()) {
     AuthBloc.prefs.setBool(AppStrings.firstTimeOnApp, false);
   } else {
-    _startRoute = AppRoutes.loginRoute;
+    if(AuthBloc.authenticated()){
+      _startRoute = AppRoutes.homeRoute;
+    }else{
+      _startRoute = AppRoutes.loginRoute;
+    }
   }
+
 
   // Run app!
   runApp(

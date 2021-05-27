@@ -1,5 +1,3 @@
-
-
 class CategoryBanner {
   int id;
   int category_id;

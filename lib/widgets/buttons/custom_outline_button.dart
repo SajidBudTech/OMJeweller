@@ -63,7 +63,7 @@ class _CustomOutlineButtonState extends State<CustomOutlineButton> {
       child: widget.loading ? BusyIndicator() : widget.child,
     );*/
         InkWell(
-          onTap: () => widget.onPressed,
+          onTap: widget.onPressed,
       child: new Container(
         width: widget.width ?? 100,
         height: widget.height ?? 56.0,

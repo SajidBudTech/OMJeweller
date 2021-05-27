@@ -9,6 +9,8 @@ class AppColor {
   static final newprimaryColor = Color(0xFFF8F5F1);
   static final newDividerColor = Color(0xFFF2EDE7);
 
+  static final disableColor = Color(0xFFE1CDBA);
+
 
   static final goldRateBackColor = Color(0xFFFCF4CE);
 

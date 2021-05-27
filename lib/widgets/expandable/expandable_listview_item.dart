@@ -103,7 +103,7 @@ class AppExpansionTileState extends State<AppExpansionTile> with SingleTickerPro
     final Color titleColor = _headerColor.evaluate(_easeInAnimation);
 
     return new Container(
-      padding: EdgeInsets.only(bottom: 12),
+      //padding: EdgeInsets.only(bottom: 12),
       decoration: new BoxDecoration(
           color: _backgroundColor.evaluate(_easeOutAnimation) ?? Colors.transparent,
           border: new Border(

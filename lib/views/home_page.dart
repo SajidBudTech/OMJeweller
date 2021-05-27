@@ -6,6 +6,7 @@ import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/views/bookappointment/book_appointment_page.dart';
 import 'package:flutter_om_jeweller/views/home/main_home_page.dart';
 import 'package:flutter_om_jeweller/views/loyalty/loyalty_page.dart';
+import 'package:flutter_om_jeweller/views/products/product_page_bottombar.dart';
 import 'package:flutter_om_jeweller/views/profile/profile_page.dart';
 import 'package:flutter_om_jeweller/widgets/appbars/empty_appbar.dart';
 import 'package:flutter_om_jeweller/widgets/custom_bottom_navigation_appbar.dart';
@@ -96,6 +97,7 @@ class _HomePageState extends State<HomePage> {
           // GridCategoriesPage(),
           //new home page
           MainHomePage(),
+          ProductCategoryPage(),
           BookAppointmentPage(),
          // LoyaltyPage(),
           ProfilePage(),
@@ -162,7 +164,7 @@ class _HomePageState extends State<HomePage> {
 
 
   _launchWhatsapp() async {
-    const url = "https://wa.me/"+AppStrings.defaultAdminNumber+"?text=Welcome to All Ayurvedic, How can we assist you?";
+    const url = "https://wa.me/"+AppStrings.defaultAdminNumber+"?text=Welcome to OM Jewellers, How can we assist you?";
     var encoded = Uri.encodeFull(url);
     if (await canLaunch(encoded)) {
       await launch(encoded);

@@ -18,6 +18,8 @@ import 'package:flutter_om_jeweller/views/drawer/visit_our_store.dart';
 import 'package:flutter_om_jeweller/views/drawer/dra_edit_profile.dart';
 import 'package:flutter_om_jeweller/views/drawer/about_brand.dart';
 import 'package:flutter_om_jeweller/views/bookappointment/fill_detail_page.dart';
+import 'package:flutter_om_jeweller/data/models/page_arguments.dart';
+import 'package:flutter_om_jeweller/data/models/datetime.arguments.dart';
 
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -30,11 +32,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case AppRoutes.verifyOTPRoute:
       return MaterialPageRoute(
         builder: (context) => VerifyOTPPage(
-          // url: settings.arguments,
+         user: settings.arguments,
         ),
       );
     case AppRoutes.registerRoute:
-      return MaterialPageRoute(builder: (context) => RegisterPage());
+      return MaterialPageRoute(builder: (context) => RegisterPage(
+             user: settings.arguments,
+      ));
 
     case AppRoutes.homeRoute:
       return MaterialPageRoute(
@@ -49,20 +53,32 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => WishlistPage());
 
     case AppRoutes.productListPageRoute:
-      return MaterialPageRoute(builder: (context) => ProductPage());
+      final PageArguments pageArguments = settings.arguments;
+      return MaterialPageRoute(builder: (context) => ProductPage(
+          category: pageArguments.category,
+          subcategory: pageArguments.subCategory,
+          collection: pageArguments.collection,
+
+      ));
 
     case AppRoutes.productDetailRoute:
-      return MaterialPageRoute(builder: (context) => ProductDetailPage());
+      return MaterialPageRoute(builder: (context) => ProductDetailPage(
+        product: settings.arguments,
+      ));
 
     case AppRoutes.notificationsRoute:
       return MaterialPageRoute(builder: (context) => NotificationPage());
     case AppRoutes.dateTimeRoute:
+      final DateTimeArguments dateTimeArguments = settings.arguments;
       return MaterialPageRoute(builder: (context) => SelectDateTimePage(
-        DETAILS_PAGE: settings.arguments,
+        DETAILS_PAGE: dateTimeArguments.status,
+        appointment: dateTimeArguments.appointment,
       ));
 
     case AppRoutes.confirmedBokkingRoute:
-      return MaterialPageRoute(builder: (context) => ConfirmedBookingPage());
+      return MaterialPageRoute(builder: (context) => ConfirmedBookingPage(
+        appointment: settings.arguments,
+      ));
 
     case AppRoutes.fillDetailsRoute:
       return MaterialPageRoute(builder: (context) => FillDetailsPage());

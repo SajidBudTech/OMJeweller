@@ -5,8 +5,10 @@ import 'package:flutter_om_jeweller/data/viewmodels/product_page.viewmodel.dart'
 
 class ProductPageAppBar extends StatelessWidget {
   final ProductPageViewModel model;
+  final String productName;
   const ProductPageAppBar({
     this.model,
+    this.productName,
     Key key,
   }) : super(key: key);
 
@@ -14,7 +16,7 @@ class ProductPageAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       // backgroundColor: Colors.transparent,
-      title: Text(model.makeAppBarTransparent ? "" : "Antique Kada",style: AppTextStyle.h3TitleTextStyle()),
+      title: Text(model.makeAppBarTransparent ? "" : productName,style: AppTextStyle.h3TitleTextStyle()),
       backgroundColor: model.makeAppBarTransparent ? Colors.transparent : AppColor.newprimaryColor,
       elevation: 0,
       leading: FlatButton(

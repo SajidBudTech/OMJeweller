@@ -22,6 +22,7 @@ class _EmptyProductState extends State<EmptyProduct> {
           Image.asset(
             AppImages.emptySearch,
             height: MediaQuery.of(context).size.height * 0.3,
+            alignment: Alignment.center,
           ),
           Center(
             child: Text(

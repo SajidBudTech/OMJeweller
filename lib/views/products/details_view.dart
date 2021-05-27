@@ -929,8 +929,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
       totalAmount = price + tax;
     } else if (widget.product.productType == 3) {
       double platinumAmount =
-          (double.parse(widget.product.platiniummaking ?? "0") +
-                  widget.product.platinumRate) *
+          (double.parse(widget.product.platiniummaking ?? "0") + widget.product.platinumRate) *
               (double.parse(widget.product.platiniumweight ?? "0"));
 
       double price = ((double.parse(widget.product.makingcost ?? "0") +

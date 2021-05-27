@@ -20,6 +20,7 @@ import 'package:flutter_om_jeweller/views/drawer/about_brand.dart';
 import 'package:flutter_om_jeweller/views/bookappointment/fill_detail_page.dart';
 import 'package:flutter_om_jeweller/data/models/page_arguments.dart';
 import 'package:flutter_om_jeweller/data/models/datetime.arguments.dart';
+import 'package:flutter_om_jeweller/data/models/product_arguments.dart';
 
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -62,8 +63,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       ));
 
     case AppRoutes.productDetailRoute:
+      final ProductArguments productArguments = settings.arguments;
       return MaterialPageRoute(builder: (context) => ProductDetailPage(
-        product: settings.arguments,
+        product: productArguments.product,
+        status: productArguments.status,
       ));
 
     case AppRoutes.notificationsRoute:

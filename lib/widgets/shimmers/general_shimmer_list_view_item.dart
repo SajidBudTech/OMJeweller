@@ -14,19 +14,19 @@ class GeneralShimmerListViewItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            color: Colors.black,
+            color: Colors.grey[400],
             height: 100,
             width: double.infinity,
           ),
           UiSpacer.verticalSpace(space: 10),
           Container(
-            color: Colors.black,
+            color: Colors.grey[400],
             height: 10,
             width: double.infinity,
           ),
           UiSpacer.verticalSpace(space: 10),
           Container(
-            color: Colors.black,
+            color: Colors.grey[400],
             height: 10,
             width: double.infinity,
           ),

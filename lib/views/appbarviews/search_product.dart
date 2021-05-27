@@ -43,14 +43,9 @@ class _SearchProductsPageState extends State<SearchProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.appBackground(context),
-      appBar: EmptyAppBar(),
+      appBar: EmptyAppBar(backgroundColor: AppColor.newprimaryColor),
       body: Container(
-       // decoration: BoxDecoration(
-       /*   gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFFFFDBB6), Color(0xFFFFFFFF)])),*/
+        color: Colors.white,
         child: Stack(
           children: <Widget>[
             //vendors

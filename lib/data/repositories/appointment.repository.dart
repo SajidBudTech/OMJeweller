@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/api.dart';
+import 'package:flutter_om_jeweller/constants/string/app.string.dart';
 import 'package:flutter_om_jeweller/data/models/api_response.dart';
 import 'package:flutter_om_jeweller/data/models/category.dart';
 import 'package:flutter_om_jeweller/data/models/collection.dart';
@@ -150,6 +151,38 @@ class AppointmentRepository extends HttpService {
       Api.myAppointmentBooking,
       {
         "user_id": userID,
+      },
+    );
+
+    // print("Api result ==> ${apiResult.data}");
+    //format the resposne
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+    if (!apiResponse.allGood) {
+      throw apiResponse.errors;
+    }
+
+    // print("About to collect");
+    //convert the data to list of category model
+    (apiResponse.body['data'] as List).forEach((categoryJSONObject) {
+      //vendor data
+      appointments.add(Appointment.fromJson(categoryJSONObject));
+
+    });
+
+    return appointments;
+
+  }
+
+
+  Future<List<Appointment>> getAppointmentForDate() async {
+    List<Appointment> appointments = [];
+
+    //make http call for vendors data
+    final apiResult = await post(
+      Api.checkAvailability,
+      {
+        "appointment_detail": AppStrings.selectedTypeDetails,
+        "appointment_date": AppStrings.selectedBookDate,
       },
     );
 

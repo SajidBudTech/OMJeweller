@@ -33,6 +33,7 @@ class Api {
   static const getProductByCategory = "/get_product_by_category";
   static const getProductBySubCategory = "/get_product_by_subcategory";
   static const getProductByCollection = "/get_product_by_collection";
+  static const getProductByID = "/product_detail";
   static const addtowishlist = "/add_to_wishlist";
   static const removeFromWishList = "/remove_from_wishlist";
   static const wishlistProduct = "/wishlist_product";
@@ -40,6 +41,7 @@ class Api {
   static const editAppointmentBook = "/appointment_edit";
   static const myAppointmentBooking = "/appointment_list";
   static const submitFeedBack = "/add_feedback";
+  static const checkAvailability = "/check_availablity";
 
 
   static const vendors = "/v2/vendors";

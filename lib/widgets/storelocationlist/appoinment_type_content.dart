@@ -44,6 +44,16 @@ class _AppointmentTypeContentState extends State<AppointmentTypeContent> {
   int SELECTED_POSITION=-1;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AppStrings.selectedTypeofvisit="";
+    AppStrings.selectedTypeDetails="";
+    AppStrings.selectedBookDate="";
+    AppStrings.selectedBookTime="";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainHomeViewModel>.reactive(
         viewModelBuilder: () => MainHomeViewModel(context),

@@ -21,6 +21,8 @@ class ProductPageViewModel extends MyBaseViewModel {
   LoadingState productByCategoryLoadingState = LoadingState.Loading;
   LoadingState productBySubCategoryLoadingState = LoadingState.Loading;
   LoadingState productByWishlistLoadingState = LoadingState.Loading;
+  LoadingState productByIDLoadingState = LoadingState.Loading;
+
   //Product repository
   ProductRepository _productRepository = ProductRepository();
 
@@ -33,8 +35,10 @@ class ProductPageViewModel extends MyBaseViewModel {
 
   List<Product> productbyWishList=[];
 
+  Product product=Product();
 
-  double platiniumRate;
+
+  double platiniumRate=0.0;
   //menus of the vendor
   //List<Menu> menus = [];
 
@@ -122,6 +126,25 @@ class ProductPageViewModel extends MyBaseViewModel {
     } catch (error) {
       productByCategoryLoadingState = LoadingState.Failed;
       notifyListeners();
+    }
+  }
+
+  void getProductsByID({int productID}) async {
+    //add null data so listener can show shimmer widget to indicate loading
+    setBusy(true);
+    productByIDLoadingState = LoadingState.Loading;
+    notifyListeners();
+    final int userId=AuthBloc.getUserID();
+    try {
+      product = await _productRepository.getProductByID(userID: userId,productID:productID);
+      product.platinumRate=platiniumRate;
+      productByIDLoadingState = LoadingState.Done;
+      notifyListeners();
+      setBusy(false);
+    } catch (error) {
+      productByIDLoadingState = LoadingState.Failed;
+      notifyListeners();
+      setBusy(false);
     }
   }
 

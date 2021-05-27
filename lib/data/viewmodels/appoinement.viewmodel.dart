@@ -13,6 +13,8 @@ class AppointmentViewModel extends MyBaseViewModel {
   //BannerRepository instance
   LoadingState appointmentLoadingState = LoadingState.Loading;
   List<Appointment> appointmentslist=[];
+  DateTime endday=DateTime.now();
+
 
   AppointmentRepository _appointmentRepository=AppointmentRepository();
 
@@ -25,6 +27,8 @@ class AppointmentViewModel extends MyBaseViewModel {
   }
 
 
+
+
 //get all banners
   void fetchAppointmentDetailsDateWise() async {
     //add null data so listener can show shimmer widget to indicate loading
@@ -33,9 +37,10 @@ class AppointmentViewModel extends MyBaseViewModel {
     notifyListeners();
     try {
 
-     /* courtData = await branchDetailsRepository.getCourtDetails(branchId: branchDetailsId,selectedDate: selectedDate);
-      CourtDetailsList=courtData.courtDetails;
-      equipmentDetailsList=courtData.equipmentDeatils;*/
+      appointmentslist = await _appointmentRepository.getAppointmentForDate();
+
+
+
       availableslotList.clear();
 
       for(String oneslot in slotList){
@@ -45,8 +50,25 @@ class AppointmentViewModel extends MyBaseViewModel {
         if(isCurrentDateIsAfter(newcurrentDate, slotDate)) {
           availableSlotone.active=true;
         }
+
+        int checkCount=0;
+        for(Appointment appointment in appointmentslist){
+          if(oneslot==appointment.appointmentTime){
+            checkCount++;
+            if(checkCount>=4){
+              availableSlotone.active=true;
+              break;
+            }
+          }
+        }
+
         availableslotList.add(availableSlotone);
+
       }
+
+
+      DateTime currentDate=DateTime.now();
+      endday=currentDate.add(Duration(days: 30));
 
       appointmentLoadingState=LoadingState.Done;
       notifyListeners();

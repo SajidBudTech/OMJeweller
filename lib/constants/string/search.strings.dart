@@ -5,7 +5,7 @@ class SearchStrings {
   static const String emptyBody =
       "Please try again with another filter or keyword";
 
-  static const String emptyProductTitle = "Oops! No Product found";
+  static const String emptyProductTitle = "Oops! No Search Result Found";
 
 
 

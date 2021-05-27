@@ -18,6 +18,8 @@ import 'package:flutter_om_jeweller/data/models/subcategory.dart';
 import 'package:flutter_om_jeweller/data/models/collection.dart';
 import 'package:flutter_om_jeweller/data/models/page_arguments.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
+import 'package:flutter_om_jeweller/data/models/product_arguments.dart';
 
 class AdvertismentSliderPage extends StatefulWidget {
   AdvertismentSliderPage({Key key}) : super(key: key);
@@ -95,6 +97,18 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         collection: collection
                                     )
                                 );
+                              }else if(model.advertismentBanners[0].bannertype=="product"){
+                                Product product=Product();
+                                product.productID=model.advertismentBanners[0].bannerID;
+                                product.productName=model.advertismentBanners[0].bannertype;
+                                Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.productDetailRoute,
+                                    arguments: ProductArguments(
+                                        product: product,
+                                        status: false
+                                    )
+                                );
                               }
                             },
                             highlightColor: Colors.transparent,
@@ -169,6 +183,18 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                                 category: null,
                                                 subCategory: null,
                                                 collection: collection
+                                            )
+                                        );
+                                      }else if(model.advertismentBanners[1].bannertype=="product"){
+                                        Product product=Product();
+                                        product.productID=model.advertismentBanners[1].bannerID;
+                                        product.productName=model.advertismentBanners[1].bannertype;
+                                        Navigator.pushNamed(
+                                            context,
+                                            AppRoutes.productDetailRoute,
+                                            arguments: ProductArguments(
+                                                product: product,
+                                                status: false
                                             )
                                         );
                                       }
@@ -248,6 +274,18 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                                 category: null,
                                                 subCategory: null,
                                                 collection: collection
+                                            )
+                                        );
+                                      }else if(model.advertismentBanners[2].bannertype=="product"){
+                                        Product product=Product();
+                                        product.productID=model.advertismentBanners[2].bannerID;
+                                        product.productName=model.advertismentBanners[2].bannertype;
+                                        Navigator.pushNamed(
+                                            context,
+                                            AppRoutes.productDetailRoute,
+                                            arguments: ProductArguments(
+                                                product: product,
+                                                status: false
                                             )
                                         );
                                       }
@@ -332,6 +370,18 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                                 collection: collection
                                             )
                                         );
+                                      }else if(model.advertismentBanners[3].bannertype=="product"){
+                                        Product product=Product();
+                                        product.productID=model.advertismentBanners[3].bannerID;
+                                        product.productName=model.advertismentBanners[3].bannertype;
+                                        Navigator.pushNamed(
+                                            context,
+                                            AppRoutes.productDetailRoute,
+                                            arguments: ProductArguments(
+                                                product: product,
+                                                status: false
+                                            )
+                                        );
                                       }
                                     },
                                     highlightColor: Colors.transparent,
@@ -409,6 +459,18 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                                 category: null,
                                                 subCategory: null,
                                                 collection: collection
+                                            )
+                                        );
+                                      }else if(model.advertismentBanners[4].bannertype=="product"){
+                                        Product product=Product();
+                                        product.productID=model.advertismentBanners[4].bannerID;
+                                        product.productName=model.advertismentBanners[4].bannertype;
+                                        Navigator.pushNamed(
+                                            context,
+                                            AppRoutes.productDetailRoute,
+                                            arguments: ProductArguments(
+                                                product: product,
+                                                status: false
                                             )
                                         );
                                       }

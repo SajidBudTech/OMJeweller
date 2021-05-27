@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/widgets/inputs/custom_text_form_field.dart';
+import 'package:flutter_om_jeweller/widgets/inputs/custom_comment_text_form.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SearchBar extends StatelessWidget {
   const SearchBar({
@@ -30,7 +33,7 @@ class SearchBar extends StatelessWidget {
             ),
             borderRadius: BorderRadius.all(Radius.circular(20))
         ),
-        child:CustomTextFormField(
+        child: CustomCommentTextFormField(
              isReadOnly: readOnly,
              focusNode: this.focusNode,
              hintText: hintText,
@@ -39,10 +42,15 @@ class SearchBar extends StatelessWidget {
              hintTextStyle: AppTextStyle.h4TitleTextStyle(
                color: AppColor.hintTextColor(context),
              ),
-             prefixWidget: Icon(
-               Icons.search,
-               color: Colors.grey[500],
+             prefixWidget:SvgPicture.asset(
+               "assets/images/search_icon.svg",
+                width: 18,
              ),
+
+             /*Icon(
+               FlutterIcons.search_mdi,
+               color: Colors.grey[500],
+             ),*/
              onTap: this.onSearchBarPressed,
              onFieldSubmitted: this.onSubmit,
            ),

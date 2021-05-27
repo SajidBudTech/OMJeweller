@@ -22,21 +22,24 @@ import 'package:edge_alert/edge_alert.dart';
 import 'package:flutter_om_jeweller/widgets/storelocationlist/appoinment_type_content.dart';
 import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
 import 'package:flutter_om_jeweller/constants/string/app.string.dart';
+import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 
 class ProductDetailPage extends StatefulWidget {
   ProductDetailPage({
     Key key,
     this.product,
+    this.status
   }) : super(key: key);
 
   final Product product;
+  final bool status;
   @override
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   ProductBloc _produtBloc=ProductBloc();
-
+  ProductPageViewModel model;
   @override
   void initState() {
     // TODO: implement initState
@@ -54,7 +57,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         );
         if(_produtBloc.dialogData.title=="Product Added To Wishlist Successfully!"){
           setState(() {
-            widget.product.isWishlist=101;
+            if(widget.status){
+              widget.product.isWishlist=101;
+            }else{
+              model.product.isWishlist=101;
+            }
           });
         }
       }
@@ -66,8 +73,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductPageViewModel>.reactive(
       viewModelBuilder: () => ProductPageViewModel(),
-      onModelReady: (model) => model.initialise(),
+      onModelReady: (model) => (widget.status?model.initialise():model.getProductsByID(productID: widget.product.productID)),
       builder: (context, model, child) {
+        this.model=model;
         return Scaffold(
           backgroundColor: AppColor.appBackground(context),
           appBar: PreferredSize(
@@ -75,11 +83,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 model.makeAppBarTransparent ? kToolbarHeight : 56),
             child: ProductPageAppBar(
               model: model,
-              productName: widget.product.categoryName==null?"":widget.product.categoryName,
+              productName: widget.status?(widget.product.productName??""):(model.product.productName??""),
             ),
           ),
           //extendBodyBehindAppBar: true,
-          body: Stack(
+          body:  model.isBusy
+              ? Padding(
+            padding: AppPaddings.defaultPadding(),
+            child: GeneralShimmerListViewItem(),
+          ):
+
+          Stack(
             children: [
               // body
               Container(
@@ -91,7 +105,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       return [
                         //vendor information header
                         ProductPageHeader(
-                          product: widget.product,
+                          product: widget.status?(widget.product):(model.product),
                         ),
 
                         // vendor menu types appbar with tabs
@@ -125,12 +139,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ];
                     },
                     body: model.isBusy
-                        ? GeneralShimmerListViewItem()
+                        ? Padding(
+                      padding: AppPaddings.defaultPadding(),
+                      child: GeneralShimmerListViewItem(),
+                      )
                         : Column(
                       children: [
                         Expanded(
                           child:ProductDetailsViewItem(
-                            product: widget.product,
+                            product: widget.status?(widget.product):(model.product),
                           ),
                         ),
                         Container(
@@ -174,10 +191,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 flex: 2,
                                 child:InkWell(
                                   onTap: (){
-                                    if(widget.product.isWishlist==null) {
-                                      _produtBloc.addToWishList(
-                                          produtcId: widget.product
-                                              .productID);
+                                    if(widget.status?(widget.product.isWishlist==null):(model.product.isWishlist==null)) {
+                                      _produtBloc.addToWishList(produtcId: widget.status?(widget.product.productID):(model.product.productID));
                                     }else{
                                       EdgeAlert.show(
                                         context,
@@ -192,12 +207,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   margin:EdgeInsets.only(left: 8),
                                   padding: EdgeInsets.only(top: 9,bottom: 9),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: widget.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor,width: 1),
+                                    border: Border.all(color: widget.status?(widget.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor):
+                                    (model.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor),width: 1),
                                     borderRadius: BorderRadius.circular(8)
                                   ),
                                   child:Icon(
                                     FlutterIcons.favorite_border_mdi,
-                                    color: widget.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor,
+                                    color: widget.status?(widget.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor):
+                                           (model.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor),
                                     size: 32,
                                   )
                                 ))

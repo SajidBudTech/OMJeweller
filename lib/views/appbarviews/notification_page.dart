@@ -45,17 +45,9 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return/* Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFFFFDBB6), Color(0xFFFFFFFF)])),
-        child:*/
-
-        Scaffold(
-          backgroundColor: AppColor.appBackground(context),
-          appBar: EmptyAppBar(),
+    return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: EmptyAppBar(backgroundColor: AppColor.newprimaryColor,),
           body: Container(
            /* decoration: BoxDecoration(
                 gradient: LinearGradient(

@@ -15,6 +15,7 @@ import 'package:flutter_om_jeweller/data/models/wishlist_data.dart';
 import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
 import 'package:flutter_om_jeweller/bloc/product.bloc.dart';
 import 'package:edge_alert/edge_alert.dart';
+import 'package:flutter_om_jeweller/data/models/product_arguments.dart';
 
 class ProductListViewItem extends StatefulWidget {
   ProductListViewItem({
@@ -78,7 +79,10 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
             Navigator.pushNamed(
               context,
               AppRoutes.productDetailRoute,
-              arguments: widget.product,
+              arguments: ProductArguments(
+                product: widget.product,
+                status: true
+              ),
             );
           },
           // elevation: 3,

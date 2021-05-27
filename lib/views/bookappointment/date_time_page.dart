@@ -135,6 +135,7 @@ class _SelectDateTimePageState extends State<SelectDateTimePage> {
                             ),*/
                             SliverToBoxAdapter(
                               child:WeekCalendarPage(
+                                endDay: model.endday,
                                 onDaySelected: (DateTime selectedDay,List<dynamic> event,List<dynamic> orver){
                                   // if(model.courtLoadingState!=LoadingState.Loading) {
                                   SELECTED_POSITION=-1;

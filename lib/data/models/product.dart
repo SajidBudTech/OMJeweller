@@ -51,8 +51,8 @@ class Product{
   int taxValue;
   int taxStatus;
   int isWishlist;
-  List<Productattributes> productattributes;
-  double platinumRate;
+  List<Productattributes> productattributes=[];
+  double platinumRate=0.0;
 
 
   Product(

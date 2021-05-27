@@ -5,8 +5,9 @@ import 'package:table_calendar/table_calendar.dart';
 
 class WeekCalendarPage extends StatefulWidget {
 
-  WeekCalendarPage({Key key,this.onDaySelected}):super();
+  WeekCalendarPage({Key key,this.onDaySelected,this.endDay}):super();
   final Function onDaySelected;
+  final DateTime endDay;
   @override
   _WeekCalendarPageState createState() => _WeekCalendarPageState();
 }
@@ -30,6 +31,7 @@ class _WeekCalendarPageState extends State<WeekCalendarPage> {
           children: <Widget>[
             TableCalendar(
               startDay: DateTime.now(),
+              endDay: widget.endDay,
               initialCalendarFormat: CalendarFormat.week,
               calendarStyle: CalendarStyle(
                 todayColor: AppColor.textColor(context),

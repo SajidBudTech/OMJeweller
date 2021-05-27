@@ -45,6 +45,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
     _searchBarFocusNode.requestFocus();
     _appointmentBloc.initBloc();
     AppStrings.selectedTypeofvisit="";
+    AppStrings.selectedTypeDetails="";
+    AppStrings.selectedBookDate="";
+    AppStrings.selectedBookTime="";
   }
 
   @override

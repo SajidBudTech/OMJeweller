@@ -31,6 +31,8 @@ import 'package:flutter_om_jeweller/data/models/category.dart';
 import 'package:flutter_om_jeweller/data/models/subcategory.dart';
 import 'package:flutter_om_jeweller/data/models/collection.dart';
 import 'package:flutter_om_jeweller/data/models/page_arguments.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
+import 'package:flutter_om_jeweller/data/models/product_arguments.dart';
 
 class MainHomePage extends StatefulWidget {
   const MainHomePage({Key key}) : super(key: key);
@@ -103,6 +105,18 @@ class _MainHomePageState extends State<MainHomePage>
                               category: null,
                               subCategory: null,
                               collection: collection
+                          )
+                      );
+                    }else if(value.bannertype=="product"){
+                      Product product=Product();
+                      product.productID=value.bannerID;
+                      product.productName=value.bannertype;
+                      Navigator.pushNamed(
+                          context,
+                          AppRoutes.productDetailRoute,
+                          arguments: ProductArguments(
+                             product: product,
+                             status: false
                           )
                       );
                     }

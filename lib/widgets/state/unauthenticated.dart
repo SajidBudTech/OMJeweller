@@ -19,6 +19,7 @@ class _UnauthenticatedPageState extends State<UnauthenticatedPage> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -48,10 +49,13 @@ class _UnauthenticatedPageState extends State<UnauthenticatedPage> {
           UiSpacer.verticalSpace(),
           //Login button
           CustomButton(
-            color: AppColor.primaryColor,
+            color: AppColor.accentColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             child: Text(
-              AuthStrings.loginTitle,
+              AuthStrings.unAuthButtonTitle,
               style: AppTextStyle.h4TitleTextStyle(
                 color: Colors.white,
               ),

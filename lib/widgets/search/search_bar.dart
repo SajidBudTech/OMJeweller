@@ -13,7 +13,8 @@ class SearchBar extends StatelessWidget {
     this.onSubmit,
     this.readOnly = false,
     this.focusNode,
-    this.hintText
+    this.hintText,
+    //this.onClosedPressed
   }) : super(key: key);
 
   final Function onSearchBarPressed;
@@ -21,6 +22,7 @@ class SearchBar extends StatelessWidget {
   final bool readOnly;
   final String hintText;
   final FocusNode focusNode;
+ // final Function onClosedPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class SearchBar extends StatelessWidget {
              isReadOnly: readOnly,
              focusNode: this.focusNode,
              hintText: hintText,
+             multiLine: true,
              textStyle: AppTextStyle.h4TitleTextStyle(),
              fillColor: AppColor.textFieldBackground(context),
              hintTextStyle: AppTextStyle.h4TitleTextStyle(
@@ -46,13 +49,14 @@ class SearchBar extends StatelessWidget {
                "assets/images/search_icon.svg",
                 width: 18,
              ),
-
-             /*Icon(
-               FlutterIcons.search_mdi,
-               color: Colors.grey[500],
-             ),*/
              onTap: this.onSearchBarPressed,
              onFieldSubmitted: this.onSubmit,
+             suffixWidget: InkWell(
+               onTap: () {
+                 Navigator.pop(context);
+               },
+               child:Icon(Icons.close,size: 20,color: Colors.black45)
+             ),
            ),
     );
   }

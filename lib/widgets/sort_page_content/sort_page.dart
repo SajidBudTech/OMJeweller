@@ -11,6 +11,7 @@ import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/product_page.viewmodel.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/store_location_listitem.dart';
@@ -24,20 +25,24 @@ import 'package:flutter_om_jeweller/widgets/listItem/sort_listview_item.dart';
 class SortProductPage extends StatefulWidget {
   SortProductPage({
     Key key,
+    this.model
   }) : super(key: key);
+
+  ProductPageViewModel model;
 
   @override
   _SortProductPageState createState() => _SortProductPageState();
+
+
 }
 
 class _SortProductPageState extends State<SortProductPage> {
-  LoginBloc _loginBloc = LoginBloc();
+
+  List<String> sortlist=["Price - Low to High","Price - High to Low"];
+
   @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<MainHomeViewModel>.reactive(
-        viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
-        builder: (context, model, child) => Container(
+  Widget build(BuildContext viewcontext) {
+    return Container(
           color: AppColor.newprimaryColor,
           child:Column(
               mainAxisSize: MainAxisSize.min,
@@ -61,43 +66,29 @@ class _SortProductPageState extends State<SortProductPage> {
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
-                  child: model.categoriesLoadingState == LoadingState.Loading
-                  //the loadinng shimmer
-                      ? Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppPaddings.contentPaddingSize,
-                    ),
-                    child: VendorShimmerListViewItem(),
-                  )
-                  // the faild view
-                      : model.categoriesLoadingState == LoadingState.Failed
-                      ? LoadingStateDataView(
-                    stateDataModel: StateDataModel(
-                      showActionButton: true,
-                      actionButtonStyle: AppTextStyle.h4TitleTextStyle(
-                        color: Colors.red,
-                      ),
-                      actionFunction: model.getCategories,
-                    ),
-                  )
-                      : ListView.separated(
+                  child:  ListView.separated(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    itemCount: model.sortlist.length,
+                    itemCount: sortlist.length,
                     //padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
                     separatorBuilder: (context, index) =>
                         UiSpacer.horizontalSpace(space: 0),
                     itemBuilder: (context, index) {
                       return SortListViewItem(
-                        notification:model.sortlist[index],
+                        notification:sortlist[index],
                         onPressed: (){
-
+                          widget.model.sortProductList(sortlist[index]);
+                          Navigator.pop(viewcontext);
+                         /* setState(() {
+                            widget.model.sortProductList(sortlist[index]);
+                          });*/
                         },
                       );
                     },
                   ),
 
                 ),
+                UiSpacer.verticalSpace(space: 40)
                 /*StreamBuilder<UiState>(
                   stream: _loginBloc.uiState,
                   builder: (context, snapshot) {
@@ -132,6 +123,6 @@ class _SortProductPageState extends State<SortProductPage> {
                 ),*/
               ]),
 
-        ));
+        );
   }
 }

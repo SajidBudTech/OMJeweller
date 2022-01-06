@@ -27,8 +27,10 @@ class _SortListViewItemState extends State<SortListViewItem> {
       onTap: widget.onPressed,
       child:Container(
         alignment: Alignment.topLeft,
+       // color: Colors.white,
         //width: (AppSizes.getScreenWidth(context)/2)-40,
-        margin: EdgeInsets.only(top: 8,bottom: 8),
+        margin: EdgeInsets.only(top: 10,bottom: 10),
+       // padding: EdgeInsets.only(top: 16,bottom: 16,left: 20,right: 20),
       /*  decoration: BoxDecoration(
             border: Border.all(color: AppColor.hintTextColor(context)),
             borderRadius: BorderRadius.circular(8)

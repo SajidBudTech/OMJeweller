@@ -15,34 +15,35 @@ class ProductBloc extends BaseBloc {
   ProductRepository _productRepository = ProductRepository();
 
   void addToWishList({int produtcId}) async {
-    //update ui state
-    final int userId=AuthBloc.getUserID();
 
-    setUiState(UiState.loading);
-    final resultDialogData = await _productRepository.addToWishList(
-       userID: userId,
-       productID: produtcId
-    );
+      //update ui state
+      final int userId = AuthBloc.getUserID();
 
-    //update ui state after operation
-    setUiState(UiState.done);
-    //checking if operation was successful before either showing an error or redirect to home page
-    if (resultDialogData.dialogType == DialogType.success) {
-      dialogData.title = resultDialogData.title;
-      dialogData.body = resultDialogData.body;
-      dialogData.backgroundColor = AppColor.successfulColor;
-      dialogData.iconData = FlutterIcons.done_mdi;
-      setShowAlert(true);
-    } else {
-      //prepare the data model to be used to show the alert on the view
-      dialogData.title = resultDialogData.title;
-      dialogData.body = resultDialogData.body;
-      dialogData.backgroundColor = AppColor.failedColor;
-      dialogData.iconData = FlutterIcons.error_mdi;
-      //notify listners to show show alert
-      setShowAlert(true);
-    }
+      // setUiState(UiState.loading);
+      final resultDialogData = await _productRepository.addToWishList(
+          userID: userId,
+          productID: produtcId
+      );
 
+      //update ui state after operation
+      // setUiState(UiState.done);
+      //checking if operation was successful before either showing an error or redirect to home page
+      if (resultDialogData.dialogType == DialogType.success) {
+        dialogData.title = resultDialogData.title;
+        dialogData.body = resultDialogData.body;
+        dialogData.backgroundColor = AppColor.successfulColor;
+        dialogData.iconData = FlutterIcons.done_mdi;
+        setShowAlert(true);
+      } else {
+        //prepare the data model to be used to show the alert on the view
+        dialogData.title = resultDialogData.title;
+        dialogData.body = resultDialogData.body;
+        dialogData.backgroundColor = AppColor.failedColor;
+        dialogData.iconData = FlutterIcons.error_mdi;
+        //notify listners to show show alert
+        setShowAlert(true);
+
+      }
 
   }
 

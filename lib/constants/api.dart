@@ -29,11 +29,14 @@ class Api {
   static const advertismentbanners = "/get_adevertisment_banner";
   static const categories = "/get_category";
   static const collections = "/get_collection";
+  static const newArrival = "/new_arrival";
+  static const omLive = "/get_videos";
   static const goldRate = "/get_purity";
   static const getProductByCategory = "/get_product_by_category";
   static const getProductBySubCategory = "/get_product_by_subcategory";
   static const getProductByCollection = "/get_product_by_collection";
   static const getProductByID = "/product_detail";
+  static const getProductBySearch = "/search_product";
   static const addtowishlist = "/add_to_wishlist";
   static const removeFromWishList = "/remove_from_wishlist";
   static const wishlistProduct = "/wishlist_product";
@@ -62,6 +65,8 @@ class Api {
   static const coupons = "/coupons";
 
   static const notification = "/notifications";
+  static const notificationCount = "/unread-notification-count";
+  static const wishlistCount = "/wishlist";
 
 
   // Updates .....

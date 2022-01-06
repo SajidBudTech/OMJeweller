@@ -20,11 +20,13 @@ class OMLiveListItems extends StatefulWidget {
   final VideoPlayerController videoPlayerController;
   final bool looping;
   final bool autoplay;
+  final String title;
 
   OMLiveListItems(
       {@required this.videoPlayerController,
       this.looping,
       this.autoplay,
+      this.title,
       Key key})
       : super(key: key);
 
@@ -86,7 +88,7 @@ class _OMLiveListItemsState extends State<OMLiveListItems> {
                 : Container(
                     width: (AppSizes.getScreenWidth(context))-40,
                     margin: EdgeInsets.only(right: 20),
-          decoration: BoxDecoration(
+             decoration: BoxDecoration(
               color: Colors.grey[300],
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(16),
@@ -95,26 +97,7 @@ class _OMLiveListItemsState extends State<OMLiveListItems> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        /*Expanded(
-                          flex: 2,
-                        child:
-                        Container(
-                            padding: EdgeInsets.only(top: 16, bottom: 16),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(16),
-                                    topRight: Radius.circular(16))),
-                            child: Text(
-                              'DE BEERS GROUP',
-                              style: AppTextStyle.h4TitleTextStyle(
-                                color: AppColor.textColor(context),
-                              ),
-                              textAlign: TextAlign.start,
-                              textDirection: AppTextDirection.defaultDirection,
-                            ))),*/
-                             Expanded(
+                      Expanded(
                                 flex: 8,
                                   child: Container(
                                       decoration: BoxDecoration(
@@ -139,7 +122,7 @@ class _OMLiveListItemsState extends State<OMLiveListItems> {
                                     bottomLeft: Radius.circular(16),
                                     bottomRight: Radius.circular(16))),
                             child: Text(
-                              'There\'s no much change between the photo shown',
+                              widget.title??"",
                               style: AppTextStyle.h5TitleTextStyle(
                                 color: AppColor.textColor(context),
                                 fontWeight: FontWeight.w600

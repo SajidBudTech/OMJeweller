@@ -9,8 +9,10 @@ import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/product_page.viewmodel.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/store_location_listitem.dart';
@@ -25,7 +27,12 @@ import 'package:flutter/gestures.dart';
 class FilterProductPage extends StatefulWidget {
   FilterProductPage({
     Key key,
+    this.model,
+    this.productList
   }) : super(key: key);
+
+  ProductPageViewModel model;
+  List<Product> productList;
 
   @override
   _FilterProductPageState createState() => _FilterProductPageState();
@@ -33,12 +40,49 @@ class FilterProductPage extends StatefulWidget {
 
 class _FilterProductPageState extends State<FilterProductPage> {
   LoginBloc _loginBloc = LoginBloc();
+
+  List<String> availableCategory=[];
+  List<String> availableSubCategory=[];
+  List<String> availableCollection=[];
+  List<String> availableGoldPurity=[];
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    for(Product product in widget.productList){
+      availableCategory.add(product.categoryName);
+      availableSubCategory.add(product.subcategoryName);
+      availableCollection.add(product.collectionName);
+      availableGoldPurity.add(product.purityName);
+    }
+
+    availableCategory.toSet().toList();
+    availableSubCategory.toSet().toList();
+    availableCollection.toSet().toList();
+    availableGoldPurity.toSet().toList();
+
+    if(widget.model.availableCategoryMap==null){
+      widget.model.availableCategoryMap=Map.fromIterable(availableCategory,key: (e)=>e,value: (e)=>false);
+    }
+    if(widget.model.availableSubCategoryMap==null){
+      widget.model.availableSubCategoryMap=Map.fromIterable(availableSubCategory,key: (e)=>e,value: (e)=>false);
+    }
+    if(widget.model.availableCollectionMap==null){
+      widget.model.availableCollectionMap=Map.fromIterable(availableCollection,key: (e)=>e,value: (e)=>false);
+    }
+    if(widget.model.availableGoldPurityMap==null){
+      widget.model.availableGoldPurityMap=Map.fromIterable(availableGoldPurity,key: (e)=>e,value: (e)=>false);
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<MainHomeViewModel>.reactive(
-        viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
-        builder: (context, model, child) => Container(
+    return Container(
               color: AppColor.newprimaryColor,
               child:SafeArea(
               child:Column(mainAxisSize: MainAxisSize.min,
@@ -70,7 +114,8 @@ class _FilterProductPageState extends State<FilterProductPage> {
                               text: 'Clear all',
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  print('The button is clicked!');
+                                  widget.model.clearAll();
+                                  Navigator.pop(context);
                                 },
                               style: TextStyle(
                                 fontSize: 18,
@@ -93,7 +138,7 @@ class _FilterProductPageState extends State<FilterProductPage> {
                     tabsWidth: 150,
                     indicatorColor: AppColor.accentColor,
                     direction: TextDirection.ltr,
-                    selectedTabBackgroundColor: AppColor.appBackground(context),
+                    selectedTabBackgroundColor: Colors.white,
                     unselectedTabBackgroundColor: AppColor.newprimaryColor,
                     contentScrollAxis: Axis.vertical,
                     changePageDuration: Duration(milliseconds: 500),
@@ -111,7 +156,7 @@ class _FilterProductPageState extends State<FilterProductPage> {
                       ),
                       Tab(child:
                       Text(
-                        'Price',
+                        'Sub Category',
                         style: AppTextStyle.h4TitleTextStyle(
                             color: AppColor.textColor(context),
                             fontWeight: FontWeight.w500),
@@ -119,7 +164,7 @@ class _FilterProductPageState extends State<FilterProductPage> {
                         textDirection: AppTextDirection.defaultDirection,
                       )),
                       Tab(child:  Text(
-                        'Collections',
+                        'Collection',
                         style: AppTextStyle.h4TitleTextStyle(
                             color: AppColor.textColor(context),
                             fontWeight: FontWeight.w500),
@@ -128,14 +173,14 @@ class _FilterProductPageState extends State<FilterProductPage> {
                       )
                       ),
                       Tab(child:  Text(
-                        'Products',
+                        'Gold Purity',
                         style: AppTextStyle.h4TitleTextStyle(
                             color: AppColor.textColor(context),
                             fontWeight: FontWeight.w500),
                         textAlign: TextAlign.start,
                         textDirection: AppTextDirection.defaultDirection,
                       )),
-                      Tab(child:  Text(
+                      /*Tab(child:  Text(
                         'Offers',
                         style: AppTextStyle.h4TitleTextStyle(
                             color: AppColor.textColor(context),
@@ -150,20 +195,18 @@ class _FilterProductPageState extends State<FilterProductPage> {
                             fontWeight: FontWeight.w500),
                         textAlign: TextAlign.start,
                         textDirection: AppTextDirection.defaultDirection,
-                      )),
+                      )),*/
                     ],
                     contents: <Widget>[
-                      tabsContent('Flutter', 'www.fluttertutorial.in'),
-                      tabsContent('Dart'),
-                      tabsContent('NodeJS'),
-                      tabsContent('PHP'),
-                      tabsContent('PHP'),
-                      tabsContent('PHP'),
+                      tabsContent('Categories',widget.model.availableCategoryMap),
+                      tabsContent('Sub Categories',widget.model.availableSubCategoryMap),
+                      tabsContent('Collections',widget.model.availableCollectionMap),
+                      tabsContent('Gold Purity',widget.model.availableGoldPurityMap),
                     ],
                   ),
                 ),
                  Container(
-                   color: AppColor.appBackground(context),
+                   color: Colors.white,
                      padding: EdgeInsets.only(
                          top: AppPaddings.contentPaddingSize,
                          bottom: AppPaddings.contentPaddingSize,
@@ -180,7 +223,7 @@ class _FilterProductPageState extends State<FilterProductPage> {
                                text: 'Close',
                                recognizer: TapGestureRecognizer()
                                  ..onTap = () {
-                                   print('The button is clicked!');
+                                   Navigator.pop(context);
                                  },
                                style: AppTextStyle.h3TitleTextStyle(
                                    color: AppColor.textColor(context),
@@ -189,6 +232,7 @@ class _FilterProductPageState extends State<FilterProductPage> {
                            ]))),
                    Container(
                      width: 1,
+                     height: 24,
                      color: AppColor.newprimaryColor,
                    ),
                    Expanded(
@@ -201,7 +245,8 @@ class _FilterProductPageState extends State<FilterProductPage> {
                                  text: 'Apply',
                                  recognizer: TapGestureRecognizer()
                                    ..onTap = () {
-                                     print('The button is clicked!');
+                                      widget.model.filterProductList();
+                                      Navigator.pop(context);
                                    },
                                  style: AppTextStyle.h3TitleTextStyle(
                                      color: AppColor.accentColor,
@@ -212,44 +257,11 @@ class _FilterProductPageState extends State<FilterProductPage> {
                  )
                  ),
 
-
-                /*StreamBuilder<UiState>(
-                  stream: _loginBloc.uiState,
-                  builder: (context, snapshot) {
-                    final uiState = snapshot.data;
-                    return Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: CustomButton(
-                          padding: EdgeInsets.only(top: 15,bottom: 15,left: 48,right: 48),
-                          color: AppColor.accentColor,
-                          onPressed: uiState != UiState.loading
-                              ?  (){
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.dateTimeRoute,
-                              //arguments: category,
-                            );
-                          }
-                              : null,
-                          child: uiState != UiState.loading
-                              ? Text(
-                            "Book an Appointement",
-                            style: AppTextStyle.h4TitleTextStyle(
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.start,
-                            textDirection:
-                            AppTextDirection.defaultDirection,
-                          )
-                              : PlatformCircularProgressIndicator(),
-                        ));
-                  },
-                ),*/
               ]),
-            )));
+            ));
   }
 
-  Widget tabsContent(String caption, [String description = '']) {
+  Widget tabsContent(String caption, Map<String,bool> items) {
     return Container(
       margin: EdgeInsets.all(1),
       padding: EdgeInsets.all(2),
@@ -258,15 +270,37 @@ class _FilterProductPageState extends State<FilterProductPage> {
         children: <Widget>[
           Text(
             caption,
-            style: TextStyle(fontSize: 25),
+            style: AppTextStyle.h3TitleTextStyle(color: AppColor.textColor(context),fontWeight: FontWeight.w500),
           ),
           Divider(
             height: 20,
             color: Colors.black45,
           ),
-          Text(
-            description,
-            style: TextStyle(fontSize: 15, color: Colors.black87),
+          Expanded(
+            child :
+            ListView(
+              children: items.keys.map((String key) {
+                return new CheckboxListTile(
+                  title: new Text(key??""),
+                  value: items[key],
+                  activeColor: AppColor.accentColor,
+                  checkColor: Colors.white,
+                  onChanged: (bool value) {
+                    setState(() {
+                      if(caption=="Categories"){
+                        widget.model.availableCategoryMap[key] = value;
+                      }else if(caption=="Sub Categories"){
+                        widget.model.availableSubCategoryMap[key] = value;
+                      }else if(caption=="Collections"){
+                        widget.model.availableCollectionMap[key] = value;
+                      }else if(caption=="Gold Purity"){
+                        widget.model.availableGoldPurityMap[key] = value;
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
           ),
         ],
       ),

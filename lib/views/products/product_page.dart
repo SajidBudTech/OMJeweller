@@ -9,6 +9,7 @@ import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/constants/string/search.strings.dart';
 import 'package:flutter_om_jeweller/data/models/category.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
@@ -39,14 +40,22 @@ class ProductPage extends StatefulWidget {
   Collection collection;
   @override
   _ProductPageState createState() => _ProductPageState();
+
 }
 
 class _ProductPageState extends State<ProductPage> {
   //SearchVendorsBloc instance
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductPageViewModel>.reactive(
-        viewModelBuilder: () => ProductPageViewModel(),
+        viewModelBuilder: () => ProductPageViewModel(context),
         onModelReady: (model) => widget.category==null?(widget.subcategory==null?
         model.getProductsByCollection(collection: widget.collection):model.getProductsBySubCategory(subcategory: widget.subcategory)):
         model.getProductsByCategory(category: widget.category),
@@ -66,7 +75,8 @@ class _ProductPageState extends State<ProductPage> {
                               LoadingState.Loading?model.productbyCategoryList.length.toString()+" Items":"0 Items",
                         ),
                       ),
-                      Expanded(child: CustomScrollView(slivers: [
+                      Expanded(child:
+                      CustomScrollView(slivers: [
                         SliverPadding(
                             padding: AppPaddings.defaultPadding(),
                             sliver: model.productByCategoryLoadingState ==
@@ -107,7 +117,7 @@ class _ProductPageState extends State<ProductPage> {
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
-                                childAspectRatio: 0.60,
+                                childAspectRatio: 1/1.7,
                               ),
                               delegate: SliverChildBuilderDelegate(
                                     (context, index) {
@@ -120,8 +130,6 @@ class _ProductPageState extends State<ProductPage> {
                                 childCount: model.productbyCategoryList.length,
                               ),
                             )),
-
-
 
                       ])),
 
@@ -143,7 +151,7 @@ class _ProductPageState extends State<ProductPage> {
                               flex: 1,
                                 child: InkWell(
                                 onTap: (){
-                                   showSortBottomSheetDialog();
+                                   showSortBottomSheetDialog(model);
                                 },
                                 child:Container(
                                   alignment: Alignment.center,
@@ -178,7 +186,7 @@ class _ProductPageState extends State<ProductPage> {
                               flex: 1,
                                 child: InkWell(
                                   onTap: (){
-                                    showFilterBottomSheetDialog();
+                                    showFilterBottomSheetDialog(model,model.productbyCategoryList);
                                   },
                                 child:Container(
                                   alignment: Alignment.center,
@@ -214,18 +222,25 @@ class _ProductPageState extends State<ProductPage> {
     //);
   }
 
-  void showSortBottomSheetDialog() {
+  void showSortBottomSheetDialog(ProductPageViewModel model) {
     CustomDialog.showCustomBottomSheet(
       context,
-      content:SortProductPage()
+      backgroundColor: AppColor.newprimaryColor,
+      content:SortProductPage(
+        model: model,
+      )
     );
+
   }
 
-  void showFilterBottomSheetDialog() {
+  void showFilterBottomSheetDialog(ProductPageViewModel model, List<Product> productList) {
     CustomDialog.showCustomBottomSheet(
         context,
-        content:FilterProductPage()
+        backgroundColor: AppColor.newprimaryColor,
+        content:FilterProductPage(
+          model: model,
+          productList: productList,
+        )
     );
-
   }
 }

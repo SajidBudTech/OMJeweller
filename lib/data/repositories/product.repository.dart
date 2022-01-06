@@ -112,6 +112,39 @@ class ProductRepository extends HttpService {
 
   }
 
+  Future<List<Product>> getSerachProduct({int userID,String keyword}) async {
+    List<Product> products = [];
+
+    //make http call for vendors data
+
+    final apiResult = await post(
+      Api.getProductBySearch,
+      {
+        "user_id": userID,
+        "search": keyword,
+      },
+    );
+
+    // final apiResult = await get(Api.getProductByCollection+"/"+collectionId.toString());
+
+    // print("Api result ==> ${apiResult.data}");
+    //format the resposne
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+    if (!apiResponse.allGood) {
+      throw apiResponse.errors;
+    }
+
+    // print("About to collect");
+    //convert the data to list of category model
+    (apiResponse.body['data'] as List).forEach((categoryJSONObject) {
+      //vendor data
+      products.add(Product.fromJson(categoryJSONObject));
+    });
+
+    return products;
+
+  }
+
   Future<Product> getProductByID({int userID,int productID}) async {
     Product product = Product();
 

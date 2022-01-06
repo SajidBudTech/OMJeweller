@@ -53,6 +53,7 @@ class Product{
   int isWishlist;
   List<Productattributes> productattributes=[];
   double platinumRate=0.0;
+  int productPrice;
 
 
   Product(

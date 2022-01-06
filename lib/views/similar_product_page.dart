@@ -36,7 +36,7 @@ class _SimilarProductPageState extends State<SimilarProductPage> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductPageViewModel>.reactive(
-        viewModelBuilder: () => ProductPageViewModel(),
+        viewModelBuilder: () => ProductPageViewModel(context),
         onModelReady: (model) => model.getProductsByCategory(categoryId: widget.categoryId),
         builder: (context, model, child) => Container(
           color: AppColor.newprimaryColor,
@@ -60,7 +60,7 @@ class _SimilarProductPageState extends State<SimilarProductPage> {
                 UiSpacer.verticalSpace(),
                 Container(
                   width: double.infinity,
-                  height: AppSizes.getScreenheight(context)/2.6,
+                  height: 260,
                   child: model.productByCategoryLoadingState == LoadingState.Loading
                   //the loadinng shimmer
                       ? Padding(

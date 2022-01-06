@@ -21,6 +21,7 @@ import 'package:flutter_om_jeweller/widgets/inputs/custom_text_form_field.dart';
 import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
 import 'package:flutter_om_jeweller/data/models/user_data.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_om_jeweller/utils/otp_timer.dart';
 
 class VerifyOTPPage extends StatefulWidget {
   VerifyOTPPage({Key key, this.user}) : super(key: key);
@@ -40,24 +41,24 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
   final secondFocusNode = new FocusNode();
   final threeFocusNode = new FocusNode();
   final fourthFocusNode = new FocusNode();
-
+  bool hasTimerStopped=false;
 
   void callShowOTP() {
     EdgeAlert.show(
       context,
       title:widget.user.otp.toString(),
       description: "OTP Sent Successfully!",
-      backgroundColor: AppColor.successfulColor,
+      backgroundColor: AppColor.accentColor,
       icon: FlutterIcons.done_mdi,
     );
-
     print(widget.user.otp.toString());
-
   }
+
 
   @override
   void initState() {
     super.initState();
+    _otpBloc.user=widget.user;
     Future.delayed(Duration.zero, () async {
       callShowOTP();
     });
@@ -70,7 +71,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
           context,
           title: _otpBloc.dialogData.title,
           description: _otpBloc.dialogData.body,
-          backgroundColor: _otpBloc.dialogData.backgroundColor,
+          backgroundColor: AppColor.accentColor,
           icon: _otpBloc.dialogData.iconData,
         );
       }
@@ -118,7 +119,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
               bottomSheet: getBottomWidget(),
               appBar: EmptyAppBar(),
               extendBodyBehindAppBar: true,
-              backgroundColor: AppColor.appBackground(context),
+              backgroundColor: Colors.white,
               body: Stack(
                 children: [
                   //body
@@ -314,15 +315,48 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                           child: Container(
                               padding: EdgeInsets.only(left: 32, right: 32),
                               alignment: Alignment.bottomLeft,
-                              child: Text(
-                                "Resend OTP in 00:28",
-                                style: AppTextStyle.h4TitleTextStyle(
-                                  color: AppColor.hintTextColor(context),
-                                ),
-                                textAlign: TextAlign.start,
-                                textDirection:
+                              child: Row(
+                                children: [
+                                  InkWell(
+                                  onTap: (){
+                                    if(hasTimerStopped){
+                                      setState(() {
+                                         hasTimerStopped = !hasTimerStopped;
+                                        _otpBloc.processOTP(context: context);
+                                      });
+                                    }
+                                  },
+                                  child:Text(
+                                    hasTimerStopped?"Resend OTP":"Resend OTP in ",
+                                    style: hasTimerStopped? AppTextStyle.h4TitleTextStyle(
+                                      color:AppColor.accentColor,
+                                    ): AppTextStyle.h5TitleTextStyle(
+                                      color:AppColor.hintTextColor(context),
+                                    ),
+                                    textAlign: TextAlign.start,
+                                    textDirection:
                                     AppTextDirection.defaultDirection,
-                              ))),
+                                  )),
+                                  Visibility(
+                                  visible: !hasTimerStopped,
+                                  child:CountDownTimer(
+                                    secondsRemaining: 60,
+                                    whenTimeExpires: () {
+                                      setState(() {
+                                        hasTimerStopped = !hasTimerStopped;
+                                      });
+                                    },
+                                    countDownTimerStyle: TextStyle(
+                                        color: AppColor.hintTextColor(context),
+                                        fontSize: 12.0,
+                                        height: 1.2),
+                                  )),
+                                ],
+                              )
+
+
+                          )
+                      ),
                       SliverToBoxAdapter(
                           child: UiSpacer.verticalSpace(space: 40)),
                       //login button
@@ -345,13 +379,13 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                                             mobile:
                                             widget.user.cutomerMobile,
                                             serverOTP:
-                                            widget.user.otp.toString());
+                                            _otpBloc.user.otp.toString());
                                       }else{
                                         _otpBloc.processRegister(
                                             mobile:
                                             widget.user.cutomerMobile,
                                             serverOTP:
-                                            widget.user.otp.toString(),
+                                            _otpBloc.user.otp.toString(),
                                         name: widget.user.customerName,
                                         email: widget.user.customerEmail);
                                       }
@@ -394,13 +428,13 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
               mobile:
               widget.user.cutomerMobile,
               serverOTP:
-              widget.user.otp.toString());
+              _otpBloc.user.otp.toString());
         }else{
           _otpBloc.processRegister(
               mobile:
               widget.user.cutomerMobile,
               serverOTP:
-              widget.user.otp.toString(),
+              _otpBloc.user.otp.toString(),
               name: widget.user.customerName,
               email: widget.user.customerEmail);
         }

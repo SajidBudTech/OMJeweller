@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
 import 'package:flutter_om_jeweller/bloc/base.bloc.dart';
 import 'package:flutter_om_jeweller/bloc/login.bloc.dart';
 import 'package:flutter_om_jeweller/bloc/product_search.bloc.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
 import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
+import 'package:flutter_om_jeweller/widgets/state/unauthenticated.dart';
 import 'package:flutter_om_jeweller/widgets/storelocationlist/store_location_content.dart';
 import 'package:flutter_om_jeweller/widgets/storelocationlist/store_call_content.dart';
 import 'package:stacked/stacked.dart';
@@ -58,7 +60,10 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return /*ViewModelBuilder<MainHomeViewModel>.reactive(
+
+    Widget pageBody;
+
+     /*ViewModelBuilder<MainHomeViewModel>.reactive(
         viewModelBuilder: () => MainHomeViewModel(context),
         onModelReady: (model) => model.getStoreVisitData(),
         builder: (context, model, child) =>
@@ -70,58 +75,60 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                   end: Alignment.bottomCenter,
                   colors: [Color(0xFFFFDBB6), Color(0xFFFFFFFF)])),
           child:*/
-
-          Scaffold(
-            body:
-            Container(
-                padding: AppPaddings.defaultPadding(),
-               color: Colors.white,
-               /* decoration: BoxDecoration(
+    if (AuthBloc.authenticated()) {
+      pageBody = Scaffold(
+        body:
+        Container(
+            padding: AppPaddings.defaultPadding(),
+            color: Colors.white,
+            /* decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [Color(0xFFFFDBB6), Color(0xFFFFFFFF)])),*/
+            child:
+
+            CustomScrollView(slivers: [
+
+              SliverToBoxAdapter(
+                child: UiSpacer.verticalSpace(),
+              ),
+              SliverToBoxAdapter(
                 child:
-
-                CustomScrollView(slivers: [
-
-                  SliverToBoxAdapter(
-                    child: UiSpacer.verticalSpace(),
-                  ),
-                  SliverToBoxAdapter(
-                    child:
-                    Container(
-                        alignment: Alignment.topLeft,
-                        padding: EdgeInsets.only(bottom: 0),
-                        child:Text(
-                          'Hi, '+(_appointmentBloc.userName==null?"":_appointmentBloc.userName),
-                          style: AppTextStyle.h4TitleTextStyle(
-                              color: AppColor.hintTextColor(context),
-                              fontWeight: FontWeight.w400
-                          ),
-                          textAlign: TextAlign.start,
-                          textDirection: AppTextDirection.defaultDirection,
-                        )),
-                  ),
-                  SliverToBoxAdapter(
-                    child:
-                    Container(
-                        alignment: Alignment.topLeft,
-                        padding: EdgeInsets.only(bottom: 8),
-                        child:Text(
-                          'How would you like to visit?',
-                          style: AppTextStyle.h4TitleTextStyle(
-                              color: AppColor.textColor(context),
-                              fontWeight: FontWeight.w500
-                          ),
-                          textAlign: TextAlign.start,
-                          textDirection: AppTextDirection.defaultDirection,
-                        )),
-                  ),
-                  SliverToBoxAdapter(
-                    child: UiSpacer.verticalSpace(space: 30),
-                  ),
-                 /* SliverToBoxAdapter(
+                Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(bottom: 0),
+                    child: Text(
+                      'Hi, ' + (_appointmentBloc.userName == null
+                          ? ""
+                          : _appointmentBloc.userName),
+                      style: AppTextStyle.h4TitleTextStyle(
+                          color: AppColor.hintTextColor(context),
+                          fontWeight: FontWeight.w400
+                      ),
+                      textAlign: TextAlign.start,
+                      textDirection: AppTextDirection.defaultDirection,
+                    )),
+              ),
+              SliverToBoxAdapter(
+                child:
+                Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      'How would you like to visit?',
+                      style: AppTextStyle.h4TitleTextStyle(
+                          color: AppColor.textColor(context),
+                          fontWeight: FontWeight.w500
+                      ),
+                      textAlign: TextAlign.start,
+                      textDirection: AppTextDirection.defaultDirection,
+                    )),
+              ),
+              SliverToBoxAdapter(
+                child: UiSpacer.verticalSpace(space: 30),
+              ),
+              /* SliverToBoxAdapter(
                     child:
                     Container(
                         alignment: Alignment.topLeft,
@@ -136,78 +143,86 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                           textDirection: AppTextDirection.defaultDirection,
                         )),
                   ),*/
-                  SliverToBoxAdapter(
-                    child: UiSpacer.verticalSpace(),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child:InkWell(
-                            onTap: (){
-                              setState(() {
-                                SELECTED_STORE_VISIT=true;
-                                SELECTED_REQUEST_CALL=false;
-                                AppStrings.selectedTypeofvisit="Store Visit";
-                              });
-                            },
-                          child:Container(
+              SliverToBoxAdapter(
+                child: UiSpacer.verticalSpace(),
+              ),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              SELECTED_STORE_VISIT = true;
+                              SELECTED_REQUEST_CALL = false;
+                              AppStrings.selectedTypeofvisit = "Store Visit";
+                            });
+                          },
+                          child: Container(
                             margin: EdgeInsets.only(right: 10),
                             padding: EdgeInsets.symmetric(vertical: 30),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(
-                               color:SELECTED_STORE_VISIT ? AppColor.accentColor:AppColor.hintTextColor(context),
+                                color: SELECTED_STORE_VISIT ? AppColor
+                                    .accentColor : AppColor.hintTextColor(
+                                    context),
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                           child: Column(
-                             children: [
+                            child: Column(
+                              children: [
 
-                               SvgPicture.asset(
-                                 'assets/images/store_visit.svg',
-                                 width: 34,
-                                 height: 34,
-                                 color:SELECTED_STORE_VISIT ? AppColor.accentColor:AppColor.hintTextColor(context),
-                               ),
+                                SvgPicture.asset(
+                                  'assets/images/store_visit.svg',
+                                  width: 34,
+                                  height: 34,
+                                  color: SELECTED_STORE_VISIT ? AppColor
+                                      .accentColor : AppColor.hintTextColor(
+                                      context),
+                                ),
 
-                             /*  Icon(
+                                /*  Icon(
                                  FlutterIcons.store_faw5s,
                                  color: SELECTED_STORE?AppColor.accentColor:AppColor.hintTextColor(context),
                                  size: 36,
                                ),*/
-                               Padding(padding: EdgeInsets.only(top: 8),
-                               child: Text(
-                                 'Store Visit',
-                                 style: AppTextStyle.h4TitleTextStyle(
-                                     color:SELECTED_STORE_VISIT ? AppColor.accentColor:AppColor.hintTextColor(context),
-                                     fontWeight: FontWeight.w400
-                                 ),
-                                 textAlign: TextAlign.start,
-                                 textDirection: AppTextDirection.defaultDirection,
-                               ),)
-                             ],
-                           ),
+                                Padding(padding: EdgeInsets.only(top: 8),
+                                  child: Text(
+                                    'Store Visit',
+                                    style: AppTextStyle.h4TitleTextStyle(
+                                        color: SELECTED_STORE_VISIT ? AppColor
+                                            .accentColor : AppColor
+                                            .hintTextColor(context),
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                    textAlign: TextAlign.start,
+                                    textDirection: AppTextDirection
+                                        .defaultDirection,
+                                  ),)
+                              ],
+                            ),
                           ),
                         )),
-                        Expanded(
-                          child: InkWell(
-                            onTap: (){
-                              setState(() {
-                                SELECTED_STORE_VISIT=false;
-                                SELECTED_REQUEST_CALL=true;
-                                AppStrings.selectedTypeofvisit="Request a Call";
-                              });
-
-                            },
-                          child:Container(
+                    Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              SELECTED_STORE_VISIT = false;
+                              SELECTED_REQUEST_CALL = true;
+                              AppStrings.selectedTypeofvisit = "Request a Call";
+                            });
+                          },
+                          child: Container(
                             padding: EdgeInsets.symmetric(vertical: 30),
                             margin: EdgeInsets.only(left: 10),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(
-                                color: SELECTED_REQUEST_CALL ? AppColor.accentColor:AppColor.hintTextColor(context),
+                                color: SELECTED_REQUEST_CALL ? AppColor
+                                    .accentColor : AppColor.hintTextColor(
+                                    context),
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -217,44 +232,49 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                                   'assets/images/request_call.svg',
                                   width: 34,
                                   height: 34,
-                                  color:SELECTED_REQUEST_CALL ? AppColor.accentColor:AppColor.hintTextColor(context),
+                                  color: SELECTED_REQUEST_CALL ? AppColor
+                                      .accentColor : AppColor.hintTextColor(
+                                      context),
                                 ),
                                 Padding(padding: EdgeInsets.only(top: 8),
                                   child: Text(
                                     'Request a Call',
                                     style: AppTextStyle.h4TitleTextStyle(
-                                        color:SELECTED_REQUEST_CALL ? AppColor.accentColor:AppColor.hintTextColor(context),
+                                        color: SELECTED_REQUEST_CALL ? AppColor
+                                            .accentColor : AppColor
+                                            .hintTextColor(context),
                                         fontWeight: FontWeight.w400
                                     ),
                                     textAlign: TextAlign.start,
-                                    textDirection: AppTextDirection.defaultDirection,
+                                    textDirection: AppTextDirection
+                                        .defaultDirection,
                                   ),)
                               ],
                             ),
                           ),
                         ))
-                      ],
-                    ),
-                  ),
-                  SliverToBoxAdapter(child:UiSpacer.verticalSpace(space: 40)),
-                  SliverToBoxAdapter(child:StreamBuilder<UiState>(
-                    stream: _appointmentBloc.uiState,
-                    builder: (context, snapshot) {
-                      final uiState = snapshot.data;
-                      return Padding(padding: EdgeInsets.only(left: 20,right: 20),
+                  ],
+                ),
+              ),
+              SliverToBoxAdapter(child: UiSpacer.verticalSpace(space: 40)),
+              SliverToBoxAdapter(child: StreamBuilder<UiState>(
+                stream: _appointmentBloc.uiState,
+                builder: (context, snapshot) {
+                  final uiState = snapshot.data;
+                  return Padding(padding: EdgeInsets.only(left: 20, right: 20),
 
-                       child: CustomButton(
+                      child: CustomButton(
                         padding: AppPaddings.mediumButtonPadding(),
                         color: AppColor.accentColor,
                         onPressed: uiState != UiState.loading
-                            ?  (){
-                          if(AppStrings.selectedTypeofvisit!="") {
+                            ? () {
+                          if (AppStrings.selectedTypeofvisit != "") {
                             if (SELECTED_STORE_VISIT) {
                               showStoreVisitBottomDialog();
                             } else {
                               showCallBottomDialog();
                             }
-                          }else{
+                          } else {
                             EdgeAlert.show(
                               context,
                               title: "Please select appointment type!",
@@ -277,22 +297,27 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         )
                             : PlatformCircularProgressIndicator(),
                       ));
-                    },
-                  )),
+                },
+              )),
 
 
+            ])
+        ),
+      );
+      // );
+      //);
+    }else{
+      pageBody=UnauthenticatedPage();
+    }
 
-                ])
-            ),
-          );
-       // );
-    //);
+    return pageBody;
   }
 
   void showCallBottomDialog() {
 
     CustomDialog.showCustomBottomSheet(
       context,
+      backgroundColor: Colors.white,
       content: StoreCallContent(
         vendor: "",
       ),
@@ -303,6 +328,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
 
     CustomDialog.showCustomBottomSheet(
       context,
+      backgroundColor: Colors.white,
       content: StoreLocationContent(
         vendor: "",
       ),

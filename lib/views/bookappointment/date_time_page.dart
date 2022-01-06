@@ -187,7 +187,7 @@ class _SelectDateTimePageState extends State<SelectDateTimePage> {
                                 //the loadinng shimmer
                                     ? SliverToBoxAdapter(
                                   child: VendorShimmerListViewItem(),
-                                )
+                                 )
                                 // the faild view
                                     : model.appointmentLoadingState ==
                                     LoadingState.Failed
@@ -218,7 +218,6 @@ class _SelectDateTimePageState extends State<SelectDateTimePage> {
                                     crossAxisCount: 3,
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 10,
-                                   // mainAxisExtent: 48,
                                     childAspectRatio: 0.5 /0.18,
                                   ),
                                   delegate: SliverChildBuilderDelegate(

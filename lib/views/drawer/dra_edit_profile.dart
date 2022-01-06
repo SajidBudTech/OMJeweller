@@ -19,6 +19,7 @@ import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
 import 'package:flutter_om_jeweller/widgets/expandable/expandable_listview_item.dart';
 import 'package:flutter_om_jeweller/widgets/inputs/textinput_edittext_textfield.dart';
 import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
+import 'package:flutter_om_jeweller/widgets/state/unauthenticated.dart';
 import 'package:stacked/stacked.dart';
 import 'package:intl/intl.dart';
 
@@ -40,7 +41,6 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
 
   @override
   void initState() {
-    super.initState();
     super.initState();
     _profileBloc.initBloc();
     final dob=AuthBloc.getUserDOB();
@@ -85,245 +85,310 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<
-            SystemUiOverlayStyle>(
-            value: SystemUiOverlayStyle(
-              statusBarColor: AppColor.newprimaryColor,
-            ),
-            child: Scaffold(
-              // backgroundColor: AppColor.newprimaryColor,
-              //extendBodyBehindAppBar: true,
-                backgroundColor: AppColor.newprimaryColor,
-                body: Container(
-                  child: SafeArea(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Container(
-                            child: LeadingAppBar(
-                              title: "Edit Profile",
-                              subTitle: "",
-                            ),
+    Widget pageBody;
+    if (AuthBloc.authenticated()) {
+      pageBody = AnnotatedRegion<
+          SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle(
+            statusBarColor: AppColor.newprimaryColor,
+          ),
+          child: Scaffold(
+            // backgroundColor: AppColor.newprimaryColor,
+            //extendBodyBehindAppBar: true,
+              backgroundColor: AppColor.newprimaryColor,
+              body: Container(
+                child: SafeArea(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Container(
+                          child: LeadingAppBar(
+                            title: "Edit Profile",
+                            subTitle: "",
                           ),
-                          Expanded(
-                              child:Container(
-                                  color: Colors.white,
-                                  padding: AppPaddings.defaultPadding(),
-                                  child: CustomScrollView(slivers: [
+                        ),
+                        Expanded(
+                            child: Container(
+                                color: Colors.white,
+                                padding: AppPaddings.defaultPadding(),
+                                child: CustomScrollView(slivers: [
 
-                                    SliverToBoxAdapter(
-                                        child:Container(
-                                        child:Text(
-                                      'Personal Details',
-                                      style: AppTextStyle.h3TitleTextStyle(
-                                          color: AppColor.textColor(context),
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.start,
-                                      textDirection: AppTextDirection.defaultDirection,
-                                    ))),
-                                    SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
-                                    SliverToBoxAdapter(
-                                        child:StreamBuilder<bool>(
-                                          stream: _profileBloc.validmobile,
-                                          builder: (context, snapshot) {
-                                            return  CustomHintLableTextFormField(
+                                  SliverToBoxAdapter(
+                                      child: Container(
+                                          child: Text(
+                                            'Personal Details',
+                                            style: AppTextStyle
+                                                .h3TitleTextStyle(
+                                                color: AppColor.textColor(
+                                                    context),
+                                                fontWeight: FontWeight.w500),
+                                            textAlign: TextAlign.start,
+                                            textDirection: AppTextDirection
+                                                .defaultDirection,
+                                          ))),
+                                  SliverToBoxAdapter(child: UiSpacer
+                                      .verticalSpace()),
+                                  SliverToBoxAdapter(
+                                      child: StreamBuilder<bool>(
+                                        stream: _profileBloc.validmobile,
+                                        builder: (context, snapshot) {
+                                          return CustomHintLableTextFormField(
+                                            isFixedHeight: false,
+                                            left: 0,
+                                            right: 0,
+                                            top: 0,
+                                            bottom: 0,
+                                            labelText: "Phone Number",
+                                            isReadOnly: true,
+                                            keyboardType: TextInputType.phone,
+                                            textStyle: AppTextStyle
+                                                .h4TitleTextStyle(
+                                                color: AppColor.textColor(
+                                                    context)
+                                            ),
+                                            textInputAction: TextInputAction
+                                                .next,
+                                            textEditingController: _profileBloc
+                                                .mobileTEC,
+                                            errorText: snapshot.error,
+                                            onChanged: _profileBloc
+                                                .validateMobile,
+                                          );
+                                        },
+                                      )),
+                                  SliverToBoxAdapter(child: UiSpacer
+                                      .verticalSpace()),
+                                  SliverToBoxAdapter(
+                                      child: StreamBuilder<bool>(
+                                        stream: _profileBloc.validName,
+                                        builder: (context, snapshot) {
+                                          return CustomHintLableTextFormField(
                                               isFixedHeight: false,
                                               left: 0,
                                               right: 0,
                                               top: 0,
                                               bottom: 0,
-                                              labelText:"Phone Number",
-                                              isReadOnly: true,
-                                              keyboardType: TextInputType.phone,
-                                              textStyle: AppTextStyle.h4TitleTextStyle(
-                                                  color: AppColor.textColor(context)
+                                              labelText: "Name",
+                                              keyboardType: TextInputType.name,
+                                              textStyle: AppTextStyle
+                                                  .h4TitleTextStyle(
+                                                  color: AppColor.textColor(
+                                                      context)
                                               ),
-                                              textInputAction: TextInputAction.next,
-                                              textEditingController: _profileBloc.mobileTEC,
+                                              textInputAction: TextInputAction
+                                                  .next,
+                                              textEditingController: _profileBloc
+                                                  .nameTEC,
                                               errorText: snapshot.error,
-                                              onChanged: _profileBloc.validateMobile,
-                                            );
-                                          },
-                                        )),
-                                    SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
-                                    SliverToBoxAdapter(
-                                        child:StreamBuilder<bool>(
-                                          stream: _profileBloc.validName,
-                                          builder: (context, snapshot) {
-                                            return  CustomHintLableTextFormField(
-                                                isFixedHeight: false,
-                                                left: 0,
-                                                right: 0,
-                                                top: 0,
-                                                bottom: 0,
-                                                labelText: "Name",
-                                                keyboardType: TextInputType.name,
-                                                textStyle: AppTextStyle.h4TitleTextStyle(
-                                                    color: AppColor.textColor(context)
-                                                ),
-                                                textInputAction: TextInputAction.next,
-                                                textEditingController: _profileBloc.nameTEC,
-                                                errorText: snapshot.error,
-                                                onChanged: _profileBloc.validateName
-                                            );
-                                          },
-                                        )),
-                                    SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
-                                    SliverToBoxAdapter(
-                                        child: Column(
-                                            children:[
-                                              Container(
-                                                  child: AppExpansionTile(
-                                                    key: expansionTile,
-                                                    title: Text(
-                                                      SELECTED_GENDER==""?"Gender":SELECTED_GENDER,
-                                                      style: AppTextStyle.h4TitleTextStyle(
-                                                        fontWeight: SELECTED_GENDER==""?FontWeight.w300:FontWeight.w500,
-                                                        color: SELECTED_GENDER==""?AppColor.hintTextColor(context): AppColor.textColor(context),
-                                                      ),
-                                                      //overflow: TextOverflow.ellipsis,
-                                                      textDirection: AppTextDirection.defaultDirection,
+                                              onChanged: _profileBloc
+                                                  .validateName
+                                          );
+                                        },
+                                      )),
+                                  SliverToBoxAdapter(child: UiSpacer
+                                      .verticalSpace()),
+                                  SliverToBoxAdapter(
+                                      child: Column(
+                                          children: [
+                                            Container(
+                                                child: AppExpansionTile(
+                                                  key: expansionTile,
+                                                  contentPadding: EdgeInsets
+                                                      .all(0),
+                                                  title: Text(
+                                                    SELECTED_GENDER == ""
+                                                        ? "Gender"
+                                                        : SELECTED_GENDER,
+                                                    style: AppTextStyle
+                                                        .h4TitleTextStyle(
+                                                      fontWeight: SELECTED_GENDER ==
+                                                          ""
+                                                          ? FontWeight.w300
+                                                          : FontWeight.w500,
+                                                      color: SELECTED_GENDER ==
+                                                          "" ? AppColor
+                                                          .hintTextColor(
+                                                          context) : AppColor
+                                                          .textColor(context),
                                                     ),
-                                                    children: [
-                                                      new ListTile(
-                                                        title: Text(
-                                                          'Male',
-                                                          style: AppTextStyle
-                                                              .h5TitleTextStyle(
-                                                            fontWeight:
-                                                            FontWeight.w500,
-                                                            color: AppColor.hintTextColor(
-                                                                context),
-                                                          ),
-                                                          //overflow: TextOverflow.ellipsis,
-                                                          textDirection:
-                                                          AppTextDirection
-                                                              .defaultDirection,
+                                                    //overflow: TextOverflow.ellipsis,
+                                                    textDirection: AppTextDirection
+                                                        .defaultDirection,
+                                                  ),
+                                                  children: [
+                                                    new ListTile(
+                                                      title: Text(
+                                                        'Male',
+                                                        style: AppTextStyle
+                                                            .h5TitleTextStyle(
+                                                          fontWeight:
+                                                          FontWeight.w500,
+                                                          color: AppColor
+                                                              .hintTextColor(
+                                                              context),
                                                         ),
-                                                        onTap: () {
-                                                          setState(() {
-                                                            SELECTED_GENDER="Male";
-                                                            expansionTile.currentState
-                                                                .collapse();
-                                                          });
-                                                        },
+                                                        //overflow: TextOverflow.ellipsis,
+                                                        textDirection:
+                                                        AppTextDirection
+                                                            .defaultDirection,
                                                       ),
-                                                      new ListTile(
-                                                        title: Text(
-                                                          'Female',
-                                                          style: AppTextStyle
-                                                              .h5TitleTextStyle(
-                                                            fontWeight:
-                                                            FontWeight.w500,
-                                                            color: AppColor.hintTextColor(
-                                                                context),
-                                                          ),
-                                                          //overflow: TextOverflow.ellipsis,
-                                                          textDirection:
-                                                          AppTextDirection
-                                                              .defaultDirection,
-                                                        ),
-                                                        onTap: () {
-                                                          setState(() {
-                                                            SELECTED_GENDER="Female";
-                                                            expansionTile.currentState
-                                                                .collapse();
-                                                          });
-                                                        },
-                                                      ),
-                                                    ],
-                                                    rotateWidget: Icon(
-                                                      Icons.keyboard_arrow_down,
-                                                      color: Color(0xFF2C2C2C),
-                                                      size: 18,
+                                                      onTap: () {
+                                                        setState(() {
+                                                          SELECTED_GENDER =
+                                                          "Male";
+                                                          expansionTile
+                                                              .currentState
+                                                              .collapse();
+                                                        });
+                                                      },
+                                                      contentPadding: EdgeInsets
+                                                          .all(0),
                                                     ),
-                                                  )),
-                                              UiSpacer.divider(thickness: 0.5,color: AppColor.hintTextColor(context))
-                                            ])
+                                                    new ListTile(
+                                                      title: Text(
+                                                        'Female',
+                                                        style: AppTextStyle
+                                                            .h5TitleTextStyle(
+                                                          fontWeight:
+                                                          FontWeight.w500,
+                                                          color: AppColor
+                                                              .hintTextColor(
+                                                              context),
+                                                        ),
+                                                        //overflow: TextOverflow.ellipsis,
+                                                        textDirection:
+                                                        AppTextDirection
+                                                            .defaultDirection,
+                                                      ),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          SELECTED_GENDER =
+                                                          "Female";
+                                                          expansionTile
+                                                              .currentState
+                                                              .collapse();
+                                                        });
+                                                      },
+                                                      contentPadding: EdgeInsets
+                                                          .all(0),
+                                                    ),
+                                                  ],
+                                                  rotateWidget: Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    color: Color(0xFF2C2C2C),
+                                                    size: 18,
+                                                  ),
+                                                )),
+                                            UiSpacer.divider(thickness: 0.5,
+                                                color: AppColor.hintTextColor(
+                                                    context))
+                                          ])
+                                  ),
+                                  SliverToBoxAdapter(child: UiSpacer
+                                      .verticalSpace()),
+                                  SliverToBoxAdapter(
+                                      child: StreamBuilder<bool>(
+                                        stream: _profileBloc.validEmailAddress,
+                                        builder: (context, snapshot) {
+                                          return CustomHintLableTextFormField(
+                                              isFixedHeight: false,
+                                              left: 0,
+                                              right: 0,
+                                              top: 0,
+                                              bottom: 0,
+                                              labelText: "Email",
+                                              keyboardType: TextInputType
+                                                  .emailAddress,
+                                              textStyle: AppTextStyle
+                                                  .h4TitleTextStyle(
+                                                  color: AppColor.textColor(
+                                                      context)
+                                              ),
+                                              textInputAction: TextInputAction
+                                                  .next,
+                                              textEditingController: _profileBloc
+                                                  .emailAddressTEC,
+                                              errorText: snapshot.error,
+                                              onChanged: _profileBloc
+                                                  .validateEmailAddress
+                                          );
+                                        },
+                                      )),
+                                  SliverToBoxAdapter(child: UiSpacer
+                                      .verticalSpace()),
+
+                                  SliverToBoxAdapter(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+
+                                        Expanded(child: getDOBWidget()
+                                        ),
+                                        SizedBox(
+                                          width: 16,
+                                        ),
+                                        Expanded(
+                                            child: getAnniversaryWidget()
+                                        )
+
+                                      ],
                                     ),
-                                    SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
-                                    SliverToBoxAdapter(
-                                        child:StreamBuilder<bool>(
-                                          stream: _profileBloc.validEmailAddress,
-                                          builder: (context, snapshot) {
-                                            return  CustomHintLableTextFormField(
-                                                isFixedHeight: false,
-                                                left: 0,
-                                                right: 0,
-                                                top: 0,
-                                                bottom: 0,
-                                                labelText: "Email",
-                                                keyboardType: TextInputType.emailAddress,
-                                                textStyle: AppTextStyle.h4TitleTextStyle(
-                                                    color: AppColor.textColor(context)
-                                                ),
-                                                textInputAction: TextInputAction.next,
-                                                textEditingController: _profileBloc.emailAddressTEC,
-                                                errorText: snapshot.error,
-                                                onChanged: _profileBloc.validateEmailAddress
-                                            );
-                                          },
-                                        )),
-                                    SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
+                                  ),
+                                  SliverToBoxAdapter(child: UiSpacer
+                                      .verticalSpace(space: 40)),
+                                  SliverToBoxAdapter(
+                                      child: StreamBuilder<UiState>(
+                                        stream: _profileBloc.uiState,
+                                        builder: (context, snapshot) {
+                                          final uiState = snapshot.data;
 
-                                    SliverToBoxAdapter(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-
-                                          Expanded(child:getDOBWidget()
-                                          ),
-                                          SizedBox(
-                                            width: 16,
-                                          ),
-                                          Expanded(
-                                              child:getAnniversaryWidget()
-                                          )
-
-                                        ],
-                                      ),
-                                    ),
-                                    SliverToBoxAdapter(child:UiSpacer.verticalSpace(space: 40)),
-                                    SliverToBoxAdapter(
-                                        child:StreamBuilder<UiState>(
-                                          stream: _profileBloc.uiState,
-                                          builder: (context, snapshot) {
-                                            final uiState = snapshot.data;
-
-                                            return CustomButton(
-                                              padding: AppPaddings.mediumButtonPadding(),
-                                              color: AppColor.accentColor,
-                                              onPressed: uiState != UiState.loading
-                                                  ?  (){
-                                                _profileBloc.processAccountUpdate(dob:_datetimeDOB==null?null:DateFormat('yyyy-MM-dd').format(_datetimeDOB),
-                                                    anniver: _datetimeAnniversary==null?null:DateFormat('yyyy-MM-dd').format(_datetimeAnniversary),
-                                                    gender: SELECTED_GENDER);
-                                              }
-                                                  : null,
-                                              child: uiState != UiState.loading
-                                                  ? Text(
-                                                "Save Details",
-                                                style: AppTextStyle.h4TitleTextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500
-                                                ),
-                                                textAlign: TextAlign.start,
-                                                textDirection:
-                                                AppTextDirection.defaultDirection,
-                                              )
-                                                  : PlatformCircularProgressIndicator(),
-                                            );
-                                          },
-                                        )),
-                                    SliverToBoxAdapter(child:UiSpacer.verticalSpace()),
+                                          return CustomButton(
+                                            padding: AppPaddings
+                                                .mediumButtonPadding(),
+                                            color: AppColor.accentColor,
+                                            onPressed: uiState !=
+                                                UiState.loading
+                                                ? () {
+                                              _profileBloc.processAccountUpdate(
+                                                  dob: _datetimeDOB == null
+                                                      ? null
+                                                      : DateFormat('yyyy-MM-dd')
+                                                      .format(_datetimeDOB),
+                                                  anniver: _datetimeAnniversary ==
+                                                      null ? null : DateFormat(
+                                                      'yyyy-MM-dd').format(
+                                                      _datetimeAnniversary),
+                                                  gender: SELECTED_GENDER);
+                                            }
+                                                : null,
+                                            child: uiState != UiState.loading
+                                                ? Text(
+                                              "Save Details",
+                                              style: AppTextStyle
+                                                  .h4TitleTextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              textAlign: TextAlign.start,
+                                              textDirection:
+                                              AppTextDirection.defaultDirection,
+                                            )
+                                                : PlatformCircularProgressIndicator(),
+                                          );
+                                        },
+                                      )),
+                                  SliverToBoxAdapter(child: UiSpacer
+                                      .verticalSpace()),
 
 
-
-                                  ]))),
-                        ]),
-                  ),
-                )));
-
+                                ]))),
+                      ]),
+                ),
+              )));
+    }else{
+      pageBody=UnauthenticatedPage();
+    }
+    return pageBody;
     //);
   }
 
@@ -332,7 +397,7 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
         children:[
           Container(
             height: AppSizes.inputHeight,
-            padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+            padding: EdgeInsets.fromLTRB(0, 5, 20, 5),
             child: Row(
               children: [
                 Expanded(
@@ -380,7 +445,7 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
         children:[
           Container(
             height: AppSizes.inputHeight,
-            padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+            padding: EdgeInsets.fromLTRB(0, 5, 20, 5),
             child: Row(
               children: [
                 Expanded(

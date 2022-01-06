@@ -12,6 +12,10 @@ import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
 import 'package:flutter_om_jeweller/widgets/empty/empty_product.dart';
 import 'package:flutter_om_jeweller/widgets/search/search_bar.dart';
 import 'package:flutter_om_jeweller/widgets/search/search_groupedlist_view.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
+import 'package:flutter_om_jeweller/widgets/listItem/animated_product_listitem.dart';
+import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
+import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
 
 class SearchProductsPage extends StatefulWidget {
   SearchProductsPage({Key key}) : super(key: key);
@@ -30,7 +34,7 @@ class _SearchProductsPageState extends State<SearchProductsPage> {
   @override
   void initState() {
     super.initState();
-    _searchBarFocusNode.requestFocus();
+    // _searchBarFocusNode.requestFocus();
     _searchVendorsBloc.initBloc();
   }
 
@@ -59,27 +63,68 @@ class _SearchProductsPageState extends State<SearchProductsPage> {
               bottom: 0,
               child: ListView(
                 //padding: AppPaddings.defaultPadding(),
-                padding: EdgeInsets.fromLTRB(
-                  AppPaddings.contentPaddingSize,
-                  MediaQuery.of(context).size.height * 0.10,
-                  AppPaddings.contentPaddingSize,
-                  AppPaddings.contentPaddingSize,
-                ),
+                padding: EdgeInsets.only(left: 20,right: 20),
                 children: <Widget>[
                   //Resut
-                  StreamBuilder<List<String>>(
-                    stream: _searchVendorsBloc.searchVendors,
+                  StreamBuilder<List<Product>>(
+                    stream: _searchVendorsBloc.searchProducts,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return EmptyProduct();
+                      }else if(snapshot.data==null){
+                        return Column(
+                            children: <Widget>[
+                              Container(
+                                  width: 60,
+                                  height: 60,
+                                  alignment: Alignment.center,
+                                  child:PlatformCircularProgressIndicator()
+                              ),
+                              UiSpacer.verticalSpace(space: 30),
+                              Text(
+                                "Loading... Please Wait",
+                                style: AppTextStyle.h3TitleTextStyle(
+                                      color: AppColor.textColor(context),
+                                    ),
+                                textDirection: AppTextDirection.defaultDirection,
+                              ),
+
+                            ]
+                        );
                       }
-                      return SearchGroupedVendorsListView(
+                     /* return SearchGroupedVendorsListView(
                         title: SearchStrings.result,
                         titleTextStyle: AppTextStyle.h3TitleTextStyle(
                           color: AppColor.textColor(context),
                         ),
                         products: snapshot.data,
-                      );
+                        platinumRate: _searchVendorsBloc.platiniumRate,
+                      );*/
+
+                      //grid listing type
+                      return CustomScrollView(
+                          primary: true,
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          slivers: [
+                        SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 1/1.7,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return AnimatedProdcutListViewItem(
+                                index: index,
+                                product: snapshot.data[index],
+                                platinumRate: _searchVendorsBloc.platiniumRate,
+                              );
+                            },
+                            childCount: snapshot.data.length,
+                          ))]);
                     },
                   ),
                 ],
@@ -101,7 +146,7 @@ class _SearchProductsPageState extends State<SearchProductsPage> {
                   textDirection: AppTextDirection.defaultDirection,
                   children: <Widget>[
                     //top view
-                   /* Row(
+                    /* Row(
                       textDirection: AppTextDirection.defaultDirection,
                       children: <Widget>[
                         Expanded(
@@ -126,8 +171,18 @@ class _SearchProductsPageState extends State<SearchProductsPage> {
                         ),
                       ],
                     ),*/
-
-                    UiSpacer.verticalSpace(),
+/*                    Container(
+                        alignment: Alignment.topRight,
+                        child:CustomButton(
+                          padding: EdgeInsets.only(),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.close,
+                      ),
+                    )),*/
+                    //UiSpacer.verticalSpace(),
                     SearchBar(
                       hintText: 'Search for jewellery',
                       onSearchBarPressed: null,
@@ -142,6 +197,6 @@ class _SearchProductsPageState extends State<SearchProductsPage> {
         ),
       ),
     );
-   // );
+    // );
   }
 }

@@ -13,6 +13,7 @@ import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_it
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SocialViews extends StatelessWidget {
   SocialViews({Key key}) : super(key: key);
@@ -24,13 +25,17 @@ class SocialViews extends StatelessWidget {
       children: [
         Expanded(
             flex: 1,
-            child: Container(
+            child: InkWell(
+              onTap: (){
+                luanchFacebook();
+              },
+              child:Container(
                 padding: EdgeInsets.only(),
                 margin: EdgeInsets.only(right: 8),
                 decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
                 child:SvgPicture.asset(
                   'assets/images/face_svg.svg',
-                )
+                )),
 
               /*  Row(
                   mainAxisSize: MainAxisSize.min,
@@ -62,14 +67,19 @@ class SocialViews extends StatelessWidget {
         ),*/
         Expanded(
             flex: 1,
-            child: Container(
+            child: InkWell(
+              onTap: (){
+                luanchInstagram();
+              },
+              child:Container(
                 padding: EdgeInsets.only(),
                 margin: EdgeInsets.only(left: 1),
                 decoration: BoxDecoration(color: Color(0xFFFFEEFA)),
                 child: Image.asset(
-                      'assets/images/insta_png.png',
-                        height: 44,
+                        'assets/images/insta_png.png',
+                         height: 44,
                         )
+              ),
 
                /* Row(
                   mainAxisSize: MainAxisSize.min,
@@ -100,14 +110,18 @@ class SocialViews extends StatelessWidget {
         ),*/
         Expanded(
             flex: 1,
-            child: Container(
+            child: InkWell(
+              onTap: (){
+                luanchPinrest();
+              },
+            child:Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(),
                 margin: EdgeInsets.only(left: 8),
                 decoration: BoxDecoration(color: Color(0xFFFFF2EE)),
                 child:SvgPicture.asset(
                   'assets/images/p_svg.svg',
-                )
+                ))
 
 /*                Row(
                   mainAxisSize: MainAxisSize.min,
@@ -133,5 +147,38 @@ class SocialViews extends StatelessWidget {
             )),
       ],
     );
+  }
+
+  void luanchFacebook() async{
+    const url = 'https://www.facebook.com/OmJewellersIndia/';
+    var encoded = Uri.encodeFull(url);
+    await launch(encoded);
+    /*if (await canLaunch(encoded)) {
+        await launch(encoded);
+    } else {
+      throw 'Could not launch $url';
+    }*/
+  }
+
+  void luanchInstagram() async{
+    const url = 'https://www.instagram.com/om_jewellers/';
+    var encoded = Uri.encodeFull(url);
+    await launch(encoded);
+    /*if (await canLaunch(encoded)) {
+        await launch(encoded);
+    } else {
+       throw 'Could not launch $url';
+    }*/
+  }
+
+  void luanchPinrest() async{
+    const url = 'https://in.pinterest.com/om_jewellers/';
+    var encoded = Uri.encodeFull(url);
+    await launch(encoded);
+   /* if (await canLaunch(encoded)) {
+    await launch(encoded);
+    } else {
+    throw 'Could not launch $url';
+    }*/
   }
 }

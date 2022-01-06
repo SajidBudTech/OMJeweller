@@ -60,7 +60,7 @@ class _FAQPageState extends State<FAQPage> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainHomeViewModel>.reactive(
         viewModelBuilder: () => MainHomeViewModel(context),
-        onModelReady: (model) => model.initialise(),
+        onModelReady: (model) => model.getFAQ(),
         builder: (context, model, child) => AnnotatedRegion<
             SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle(
@@ -94,14 +94,14 @@ class _FAQPageState extends State<FAQPage> {
 
                               SliverPadding(
                                   padding: AppPaddings.defaultPadding(),
-                                  sliver: model.categoriesLoadingState ==
+                                  sliver: model.omLiveLoadingState ==
                                       LoadingState.Loading
                                   //the loadinng shimmer
                                       ? SliverToBoxAdapter(
                                     child: VendorShimmerListViewItem(),
                                   )
                                   // the faild view
-                                      : model.categoriesLoadingState ==
+                                      : model.omLiveLoadingState ==
                                       LoadingState.Failed
                                       ? SliverToBoxAdapter(
                                     child: LoadingStateDataView(
@@ -112,12 +112,12 @@ class _FAQPageState extends State<FAQPage> {
                                           color: Colors.red,
                                         ),
                                         actionFunction: () =>
-                                        model.wishlistList,
+                                        model.getFAQ,
                                       ),
                                     ),
                                   )
                                   // the vendors list
-                                      : model.wishlistList.length == 0
+                                      : model.faqQuestionList.length == 0
                                       ? SliverToBoxAdapter(
                                       child: Center(
                                         child: EmptyWishlist(),
@@ -128,13 +128,14 @@ class _FAQPageState extends State<FAQPage> {
                                           (context, index) {
                                         return AnimatedMapListViewItem(
                                           index: index,
-                                          address: model.productList[index],
+                                          address: model.faqQuestionList[index],
                                           listViewItem: FAQListViewItem(
-                                            vendor: model.productList[index],
+                                            question: model.faqQuestionList[index],
+                                            answer: model.faqAnswerList[index],
                                           ),
                                         );
                                       },
-                                      childCount: model.productList.length,
+                                      childCount: model.faqQuestionList.length,
                                     ),
                                   ),
                                 ),

@@ -43,7 +43,7 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
           context,
           title: _fillDetailsBloc.dialogData.title,
           description: _fillDetailsBloc.dialogData.body,
-          backgroundColor: _fillDetailsBloc.dialogData.backgroundColor,
+          backgroundColor: AppColor.accentColor,
           icon: _fillDetailsBloc.dialogData.iconData,
         );
       }
@@ -188,7 +188,7 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
                           top: 0,
                           bottom: 0,
                           labelText: "Product*",
-                          keyboardType: TextInputType.phone,
+                          keyboardType: TextInputType.text,
                           textStyle: AppTextStyle.h4TitleTextStyle(
                               color: AppColor.textColor(context)
                           ),

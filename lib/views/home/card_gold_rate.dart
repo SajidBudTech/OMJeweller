@@ -108,7 +108,7 @@ class _CardGoldRateState extends State<CardGoldRate> {
                            textDirection: AppTextDirection.defaultDirection,
                          ),
                          Text(
-                           'Rs.'+model.karate18Price,
+                           'Rs.'+(model.karate18Price??""),
                            style: AppTextStyle.h16TitleTextStyle(
                              color: Colors.white,
                            ),
@@ -143,7 +143,7 @@ class _CardGoldRateState extends State<CardGoldRate> {
                             textDirection: AppTextDirection.defaultDirection,
                           ),
                           Text(
-                            'Rs.'+model.karate22Price,
+                            'Rs.'+(model.karate22Price??""),
                             style: AppTextStyle.h16TitleTextStyle(
                               color: Colors.white,
                             ),

@@ -9,8 +9,10 @@ import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/constants/string/app.string.dart';
 import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
 import 'package:flutter_om_jeweller/bloc/profile.bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppDrawer extends StatelessWidget {
+
 
   String userName=AuthBloc.getUserName();
   List<String> drawerIcon=["assets/images/dra_appointment.svg","assets/images/dra_about.svg","assets/images/dra_visit.svg",
@@ -23,10 +25,13 @@ class AppDrawer extends StatelessWidget {
         children: [
        Container(
             height: 160,
+            color: Colors.white,
            // alignment: Alignment.bottomLeft,
             child: _createHeader(context),
           ),
           Expanded(
+            child:Container(
+              color: Colors.white,
             child:ListView(
               shrinkWrap: true,
               padding: EdgeInsets.only(left: 10,right: 10),
@@ -73,7 +78,8 @@ class AppDrawer extends StatelessWidget {
                   );
                 }),
                 _createDrawerItem(context: context,position: 6,text: "Review on Google",onTap: (){
-
+                  Navigator.pop(context);
+                  launchGoogleReview();
                 }),
                  UiSpacer.verticalSpace(space: 40),
             ListTile(
@@ -105,12 +111,12 @@ class AppDrawer extends StatelessWidget {
                 // _createDrawerItem(icon: Icons.stars, text: 'Useful Links'),
                 //Divider(),
                 // _createDrawerItem(icon: Icons.bug_report, text: 'Report an issue'),
-                 ListTile(
+                 /*ListTile(
                    contentPadding: EdgeInsets.zero,
                    dense: true,
                   title:Padding(
                     padding: EdgeInsets.only(left: 16),
-                    child:Text('App Verison Lorem Ipsum',
+                    child:Text('App Verison : '+buildNumber,
                   style: AppTextStyle.h7TitleTextStyle(
                       color: AppColor.hintTextColor(context),
                       fontWeight: FontWeight.w400
@@ -119,14 +125,23 @@ class AppDrawer extends StatelessWidget {
                   textDirection: AppTextDirection.defaultDirection,
                 )),
                 onTap: () {},
-               ),
+               ),*/
               ],
-            )),
+            ))),
 
         ])
 
 
     );
+  }
+
+
+
+  void launchGoogleReview() async {
+    String url = 'https://www.google.com/search?q=om+jewellers+mumbai&rlz=1C1CHBD_enIN839IN839&oq=om+jewellers+&aqs=chrome.1.69i57j0l3j46i175i199j69i60l3.3839j0j7&sourceid=chrome&ie=UTF-8#lrd=0x3be7b0e709dc5933:0x9666f484e431ffac,3,,,';
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
   }
 
   void _processLogout(BuildContext context) async {
@@ -142,6 +157,9 @@ class AppDrawer extends StatelessWidget {
     return DrawerHeader(
         margin: EdgeInsets.only(top: 60),
         padding: EdgeInsets.only(left: 24,right: 24),
+        decoration: BoxDecoration(
+          color: Colors.white
+        ),
         child:Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
           context,
           title: _loginBloc.dialogData.title,
           description: _loginBloc.dialogData.body,
-          backgroundColor: _loginBloc.dialogData.backgroundColor,
+           backgroundColor: AppColor.accentColor,
           icon: _loginBloc.dialogData.iconData,
         );
       }
@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
           primary: false,
           appBar: EmptyAppBar(),
           extendBodyBehindAppBar: true,
-          backgroundColor: AppColor.appBackground(context),
+          backgroundColor: Colors.white,
           body: Stack(
             children: [
               //body

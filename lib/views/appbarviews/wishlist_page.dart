@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
 import 'package:flutter_om_jeweller/bloc/product_search.bloc.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
@@ -22,6 +23,7 @@ import 'package:flutter_om_jeweller/widgets/listItem/product_listview_item.dart'
 import 'package:flutter_om_jeweller/widgets/listItem/wishlist_list_item.dart';
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
+import 'package:flutter_om_jeweller/widgets/state/unauthenticated.dart';
 import 'package:stacked/stacked.dart';
 
 class WishlistPage extends StatefulWidget {
@@ -36,93 +38,108 @@ class _WishlistPageState extends State<WishlistPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ProductPageViewModel>.reactive(
-        viewModelBuilder: () => ProductPageViewModel(),
-        onModelReady: (model) => model.getWishListProducts(),
-        builder: (context, model, child) =>
-            Scaffold(
-                body:
-                Container(
-                  color: AppColor.newprimaryColor,
-               /*   decoration: BoxDecoration(
+    Widget pageBody;
+    if (AuthBloc.authenticated()) {
+      pageBody = ViewModelBuilder<ProductPageViewModel>.reactive(
+          viewModelBuilder: () => ProductPageViewModel(context),
+          onModelReady: (model) => model.getWishListProducts(),
+          builder: (context, model, child) =>
+              Scaffold(
+                  body:
+                  Container(
+                    color: AppColor.newprimaryColor,
+                    /*   decoration: BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [Color(0xFFFFDBB6), Color(0xFFFFFFFF)])),*/
-                  child: SafeArea(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Container(
-                            child: LeadingAppBar(
-                              title: "Wishlist",
-                              subTitle: model.productbyWishList.length.toString()+" Items",
+                    child: SafeArea(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Container(
+                              child: LeadingAppBar(
+                                title: "Wishlist",
+                                subTitle: model.productbyWishList.length
+                                    .toString() + " Items",
+                              ),
                             ),
-                          ),
-                          Expanded(child: CustomScrollView(slivers: [
-                            SliverPadding(
-                                padding: AppPaddings.defaultPadding(),
-                                sliver: model.productByWishlistLoadingState ==
-                                    LoadingState.Loading
-                                //the loadinng shimmer
-                                    ? SliverToBoxAdapter(
-                                  child: VendorShimmerListViewItem(),
-                                )
-                                // the faild view
-                                    : model.productByWishlistLoadingState ==
-                                    LoadingState.Failed
-                                    ? SliverToBoxAdapter(
-                                  child: LoadingStateDataView(
-                                    stateDataModel: StateDataModel(
-                                      showActionButton: true,
-                                      actionButtonStyle:
-                                      AppTextStyle.h4TitleTextStyle(
-                                        color: Colors.red,
-                                      ),
-                                      actionFunction: () =>
-                                      model.getWishListProducts(),
-                                    ),
-                                  ),
-                                )
-                                // the vendors list
-                                    : model.productbyWishList.length == 0
-                                    ? SliverToBoxAdapter(
-                                    child: Center(
-                                      child: EmptyWishlist(),
-                                    ))
-                                    :
-                                //grid listing type
-                                SliverGrid(
-                                  gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    childAspectRatio: 0.54,
-                                  ),
-                                  delegate: SliverChildBuilderDelegate(
-                                        (context, index) {
-                                      return AnimatedProdcutListViewItem(
-                                        index: index,
-                                        product: model.productbyWishList[index],
-                                        listViewItem:
-                                        WishlistListViewItem(
-                                          product: model.productbyWishList[index],
-                                          platinumRate: model.platiniumRate,
+                            Expanded(child: CustomScrollView(slivers: [
+                              SliverPadding(
+                                  padding: AppPaddings.defaultPadding(),
+                                  sliver: model.productByWishlistLoadingState ==
+                                      LoadingState.Loading
+                                  //the loadinng shimmer
+                                      ? SliverToBoxAdapter(
+                                    child: VendorShimmerListViewItem(),
+                                  )
+                                  // the faild view
+                                      : model.productByWishlistLoadingState ==
+                                      LoadingState.Failed
+                                      ? SliverToBoxAdapter(
+                                    child: LoadingStateDataView(
+                                      stateDataModel: StateDataModel(
+                                        showActionButton: true,
+                                        actionButtonStyle:
+                                        AppTextStyle.h4TitleTextStyle(
+                                          color: Colors.red,
                                         ),
-                                      );
-                                    },
-                                    childCount: model.productbyWishList.length,
-                                  ),
-                                )),
+                                        actionFunction: () =>
+                                            model.getWishListProducts(),
+                                      ),
+                                    ),
+                                  )
+                                  // the vendors list
+                                      : model.productbyWishList.length == 0
+                                      ? SliverToBoxAdapter(
+                                      child: Center(
+                                        child: EmptyWishlist(),
+                                      ))
+                                      :
+                                  //grid listing type
+                                  SliverGrid(
+                                    gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10,
+                                      childAspectRatio: 1 / 1.6,
+                                    ),
+                                    delegate: SliverChildBuilderDelegate(
+                                          (context, index) {
+                                        return AnimatedProdcutListViewItem(
+                                          index: index,
+                                          product: model
+                                              .productbyWishList[index],
+                                          listViewItem:
+                                          WishlistListViewItem(
+                                            product: model
+                                                .productbyWishList[index],
+                                            platinumRate: model.platiniumRate,
+                                            productPageViewModel: model,
+                                            onPressed: (product) {
+                                              setState(() {
+                                                model.productbyWishList.remove(
+                                                    product);
+                                              });
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      childCount: model.productbyWishList
+                                          .length,
+                                    ),
+                                  )),
 
 
-
-                          ])),
-                        ]),
-                  ),
-                )));
-
+                            ])),
+                          ]),
+                    ),
+                  )));
+    }else{
+      pageBody=UnauthenticatedPage();
+    }
+    return pageBody;
     //);
   }
 }

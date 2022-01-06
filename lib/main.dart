@@ -38,7 +38,7 @@ void main() async {
   // Set default home.
  // String _startRoute = AppRoutes.welcomeRoute;
 
-  String _startRoute = AppRoutes.loginRoute;
+  String _startRoute = AppRoutes.homeRoute;
 
   //check if user has signin before
   await AuthBloc.getPrefs();
@@ -49,10 +49,9 @@ void main() async {
     if(AuthBloc.authenticated()){
       _startRoute = AppRoutes.homeRoute;
     }else{
-      _startRoute = AppRoutes.loginRoute;
+      _startRoute = AppRoutes.homeRoute;
     }
   }
-
 
   // Run app!
   runApp(
@@ -82,8 +81,10 @@ class MyApp extends StatefulWidget {
   MyApp({Key key ,this.starter});
 
   final String starter;
+
   @override
   _MyAppState createState() => new _MyAppState();
+
 }
 
 class _MyAppState extends State<MyApp> {

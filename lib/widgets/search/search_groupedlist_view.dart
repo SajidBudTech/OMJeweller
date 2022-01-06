@@ -5,18 +5,22 @@ import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_om_jeweller/widgets/listItem/product_listview_item.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
 
 class SearchGroupedVendorsListView extends StatelessWidget {
   const SearchGroupedVendorsListView({
     Key key,
     @required this.title,
     this.products,
+    this.platinumRate,
     this.titleTextStyle,
   }) : super(key: key);
 
   final String title;
   final TextStyle titleTextStyle;
-  final List<String> products;
+  final List<Product> products;
+  final double platinumRate;
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +60,10 @@ class SearchGroupedVendorsListView extends StatelessWidget {
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-               /* child: SearchProductListViewItem(
+                child: ProductListViewItem(
                   product: product,
-                  vendor: vendor,
-                ),*/
+                  platinumRate: platinumRate,
+                ),
               ),
             ),
           );

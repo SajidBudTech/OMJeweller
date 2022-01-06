@@ -93,9 +93,9 @@ class AppColor {
   static Color textColor(BuildContext context, {bool inverse = false}) {
     var platformBrightness = MediaQuery.of(context).platformBrightness;
     if (platformBrightness == Brightness.dark) {
-      return inverse ? Colors.black : Colors.white;
+      return Colors.black;
     } else {
-      return inverse ? Colors.white : Colors.black;
+      return Colors.black;
     }
   }
 

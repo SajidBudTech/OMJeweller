@@ -23,6 +23,7 @@ class AuthStrings {
 
   static const String unAuthtitle = "Unauthorized";
   static const String unAuthbody = "You must sign-in to access this section";
+  static const String unAuthButtonTitle = "Login";
 
 
   static const String invalidPhoneMessage = "Please enter valid mobile number";

@@ -7,6 +7,8 @@ import 'package:flutter_om_jeweller/data/models/wishlist_data.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/repositories/home.repository.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/base.viewmodel.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
+import 'package:flutter_om_jeweller/data/models/omlive.dart';
 
 class MainHomeViewModel extends MyBaseViewModel {
 
@@ -15,6 +17,9 @@ class MainHomeViewModel extends MyBaseViewModel {
   //
   LoadingState categoriesLoadingState = LoadingState.Loading;
   LoadingState collectionLoadingState = LoadingState.Loading;
+  LoadingState newArrivalLoadingState = LoadingState.Loading;
+  LoadingState omLiveLoadingState = LoadingState.Loading;
+  LoadingState FaqLoadingState = LoadingState.Loading;
 
 
   LoadingState nearbyLoadingState = LoadingState.Loading;
@@ -24,6 +29,7 @@ class MainHomeViewModel extends MyBaseViewModel {
   List<Category> categories = [];
 
   List<Collection> collections = [];
+  List<Product> newArrivalList = [];
 
 
   List<String> categoriesbottomone = [];
@@ -33,7 +39,7 @@ class MainHomeViewModel extends MyBaseViewModel {
   List<String> CompanyNameList = [];
   List<String> CompanyPostList = [];
   List<String> shopByCategoryList = [];
-  List<String> OMLiveList = [];
+  List<OMLive> OMLiveList = [];
 
   List<String> storeCallList = [];
   List<String> storeVisitList = [];
@@ -41,11 +47,10 @@ class MainHomeViewModel extends MyBaseViewModel {
   List<String> storeVisitTypeImage = [];
 
 
-  List<String> sortlist=["New Arrivals",
-    "Price - High to Low",
-    "Popularity",
-    "Discount",
-    "Price - Low to High"];
+  List<String> faqQuestionList = [];
+  List<String> faqAnswerList = [];
+  
+
 
   List<Wishlist> wishlistList = [];
   List<String> availableslotList = [];
@@ -95,6 +100,35 @@ class MainHomeViewModel extends MyBaseViewModel {
     }
   }
 
+  void getNewArrival() async {
+    //add null data so listener can show shimmer widget to indicate loading
+    newArrivalLoadingState = LoadingState.Loading;
+    notifyListeners();
+
+    try {
+      newArrivalList = await _homePageRepository.getNewArrival();
+      newArrivalLoadingState = LoadingState.Done;
+      notifyListeners();
+     } catch (error) {
+      newArrivalLoadingState = LoadingState.Failed;
+      notifyListeners();
+    }
+  }
+  void getOMLive() async {
+    //add null data so listener can show shimmer widget to indicate loading
+    omLiveLoadingState = LoadingState.Loading;
+    notifyListeners();
+
+    try {
+      OMLiveList = await _homePageRepository.getOMLive();
+      omLiveLoadingState = LoadingState.Done;
+      notifyListeners();
+    } catch (error) {
+      omLiveLoadingState = LoadingState.Failed;
+      notifyListeners();
+    }
+  }
+
   void getStoreVisitData() async{
     categoriesLoadingState = LoadingState.Loading;
     notifyListeners();
@@ -120,6 +154,8 @@ class MainHomeViewModel extends MyBaseViewModel {
 
       getCategories();
       getCollection();
+      getNewArrival();
+      getOMLive();
     //categoriesLoadingState=LoadingState.Done;
     //categories.add('assets/images/ugaani.png');
     //categories.add('assets/images/jodha.png');
@@ -176,8 +212,8 @@ class MainHomeViewModel extends MyBaseViewModel {
     shopByCategoryList.add('assets/images/cate_two.png');
     shopByCategoryList.add('assets/images/cate_three.png');
 
-    OMLiveList.add('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
-    OMLiveList.add('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+  /*  OMLiveList.add('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+    OMLiveList.add('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');*/
 
 
 
@@ -220,6 +256,28 @@ class MainHomeViewModel extends MyBaseViewModel {
     //getPopularVendors();
     //
    // getLocationPermissionStatus();
+
+  }
+  
+  void getFAQ(){
+    omLiveLoadingState = LoadingState.Loading;
+    notifyListeners();
+    
+    faqQuestionList.add("Where is Om Jewellers located?");
+    faqQuestionList.add("What is Om Jewellers' specialty?");
+    faqQuestionList.add("Do I get a discount?");
+    faqQuestionList.add("Is your jewellery certified?");
+    faqQuestionList.add("How can I get the latest updates about jewellery offers?");
+
+    faqAnswerList.add("You can visit Om jewellers showrooms at Borivali, Mumbai, and Mulund.");
+    faqAnswerList.add("Om Jewellers specializes in every type of jewellery. You can explore everything from bridal jewellery, diamond jewellery, office jewellery, and casual jewellery.");
+    faqAnswerList.add("Om jewellers regularly offer discounts on jewellery. Please call the store for details.");
+    faqAnswerList.add("Our jewellery is of the highest standard, and we have all the requisite hallmarks to testify the same.");
+    faqAnswerList.add("You can get first hand information about latest collections, discounts and more by following our social media pages, or by joining our Facebook group.");
+
+
+    omLiveLoadingState = LoadingState.Done;
+    notifyListeners();
 
   }
 

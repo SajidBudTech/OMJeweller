@@ -45,6 +45,7 @@ class BannerViewModel extends MyBaseViewModel {
       print("Error getting banners ==> $error");
     }
     setBusy(false);
+
   }
 
 

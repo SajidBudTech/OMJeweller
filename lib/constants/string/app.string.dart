@@ -32,7 +32,8 @@ class AppStrings {
   static String defaultPhoneCode = "+233";
   static String defaultCountryCode = "GH";
 
-  static const String defaultAdminNumber = "919924106321";
+  static const String defaultAdminNumber = "02261587000";
+  static const String defaultWhatsappNumber = "+91 8657990236";
 
   static String firebaseServerToken = "AAAAY5xaAqo:APA91bHGEZgB8Hu5lBn8tDjWmo8hCrRjHjJtqr9ua_L1-IOPhaeMupIklmmys4DoZjuWBQswInDSMpvFIWedAunS7l1x7J_kz8hVin4nq6lorlVfF5__Kh0y7B67u8s8Ct0vJTORcKBb";
 

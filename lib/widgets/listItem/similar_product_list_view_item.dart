@@ -11,6 +11,9 @@ import 'package:flutter_om_jeweller/data/models/product.dart';
 import 'package:flutter_om_jeweller/constants/api.dart';
 import 'package:flutter_om_jeweller/bloc/product.bloc.dart';
 import 'package:edge_alert/edge_alert.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_om_jeweller/data/models/product_arguments.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/count.viewmodel.dart';
 
 class SimilarProdcutListViewItem extends StatefulWidget {
   SimilarProdcutListViewItem({
@@ -28,6 +31,7 @@ class SimilarProdcutListViewItem extends StatefulWidget {
 
 class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem> {
   ProductBloc _produtBloc=ProductBloc();
+  var format = NumberFormat.currency(locale: 'HI',decimalDigits: 0,customPattern: 'INR #,##,###');
   @override
   void initState() {
     // TODO: implement initState
@@ -40,10 +44,12 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
           context,
           title: _produtBloc.dialogData.title,
           description: _produtBloc.dialogData.body,
-          backgroundColor: _produtBloc.dialogData.backgroundColor,
+          backgroundColor: AppColor.accentColor,
           icon: _produtBloc.dialogData.iconData,
         );
         if(_produtBloc.dialogData.title=="Product Added To Wishlist Successfully!"){
+          CountViewModel countViewModel=CountViewModel(context);
+          countViewModel.incrementWishlistCount();
           setState(() {
             widget.product.isWishlist=101;
           });
@@ -60,17 +66,20 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
       tag: widget.vendor,
       child: */
       Container(
-        width: (AppSizes.getScreenWidth(context)/2)-38,
+        width: (AppSizes.getScreenWidth(context)/2)-30,
         margin: EdgeInsets.only(right: 10,bottom: 4),
         child: RaisedButton(
           padding: EdgeInsets.all(0),
           onPressed: () {
             //show vendor full info and menu
-            /*Navigator.pushNamed(
-              context,
-              AppRoutes.vendorRoute,
-              arguments: widget.vendor,
-            );*/
+            Navigator.pushNamed(
+                context,
+                AppRoutes.productDetailRoute,
+                arguments: ProductArguments(
+                    product: widget.product,
+                    status: false
+                )
+            );
           },
           // elevation: 3,
           // shape: StadiumBorder(),
@@ -99,7 +108,7 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
                                       Icon(Icons.error),
                                   height: 181,
                                   fit: BoxFit.cover,
-                                  width: double.infinity,
+                                  width: (AppSizes.getScreenWidth(context)/2)-50,
                                 ),
                                /* Align(
                                   alignment: Alignment.topRight,
@@ -133,8 +142,8 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
                                         padding: EdgeInsets.only(top: 6),
                                         child:Text(
                                           widget.product.productName??"",
-                                          style: AppTextStyle.h4TitleTextStyle(
-                                            fontWeight: FontWeight.w600,
+                                          style: AppTextStyle.h5TitleTextStyle(
+                                            fontWeight: FontWeight.w500,
                                             color: AppColor.textColor(context),
                                           ),
                                           overflow: TextOverflow.ellipsis,
@@ -161,8 +170,8 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
                                     child:Container(
                                         alignment: Alignment.topRight,
                                         child: Icon(
-                                              FlutterIcons.favorite_border_mdi,
-                                              size: 20,
+                                              widget.product.isWishlist==null?FlutterIcons.favorite_border_mdi:FlutterIcons.favorite_mdi,
+                                              size: 16,
                                               color: widget.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor,
                                             )
                                     ))),
@@ -174,16 +183,18 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
                                 //product types and minimum order amount
                                 Text(
                                   widget.product.collectionName==null?"":(widget.product.collectionName+" Collection"),
-                                  style: AppTextStyle.h5TitleTextStyle(
+                                  style: AppTextStyle.h7TitleTextStyle(
                                     color: AppColor.hintTextColor(context),
+                                    fontWeight: FontWeight.w400
                                   ),
                                   textDirection: AppTextDirection.defaultDirection,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
-                                  "\u20B9 "+getProductPrice(),
-                                  style: AppTextStyle.h4TitleTextStyle(
+                                  getProductPrice(),
+                                  style: AppTextStyle.h5TitleTextStyle(
                                     color: AppColor.accentColor,
+                                      fontWeight: FontWeight.w500
                                   ),
                                   textDirection: AppTextDirection.defaultDirection,
                                   overflow: TextOverflow.ellipsis,
@@ -246,7 +257,7 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
     }
 
 
-    return totalAmount.toStringAsFixed(2);
+    return  format.format(totalAmount.toInt());
 
   }
 

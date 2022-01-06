@@ -94,6 +94,11 @@ class AppointmentViewModel extends MyBaseViewModel {
     final int userId=AuthBloc.getUserID();
     try {
       appointmentslist = await _appointmentRepository.getAllMyAppointment(userID: userId);
+      appointmentslist.sort((a,b){
+        var adate = DateTime.parse(a.appointmentDate); //before -> var adate = a.expiry;
+        var bdate = DateTime.parse(b.appointmentDate); //before -> var bdate = b.expiry;
+        return bdate.compareTo(adate);
+      });
       appointmentLoadingState = LoadingState.Done;
       notifyListeners();
     } catch (error) {

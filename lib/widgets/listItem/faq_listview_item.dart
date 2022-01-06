@@ -19,10 +19,12 @@ import 'package:flutter_svg/svg.dart';
 class FAQListViewItem extends StatefulWidget {
   FAQListViewItem({
     Key key,
-    @required this.vendor,
+    @required this.question,
+    @required this.answer,
   }) : super(key: key);
 
-  final String vendor;
+  final String question;
+  final String answer;
   @override
   _FAQListViewItemState createState() => _FAQListViewItemState();
 }
@@ -42,7 +44,7 @@ class _FAQListViewItemState extends State<FAQListViewItem> {
       // margin: EdgeInsets.only(bottom: 4),
       child:AppExpansionTile(
            key: expansionTile,
-           title: Text("What is Lorem Ipsum?",
+           title: Text(widget.question??"",
              style: AppTextStyle.h4TitleTextStyle(
                fontWeight: FontWeight.w500,
                color: AppColor.textColor(context),
@@ -52,7 +54,7 @@ class _FAQListViewItemState extends State<FAQListViewItem> {
            ),
           children: [
             new ListTile(
-              title: Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley.',
+              title: Text(widget.answer??"",
                 style: AppTextStyle.h5TitleTextStyle(
                   fontWeight: FontWeight.w400,
                   color: AppColor.hintTextColor(context),

@@ -18,16 +18,24 @@ import 'package:flutter_om_jeweller/constants/api.dart';
 import 'package:flutter_om_jeweller/bloc/product.bloc.dart';
 import 'package:edge_alert/edge_alert.dart';
 import 'package:flutter_om_jeweller/widgets/storelocationlist/appoinment_type_content.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/product_page.viewmodel.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/count.viewmodel.dart';
 
 class WishlistListViewItem extends StatefulWidget {
   WishlistListViewItem({
     Key key,
     @required this.product,
     @required this.platinumRate,
+    @required this.productPageViewModel,
+    this.onPressed
   }) : super(key: key);
 
   final Product product;
   final double platinumRate;
+  final ProductPageViewModel productPageViewModel;
+  final Function(Product) onPressed;
+
   @override
   _WishlistListViewItemState createState() =>
       _WishlistListViewItemState();
@@ -36,6 +44,7 @@ class WishlistListViewItem extends StatefulWidget {
 class _WishlistListViewItemState extends State<WishlistListViewItem> {
 
   ProductBloc _produtBloc=ProductBloc();
+  var format = NumberFormat.currency(locale: 'HI',decimalDigits: 0,customPattern: 'INR #,##,###');
 
   @override
   void initState() {
@@ -45,13 +54,24 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
     _produtBloc.showAlert.listen((show) {
       //when asked to show an alert
       if (show) {
-        Navigator.pop(context);
+        EdgeAlert.show(
+          context,
+          title: _produtBloc.dialogData.title,
+          description: _produtBloc.dialogData.body,
+          backgroundColor: AppColor.accentColor,
+          icon: _produtBloc.dialogData.iconData,
+        );
+        CountViewModel countViewModel=CountViewModel(context);
+        countViewModel.decrementWishlistCount();
+        setState(() {
+          widget.onPressed(widget.product);
+        });
       }else{
         EdgeAlert.show(
           context,
           title: _produtBloc.dialogData.title,
           description: _produtBloc.dialogData.body,
-          backgroundColor: _produtBloc.dialogData.backgroundColor,
+          backgroundColor: AppColor.accentColor,
           icon: _produtBloc.dialogData.iconData,
         );
       }
@@ -90,14 +110,14 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
                 CachedNetworkImage(
                   imageUrl: Api.ProductdownloadUrlPath + (widget.product.productImage==null?"":widget.product.productImage),
                   placeholder: (context, url) => Container(
-                    height: 181,
+                    height: ((AppSizes.getScreenWidth(context)/2)-50)+(((AppSizes.getScreenWidth(context)/2)-50)*0.15),
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
                   ),
                   errorWidget: (context, url, error) =>
                       Icon(Icons.error),
-                  height: 181,
+                  height: ((AppSizes.getScreenWidth(context)/2)-50)+(((AppSizes.getScreenWidth(context)/2)-50)*0.15),
                   fit: BoxFit.cover,
                   width: double.infinity,
                 ),
@@ -129,10 +149,11 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
                     //vendor name
                     Container(
                     alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(top: 6),
                     child:Text(
                      (widget.product.productName==null?"":(widget.product.productName)),
-                      style: AppTextStyle.h4TitleTextStyle(
-                        fontWeight: FontWeight.w600,
+                      style: AppTextStyle.h5TitleTextStyle(
+                        fontWeight: FontWeight.w500,
                         color: AppColor.textColor(context),
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -141,16 +162,18 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
                     //product types and minimum order amount
                     Text(
                       (widget.product.collectionName==null?"":(widget.product.collectionName+" Collection")),
-                      style: AppTextStyle.h5TitleTextStyle(
+                      style: AppTextStyle.h7TitleTextStyle(
                         color: AppColor.hintTextColor(context),
+                        fontWeight: FontWeight.w400,
                       ),
                       textDirection: AppTextDirection.defaultDirection,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      "\u20B9 "+getProductPrice(),
-                      style: AppTextStyle.h4TitleTextStyle(
+                      getProductPrice(),
+                      style: AppTextStyle.h5TitleTextStyle(
                         color: AppColor.accentColor,
+                          fontWeight: FontWeight.w500
                       ),
                       textDirection: AppTextDirection.defaultDirection,
                       overflow: TextOverflow.ellipsis,
@@ -293,7 +316,7 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
     }
 
 
-    return totalAmount.toString();
+    return format.format(totalAmount.toInt());
 
   }
 

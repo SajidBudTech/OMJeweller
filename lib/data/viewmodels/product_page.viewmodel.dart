@@ -10,6 +10,7 @@ import 'package:flutter_om_jeweller/data/models/collection.dart';
 import 'package:flutter_om_jeweller/data/models/gold_rate.dart';
 import 'package:flutter_om_jeweller/data/repositories/home.repository.dart';
 import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/count.viewmodel.dart';
 
 
 class ProductPageViewModel extends MyBaseViewModel {
@@ -23,6 +24,12 @@ class ProductPageViewModel extends MyBaseViewModel {
   LoadingState productByWishlistLoadingState = LoadingState.Loading;
   LoadingState productByIDLoadingState = LoadingState.Loading;
 
+
+  Map<String,bool> availableCategoryMap;
+  Map<String,bool> availableSubCategoryMap;
+  Map<String,bool> availableCollectionMap;
+  Map<String,bool> availableGoldPurityMap;
+
   //Product repository
   ProductRepository _productRepository = ProductRepository();
 
@@ -32,6 +39,7 @@ class ProductPageViewModel extends MyBaseViewModel {
   List<GoldRate> goldRate=[];
 
   List<Product> productbyCategoryList=[];
+  List<Product> productFilterList=[];
 
   List<Product> productbyWishList=[];
 
@@ -45,7 +53,8 @@ class ProductPageViewModel extends MyBaseViewModel {
   //Vendor model
  // Vendor vendor;
 
-  ProductPageViewModel(){
+  ProductPageViewModel(BuildContext context){
+    this.viewContext=context;
     getGoldRate();
   }
 
@@ -53,6 +62,8 @@ class ProductPageViewModel extends MyBaseViewModel {
     vendorPageStrollController.addListener(updateAppBarBackgroundColor);
     getDetails();
   }
+
+
 
   //
   getDetails() async {
@@ -86,12 +97,17 @@ class ProductPageViewModel extends MyBaseViewModel {
 
   void getProductsByCategory({Category category,int categoryId}) async {
     //add null data so listener can show shimmer widget to indicate loading
+
+    CountViewModel countViewModel=CountViewModel(viewContext);
+    countViewModel.setWishListCount();
+
     productByCategoryLoadingState = LoadingState.Loading;
     notifyListeners();
     final int userId=AuthBloc.getUserID();
     try {
       productbyCategoryList = await _productRepository.getProductByCategories(userID: userId,categoryId: category!=null?category.categoryID:categoryId);
       productByCategoryLoadingState = LoadingState.Done;
+      productFilterList=productbyCategoryList;
       notifyListeners();
     } catch (error) {
       productByCategoryLoadingState = LoadingState.Failed;
@@ -107,6 +123,7 @@ class ProductPageViewModel extends MyBaseViewModel {
     try {
       productbyCategoryList = await _productRepository.getProductBySubCategories(userID: userId,subCategoryId: subcategory.subcategoryID);
       productByCategoryLoadingState = LoadingState.Done;
+      productFilterList=productbyCategoryList;
       notifyListeners();
     } catch (error) {
       productByCategoryLoadingState = LoadingState.Failed;
@@ -122,6 +139,7 @@ class ProductPageViewModel extends MyBaseViewModel {
     try {
       productbyCategoryList = await _productRepository.getProductByCollection(userID: userId,collectionId: collection.collectionID);
       productByCategoryLoadingState = LoadingState.Done;
+      productFilterList=productbyCategoryList;
       notifyListeners();
     } catch (error) {
       productByCategoryLoadingState = LoadingState.Failed;
@@ -148,10 +166,96 @@ class ProductPageViewModel extends MyBaseViewModel {
     }
   }
 
+  sortProductList(String sortType) async{
+
+    if(sortType=="Price - Low to High") {
+      productbyCategoryList.sort((a,b){
+        var adate = a.productPrice; //before -> var adate = a.expiry;
+        var bdate = b.productPrice; //before -> var bdate = b.expiry;
+        return adate.compareTo(bdate);
+      });
+    }else if(sortType=="Price - High to Low"){
+      productbyCategoryList.sort((a,b){
+        var adate = a.productPrice; //before -> var adate = a.expiry;
+        var bdate = b.productPrice; //before -> var bdate = b.expiry;
+        return bdate.compareTo(adate);
+      });
+    }
+
+    print(productbyCategoryList);
+    notifyListeners();
+
+  }
+
+  filterProductList() async{
+    //productFilterList=productbyCategoryList;
+    List<Product> newFilterList=[];
+    for(Product product in productFilterList){
+
+      availableCategoryMap.forEach((key, value) {
+        if(product.categoryName==key && value){
+           bool check=newFilterList.any((item) => item.productID == product.productID);
+            if(!check){
+               newFilterList.add(product);
+            }
+
+         }
+      });
+
+      availableSubCategoryMap.forEach((key, value) {
+        if(product.subcategoryName==key && value){
+          bool check=newFilterList.any((item) => item.productID == product.productID);
+          if(!check){
+            newFilterList.add(product);
+          }
+        }
+      });
+
+      availableCollectionMap.forEach((key, value) {
+        if(product.collectionName==key && value){
+          bool check=newFilterList.any((item) => item.productID == product.productID);
+          if(!check){
+            newFilterList.add(product);
+          }
+        }
+      });
+
+      availableGoldPurityMap.forEach((key, value) {
+        if(product.purityName==key && value){
+          bool check=newFilterList.any((item) => item.productID == product.productID);
+          if(!check){
+            newFilterList.add(product);
+          }
+        }
+      });
+
+    }
+
+    productbyCategoryList=newFilterList;
+    notifyListeners();
+
+  }
+
+   clearAll()async{
+
+     availableCategoryMap=null;
+     availableSubCategoryMap= null;
+     availableCollectionMap= null;
+     availableGoldPurityMap= null;
+
+     productbyCategoryList=productFilterList;
+     notifyListeners();
+  }
 
   @override
   void dispose() {
     super.dispose();
+
+    availableCategoryMap=null;
+    availableSubCategoryMap=null;
+    availableCollectionMap=null;
+    availableGoldPurityMap=null;
+
     vendorPageStrollController.dispose();
   }
 
@@ -180,6 +284,10 @@ class ProductPageViewModel extends MyBaseViewModel {
 
   void getWishListProducts() async {
     //add null data so listener can show shimmer widget to indicate loading
+
+    CountViewModel countViewModel=CountViewModel(viewContext);
+    countViewModel.setNotificationCount();
+
     productByWishlistLoadingState = LoadingState.Loading;
     notifyListeners();
 

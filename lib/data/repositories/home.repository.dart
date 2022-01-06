@@ -7,6 +7,8 @@ import 'package:flutter_om_jeweller/data/models/gold_rate.dart';
 import 'package:flutter_om_jeweller/services/http.service.dart';
 import 'package:flutter_om_jeweller/utils/api_response.utils.dart';
 import 'package:flutter_om_jeweller/data/models/advertisment_banner.dart';
+import 'package:flutter_om_jeweller/data/models/product.dart';
+import 'package:flutter_om_jeweller/data/models/omlive.dart';
 
 
 class HomePageRepository extends HttpService {
@@ -54,6 +56,54 @@ class HomePageRepository extends HttpService {
     (apiResponse.body['data'] as List).forEach((categoryJSONObject) {
       //vendor data
       categories.add(Collection.fromJson(categoryJSONObject));
+
+    });
+
+    return categories;
+  }
+
+  Future<List<Product>> getNewArrival() async {
+    List<Product> categories = [];
+
+    //make http call for vendors data
+    final apiResult = await post(Api.newArrival,{});
+
+    // print("Api result ==> ${apiResult.data}");
+    //format the resposne
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+    if (!apiResponse.allGood) {
+      throw apiResponse.errors;
+    }
+
+    // print("About to collect");
+    //convert the data to list of category model
+    (apiResponse.body['data'] as List).forEach((categoryJSONObject) {
+      //vendor data
+      categories.add(Product.fromJson(categoryJSONObject));
+
+    });
+
+    return categories;
+  }
+
+  Future<List<OMLive>> getOMLive() async {
+    List<OMLive> categories = [];
+
+    //make http call for vendors data
+    final apiResult = await post(Api.omLive,{});
+
+    // print("Api result ==> ${apiResult.data}");
+    //format the resposne
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+    if (!apiResponse.allGood) {
+      throw apiResponse.errors;
+    }
+
+    // print("About to collect");
+    //convert the data to list of category model
+    (apiResponse.body['data'] as List).forEach((categoryJSONObject) {
+      //vendor data
+      categories.add(OMLive.fromJson(categoryJSONObject));
 
     });
 

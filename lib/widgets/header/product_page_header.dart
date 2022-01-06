@@ -145,6 +145,7 @@ class ProductPageHeader extends StatelessWidget {
     CustomDialog.showCustomBottomSheet(
       context,
       backgroundColor: AppColor.newprimaryColor,
+      contentPadding: EdgeInsets.only(top: 8,bottom: 8,left: 4,right: 4),
       content: SimilarProductPage(
         categoryId: product.categoryID,
       ),

@@ -14,6 +14,7 @@ class AppExpansionTile extends StatefulWidget {
     this.trailing,
     this.rotateWidget,
     this.initiallyExpanded: false,
+    this.contentPadding,
   })
       : assert(initiallyExpanded != null),
         super(key: key);
@@ -26,6 +27,7 @@ class AppExpansionTile extends StatefulWidget {
   final Widget trailing;
   final Widget rotateWidget;
   final bool initiallyExpanded;
+  final EdgeInsets contentPadding;
 
   @override
   AppExpansionTileState createState() => new AppExpansionTileState();
@@ -119,12 +121,14 @@ class AppExpansionTileState extends State<AppExpansionTile> with SingleTickerPro
             child: new ListTile(
               onTap: toggle,
               leading: widget.leading,
+              contentPadding: widget.contentPadding??EdgeInsets.only(left: 16,right: 8),
               title: new DefaultTextStyle(
                 style: Theme
                     .of(context)
                     .textTheme
-                    .subhead
+                    .subtitle1
                     .copyWith(color: titleColor),
+                textAlign: TextAlign.left,
                 child: widget.title,
               ),
               trailing: widget.trailing ?? new RotationTransition(
@@ -150,7 +154,7 @@ class AppExpansionTileState extends State<AppExpansionTile> with SingleTickerPro
     final ThemeData theme = Theme.of(context);
     _borderColor.end = theme.dividerColor;
     _headerColor
-      ..begin = theme.textTheme.subhead.color
+      ..begin = theme.textTheme.subtitle1.color
       ..end = theme.accentColor;
     _iconColor
       ..begin = theme.unselectedWidgetColor

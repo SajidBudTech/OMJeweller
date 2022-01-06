@@ -33,6 +33,7 @@ import 'package:flutter_om_jeweller/data/models/collection.dart';
 import 'package:flutter_om_jeweller/data/models/page_arguments.dart';
 import 'package:flutter_om_jeweller/data/models/product.dart';
 import 'package:flutter_om_jeweller/data/models/product_arguments.dart';
+import 'package:flutter_om_jeweller/constants/api.dart';
 
 class MainHomePage extends StatefulWidget {
   const MainHomePage({Key key}) : super(key: key);
@@ -234,7 +235,7 @@ class _MainHomePageState extends State<MainHomePage>
                 child: Container(
                   width: double.infinity,
                   height:195,
-                  child: model.categoriesLoadingState == LoadingState.Loading
+                  child: model.newArrivalLoadingState == LoadingState.Loading
                   //the loadinng shimmer
                       ? Padding(
                     padding: EdgeInsets.symmetric(
@@ -243,33 +244,33 @@ class _MainHomePageState extends State<MainHomePage>
                     child: VendorShimmerListViewItem(),
                   )
                   // the faild view
-                      : model.categoriesLoadingState == LoadingState.Failed
+                      : model.newArrivalLoadingState == LoadingState.Failed
                       ? LoadingStateDataView(
                     stateDataModel: StateDataModel(
                       showActionButton: true,
                       actionButtonStyle: AppTextStyle.h4TitleTextStyle(
                         color: Colors.red,
                       ),
-                      actionFunction: model.getCategories,
+                      actionFunction: model.getNewArrival,
                     ),
                   )
                       : ListView.separated(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: model.categories.length,
+                    itemCount: model.newArrivalList.length,
                     padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
                     separatorBuilder: (context, index) =>
                         UiSpacer.horizontalSpace(space: 0),
                     itemBuilder: (context, index) {
-                      return ShopByProductListViewItem(
-                         category: model.categories[index],
+                      return NewArrivalListViewItem(
+                         product: model.newArrivalList[index],
                       );
                     },
                   ),
 
                 )
             ),
-            SliverToBoxAdapter(
+           /* SliverToBoxAdapter(
               child:UiSpacer.verticalSpace(space: 24),
             ),
             SliverToBoxAdapter(
@@ -277,8 +278,8 @@ class _MainHomePageState extends State<MainHomePage>
             ),
             SliverToBoxAdapter(
               child:UiSpacer.verticalSpace(space: 18),
-            ),
-            SliverToBoxAdapter(
+            ),*/
+            /*SliverToBoxAdapter(
               child:
               Container(
                   alignment: Alignment.center,
@@ -292,8 +293,8 @@ class _MainHomePageState extends State<MainHomePage>
                     textAlign: TextAlign.start,
                     textDirection: AppTextDirection.defaultDirection,
                   )),
-            ),
-            SliverToBoxAdapter(
+            ),*/
+            /*SliverToBoxAdapter(
               child:
               Container(
                   width: (AppSizes.getScreenWidth(context))-46,
@@ -308,7 +309,7 @@ class _MainHomePageState extends State<MainHomePage>
                       ),
                       borderRadius: BorderRadius.circular(10)
                   )
-            )),
+            )),*/
             SliverToBoxAdapter(
               child:UiSpacer.verticalSpace(space: 24),
             ),
@@ -412,7 +413,7 @@ class _MainHomePageState extends State<MainHomePage>
             SliverToBoxAdapter(
               child:UiSpacer.verticalSpace(space: 18),
             ),
-            SliverToBoxAdapter(
+           /* SliverToBoxAdapter(
               child:
               Container(
                   alignment: Alignment.center,
@@ -426,9 +427,10 @@ class _MainHomePageState extends State<MainHomePage>
                     textAlign: TextAlign.start,
                     textDirection: AppTextDirection.defaultDirection,
                   )),
-            ),
+            ),*/
             SliverToBoxAdapter(
-              child:Padding(
+              child:Container(
+                   height: 67,
                   padding: EdgeInsets.only(left: 20,right: 20),
                   child: HallMarkLogo()
               ),
@@ -462,7 +464,7 @@ class _MainHomePageState extends State<MainHomePage>
                 child: Container(
                   width: double.infinity,
                   height:280,
-                  child: model.categoriesLoadingState == LoadingState.Loading
+                  child: model.omLiveLoadingState == LoadingState.Loading
                   //the loadinng shimmer
                       ? Padding(
                     padding: EdgeInsets.symmetric(
@@ -471,7 +473,7 @@ class _MainHomePageState extends State<MainHomePage>
                     child: VendorShimmerListViewItem(),
                   )
                   // the faild view
-                      : model.categoriesLoadingState == LoadingState.Failed
+                      : model.omLiveLoadingState == LoadingState.Failed
                       ? LoadingStateDataView(
                     stateDataModel: StateDataModel(
                       showActionButton: true,
@@ -489,10 +491,12 @@ class _MainHomePageState extends State<MainHomePage>
                     separatorBuilder: (context, index) =>
                         UiSpacer.horizontalSpace(space: 0),
                     itemBuilder: (context, index) {
+                      var videoUrl=Api.ProductdownloadUrlPath+model.OMLiveList[index].videoUrl;
                       return OMLiveListItems(
-                        videoPlayerController: VideoPlayerController.network(model.OMLiveList[index]),
+                        videoPlayerController: VideoPlayerController.network(videoUrl),
                         autoplay: false,
                         looping: false,
+                        title: model.OMLiveList[index].title,
                       );
                     },
                   ),

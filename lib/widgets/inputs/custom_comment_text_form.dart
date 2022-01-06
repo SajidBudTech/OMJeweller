@@ -35,6 +35,7 @@ class CustomCommentTextFormField extends StatefulWidget {
     this.focusNode,
     this.nextFocusNode,
     this.isReadOnly = false,
+    this.multiLine=false,
     this.onTap,
     this.left=20,
     this.right=20,
@@ -73,6 +74,7 @@ class CustomCommentTextFormField extends StatefulWidget {
   final FocusNode nextFocusNode;
 
   final bool isReadOnly;
+  final bool multiLine;
   final Function onTap;
 
   final double left;
@@ -110,7 +112,7 @@ class _CustomCommentTextFormFieldState extends State<CustomCommentTextFormField>
               //add spacing if there is a leading widget
               (widget.prefixWidget != null)
                   ? SizedBox(
-                width: 15,
+                 width: 15,
               )
                   : SizedBox.shrink(),
 
@@ -121,7 +123,7 @@ class _CustomCommentTextFormFieldState extends State<CustomCommentTextFormField>
                   controller: widget.textEditingController,
                   focusNode: widget.focusNode,
                   textAlign: widget.textAlign,
-                  maxLines: null,
+                  maxLines: widget.multiLine?1:null,
                   textDirection: AppTextDirection.defaultDirection,
                   onFieldSubmitted: (data) {
                     if (widget.onFieldSubmitted != null) {

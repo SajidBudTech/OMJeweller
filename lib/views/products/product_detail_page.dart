@@ -23,6 +23,7 @@ import 'package:flutter_om_jeweller/widgets/storelocationlist/appoinment_type_co
 import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
 import 'package:flutter_om_jeweller/constants/string/app.string.dart';
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/count.viewmodel.dart';
 
 class ProductDetailPage extends StatefulWidget {
   ProductDetailPage({
@@ -44,7 +45,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     _produtBloc.showAlert.listen((show) {
       //when asked to show an alert
       if (show) {
@@ -52,10 +52,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           context,
           title: _produtBloc.dialogData.title,
           description: _produtBloc.dialogData.body,
-          backgroundColor: _produtBloc.dialogData.backgroundColor,
+          backgroundColor: AppColor.accentColor,
           icon: _produtBloc.dialogData.iconData,
         );
         if(_produtBloc.dialogData.title=="Product Added To Wishlist Successfully!"){
+          CountViewModel countViewModel=CountViewModel(context);
+          countViewModel.incrementWishlistCount();
           setState(() {
             if(widget.status){
               widget.product.isWishlist=101;
@@ -72,7 +74,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductPageViewModel>.reactive(
-      viewModelBuilder: () => ProductPageViewModel(),
+      viewModelBuilder: () => ProductPageViewModel(context),
       onModelReady: (model) => (widget.status?model.initialise():model.getProductsByID(productID: widget.product.productID)),
       builder: (context, model, child) {
         this.model=model;
@@ -212,7 +214,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     borderRadius: BorderRadius.circular(8)
                                   ),
                                   child:Icon(
-                                    FlutterIcons.favorite_border_mdi,
+                                    widget.status?(widget.product.isWishlist==null?FlutterIcons.favorite_border_mdi:FlutterIcons.favorite_mdi):
+                                    (model.product.isWishlist==null?FlutterIcons.favorite_border_mdi:FlutterIcons.favorite_mdi),
                                     color: widget.status?(widget.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor):
                                            (model.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor),
                                     size: 32,

@@ -14,6 +14,7 @@ import 'package:flutter_om_jeweller/widgets/dashline/dash_line.dart';
 import 'package:flutter_om_jeweller/views/similar_product_page.dart';
 import 'package:flutter_om_jeweller/data/models/product.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/diamond_listitem_view.dart';
+import 'package:intl/intl.dart';
 
 class ProductDetailsViewItem extends StatefulWidget {
   ProductDetailsViewItem({
@@ -27,6 +28,7 @@ class ProductDetailsViewItem extends StatefulWidget {
 }
 
 class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
+  var format = NumberFormat.currency(locale: 'HI',decimalDigits: 0,customPattern: 'INR #,##,###');
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -85,7 +87,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                   left: AppPaddings.contentPaddingSize,
                   right: AppPaddings.contentPaddingSize),
               child: Text(
-                "\u20B9 " + getProductPrice(),
+                getProductPrice(),
                 style: AppTextStyle.h3TitleTextStyle(
                     color: AppColor.accentColor, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.start,
@@ -285,8 +287,8 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                                   right: AppPaddings.contentPaddingSize,
                                   top: 12),
                               child: Text(
-                                widget.product.purityName == null
-                                    ? ""
+                                 widget.product.productType == 3
+                                    ? "950 Platinum"
                                     : widget.product.purityName,
                                 style: AppTextStyle.h5TitleTextStyle(
                                     color: AppColor.textColor(context),
@@ -334,7 +336,46 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                               ))),
                     ],
                   ),
-                  Row(
+                  Visibility(
+                    visible: widget.product.productType==3,
+                  child:Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                          child: Container(
+                              alignment: Alignment.topLeft,
+                              padding: EdgeInsets.only(
+                                  left: AppPaddings.contentPaddingSize,
+                                  right: AppPaddings.contentPaddingSize,
+                                  top: 10),
+                              child: Text(
+                                    "Gross Wt",
+                                style: AppTextStyle.h5TitleTextStyle(
+                                    color: AppColor.hintTextColor(context),
+                                    fontWeight: FontWeight.w400),
+                                textAlign: TextAlign.start,
+                                textDirection:
+                                AppTextDirection.defaultDirection,
+                              ))),
+                      Expanded(
+                          child: Container(
+                              alignment: Alignment.topRight,
+                              padding: EdgeInsets.only(
+                                  left: AppPaddings.contentPaddingSize,
+                                  right: AppPaddings.contentPaddingSize,
+                                  top: 10),
+                              child: Text(
+                                getProductGrossWt(),
+                                style: AppTextStyle.h5TitleTextStyle(
+                                    color: AppColor.textColor(context),
+                                    fontWeight: FontWeight.w500),
+                                textAlign: TextAlign.start,
+                                textDirection:
+                                AppTextDirection.defaultDirection,
+                              ))),
+                    ],
+                  )),
+                 /* Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
@@ -370,8 +411,8 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                                     AppTextDirection.defaultDirection,
                               ))),
                     ],
-                  ),
-                  Row(
+                  ),*/
+                 /* Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
@@ -407,7 +448,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                                     AppTextDirection.defaultDirection,
                               ))),
                     ],
-                  ),
+                  ),*/
                   UiSpacer.verticalSpace(space: 24),
                 ],
               )),
@@ -956,7 +997,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
       totalAmount = price + tax;
     }
 
-    return totalAmount.toStringAsFixed(2);
+    return format.format(totalAmount.toInt());
   }
 
   String getPlatinumAmount(){
@@ -968,5 +1009,16 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
     }
 
     return platinumAmount.toStringAsFixed(2);
+  }
+  String getProductGrossWt(){
+    double grossWt=0;
+    if (widget.product.productType == 3) {
+      grossWt = (double.parse(widget.product.platiniumweight ?? "0")) + (double.parse(widget.product.netweight ?? "0"));
+    } else if (widget.product.productType == 4) {
+      grossWt = (double.parse(widget.product.polkiweight ?? "0"))+ (double.parse(widget.product.netweight ?? "0"));
+    }
+
+    return grossWt.toStringAsFixed(3);
+
   }
 }

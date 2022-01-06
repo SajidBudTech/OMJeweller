@@ -13,12 +13,73 @@ import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_it
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 
 class HallMarkLogo extends StatelessWidget {
   HallMarkLogo({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      children: [
+        Container(
+            padding: EdgeInsets.only(),
+            margin: EdgeInsets.only(right: 8),
+            // decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
+            child: Image.asset(
+              'assets/images/foreever.png',
+              height: 65,
+              width: 120,
+            )),
+        Container(
+            padding: EdgeInsets.only(),
+            margin: EdgeInsets.only(right: 8),
+            // decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
+            child: Image.asset(
+              'assets/images/gia.png',
+              height: 65,
+              width: 120,
+            )),
+        Container(
+            padding: EdgeInsets.only(),
+            margin: EdgeInsets.only(right: 8),
+            // decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
+            child: Image.asset(
+              'assets/images/coo.png',
+              height: 65,
+              width: 120,
+            )),
+        Container(
+            padding: EdgeInsets.only(),
+            margin: EdgeInsets.only(right: 8),
+            // decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
+            child: Image.asset(
+              'assets/images/bis.png',
+              height: 65,
+              width: 120,
+            )),
+        Container(
+            padding: EdgeInsets.only(),
+            margin: EdgeInsets.only(right: 8),
+            // decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
+            child: Image.asset(
+              'assets/images/platinum_logo.png',
+              height: 65,
+              width: 120,
+            )),
+        Container(
+            padding: EdgeInsets.only(),
+            margin: EdgeInsets.only(right: 8),
+            // decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
+            child: Image.asset(
+              'assets/images/inter_logo.png',
+              height: 65,
+              width: 120,
+            )),
+      ],
+    );
+
+    /*Row(
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -29,10 +90,10 @@ class HallMarkLogo extends StatelessWidget {
                 margin: EdgeInsets.only(right: 8),
                // decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
                 child:Image.asset(
-                  'assets/images/all_india.png',
+                  'assets/images/foreever.png',
                 )
 
-              /*  Row(
+              */ /*  Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
@@ -51,15 +112,15 @@ class HallMarkLogo extends StatelessWidget {
                           textDirection: AppTextDirection.defaultDirection,
                         ))
                   ],
-                )*/
+                )*/ /*
 
 
             )),
-        /*  Container(
+        */ /*  Container(
           color: AppColor.primaryColorDark,
           height: 65,
           width: 2,
-        ),*/
+        ),*/ /*
         Expanded(
             flex: 1,
             child: Container(
@@ -67,11 +128,12 @@ class HallMarkLogo extends StatelessWidget {
                 margin: EdgeInsets.only(left: 1),
                // decoration: BoxDecoration(color: Color(0xFFFFEEFA)),
                 child: Image.asset(
-                  'assets/images/platinum_logo.png',
-                  height: 44,
+                  'assets/images/coo.png',
+                    height: 65,
+
                 )
 
-              /* Row(
+              */ /* Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
@@ -90,14 +152,14 @@ class HallMarkLogo extends StatelessWidget {
                           textDirection: AppTextDirection.defaultDirection,
                         ))
                   ],
-                )*/
+                )*/ /*
 
             )),
-        /*Container(
+        */ /*Container(
           color: AppColor.primaryColorDark,
           height: 65,
           width: 2,
-        ),*/
+        ),*/ /*
         Expanded(
             flex: 1,
             child: Container(
@@ -106,10 +168,10 @@ class HallMarkLogo extends StatelessWidget {
                 margin: EdgeInsets.only(left: 8),
                 //decoration: BoxDecoration(color: Color(0xFFFFF2EE)),
                 child:Image.asset(
-                  'assets/images/inter_logo.png',
+                  'assets/images/coo.png',
                 )
 
-/*                Row(
+*/ /*                Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
@@ -128,10 +190,10 @@ class HallMarkLogo extends StatelessWidget {
                           textDirection: AppTextDirection.defaultDirection,
                         ))
                   ],
-                )*/
+                )*/ /*
 
             )),
       ],
-    );
+    );*/
   }
 }

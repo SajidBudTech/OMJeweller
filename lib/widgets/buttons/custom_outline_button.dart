@@ -70,13 +70,13 @@ class _CustomOutlineButtonState extends State<CustomOutlineButton> {
         padding: widget.padding ?? EdgeInsets.all(16),
         decoration: new BoxDecoration(
           color: Colors.transparent,
-          border: new Border.all(color: AppColor.accentColor, width: 1.0),
+          border: new Border.all(color: widget.borderColor??AppColor.accentColor, width: 1.0),
           borderRadius: new BorderRadius.circular(8.0),
         ),
         child: new Center(
           child: new Text(
             widget.title ?? "",
-            style: AppTextStyle.h4TitleTextStyle(color: AppColor.accentColor),
+            style: AppTextStyle.h4TitleTextStyle(color: widget.borderColor??AppColor.accentColor),
           ),
         ),
       ),

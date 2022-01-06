@@ -69,183 +69,215 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
      }
 
   int _current = 0;
+  String currentdate=DateFormat("yyyy-MM-dd").format(DateTime.now());
+  DateTime newDate=DateTime.now();
   List<Widget> _getPageSliders(List<Appointment> appointments, BuildContext context) {
+
+
+
     return appointments
-        .map((appointment) => Container(
+        .map((appointment) {
+          int days=DateFormat("yyyy-MM-dd").parse(currentdate).difference(DateTime.parse(appointment.appointmentDate)).inDays;
+          bool reshedule=false;
+          DateTime currentSheduleDate=DateFormat("yyyy-MM-dd hh:mm aa").parse(appointment.appointmentDate+" "+appointment.appointmentTime);
+          if(isCurrentDateIsAfter(newDate, currentSheduleDate)) {
+            reshedule=true;
+          }
+          return Container(
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
           ),
-        padding: EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-           // Expanded(child:
-                Container(
-                alignment: Alignment.topLeft,
-                margin: EdgeInsets.only(bottom: 3),
-                child:Text(
-                  "In 3 days",
-                  style: AppTextStyle.h4TitleTextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: AppColor.textColor(context),
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  textDirection: AppTextDirection.defaultDirection,
-                )),
-      //),
-             //Expanded(child:
-             Container(
-                alignment: Alignment.topLeft,
-                 margin: EdgeInsets.only(bottom: 13),
-                child:Text(
-                  "In "+appointment.appointmentType+" appointment at Om Jewellers - "+appointment.appointmentDetail,
-                  style: AppTextStyle.h16TitleTextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: AppColor.textColor(context),
-                  ),
-                  textDirection: AppTextDirection.defaultDirection,
-                )),
-    //),
-       // Expanded(child:
-        Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/images/my_app_cal.svg',
-                ),
-                Padding(
-                    padding: EdgeInsets.only(left: 8),
-                    child: Text(
-                      DateFormat("MMMM dd").format(DateFormat("yyyy-MM-dd").parse(appointment.appointmentDate)),
-                      style: AppTextStyle.h5TitleTextStyle(
-                          color: AppColor.textColor(context),
-                          fontWeight: FontWeight.w400),
-                      textAlign: TextAlign.center,
-                      textDirection: AppTextDirection.defaultDirection,
-                    ))
-              ],
-            ),
-            UiSpacer.verticalSpace(space: 13),
-         Visibility(
-           child:Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/images/my_app_time.svg',
-                ),
-                Padding(
-                    padding: EdgeInsets.only(left: 8),
-                    child: Text(
-                      appointment.appointmentTime,
-                      style: AppTextStyle.h5TitleTextStyle(
-                          color: AppColor.textColor(context),
-                          fontWeight: FontWeight.w400),
-                      textAlign: TextAlign.center,
-                      textDirection: AppTextDirection.defaultDirection,
-                    ))
-              ],
-            )
-         ),
-    //),
-        /* Expanded(
-           child:*/
-            UiSpacer.verticalSpace(space: 13),
-           Visibility(
-               visible: appointment.appointmentType=="Store Visit",
-             child:Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-
-                SvgPicture.asset(
-                  'assets/images/dra_visit.svg',
-                ),
-                Expanded(
-                    child:Padding(
-                        padding: EdgeInsets.only(left: 8),
-                    child:Text(
-                      appointment.appointmentDetail=="Borivali"?_appointmentBloc.storeaddresses[0]:_appointmentBloc.storeaddresses[1],
-                      style: AppTextStyle.h5TitleTextStyle(
-                          color: AppColor.textColor(context),
-                          fontWeight: FontWeight.w400),
-                      textAlign: TextAlign.start,
-                      textDirection: AppTextDirection.defaultDirection,
-                    ))
-                ),
-              ],
-            )
-           ),
-       // ),
-            UiSpacer.verticalSpace(space: 3),
-            Visibility(
-                visible: appointment.appointmentType=="Store Visit",
-              child:Container(
-              padding: EdgeInsets.only(left: 22),
-                alignment:Alignment.topLeft,
-                child:InkWell(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Expanded(child:
+              Container(
+                  alignment: Alignment.topLeft,
+                  margin: EdgeInsets.only(bottom: 3),
                   child: Text(
-                    'Directions',
-                    style: AppTextStyle.h5TitleTextStyle(
-                        color: AppColor.accentColor,
-                        decoration:TextDecoration.underline,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.start,
-                    textDirection: AppTextDirection.defaultDirection,
-                  ),
-                  onTap: (){
-                    address = appointment.appointmentDetail=="Borivali"?_appointmentBloc.storeaddresses[0]:_appointmentBloc.storeaddresses[1];
-                    getLocationPermissionStatus();
-                  },
-                ))
-            ),
-            UiSpacer.verticalSpace(space: 13),
-             Visibility(
-               visible: appointment.appointmentType=="Store Visit",
-               child:Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/images/my_app_call.svg',
-                ),
-                Padding(
-                    padding: EdgeInsets.only(left: 8),
-                    child: Text(
-                        appointment.appointmentDetail=="Borivali"?_appointmentBloc.storePhone[0]:_appointmentBloc.storePhone[1],
-                      style: AppTextStyle.h5TitleTextStyle(
-                          color: AppColor.textColor(context),
-                          fontWeight: FontWeight.w400),
-                      textAlign: TextAlign.center,
-                      textDirection: AppTextDirection.defaultDirection,
-                    ))
-              ],
-            )),
-            UiSpacer.verticalSpace(space: 24),
-            Container(
-              alignment: Alignment.topLeft,
-              child: CustomOutlineButton(
-                padding: EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
-                width: 143,
-                title: "Reschedule",
-                onPressed: (){
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.dateTimeRoute,
-                    arguments: DateTimeArguments(
-                      appointment: appointment,
-                      status: false
+                        days.isNegative ?
+                        "In " + (days).toString().replaceAll("-", "") + " days" :
+                        (days==0? "Today" :
+                       "From " + days.toString() + " days"),
+                    style: AppTextStyle.h4TitleTextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.textColor(context),
                     ),
-                  );
-                },
+                    overflow: TextOverflow.ellipsis,
+                    textDirection: AppTextDirection.defaultDirection,
+                  )),
+              //),
+              //Expanded(child:
+              Container(
+                  alignment: Alignment.topLeft,
+                  margin: EdgeInsets.only(bottom: 13),
+                  child: Text(
+                    "In " + appointment.appointmentType +
+                        " appointment at Om Jewellers - " +
+                        appointment.appointmentDetail,
+                    style: AppTextStyle.h16TitleTextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.textColor(context),
+                    ),
+                    textDirection: AppTextDirection.defaultDirection,
+                  )),
+              //),
+              // Expanded(child:
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/my_app_cal.svg',
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Text(
+                        DateFormat("MMMM dd").format(
+                            DateFormat("yyyy-MM-dd").parse(
+                                appointment.appointmentDate)),
+                        style: AppTextStyle.h5TitleTextStyle(
+                            color: AppColor.textColor(context),
+                            fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.center,
+                        textDirection: AppTextDirection.defaultDirection,
+                      ))
+                ],
               ),
-            )
-          ],
-        )
+              UiSpacer.verticalSpace(space: 13),
+              Visibility(
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/my_app_time.svg',
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: Text(
+                            appointment.appointmentTime,
+                            style: AppTextStyle.h5TitleTextStyle(
+                                color: AppColor.textColor(context),
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.center,
+                            textDirection: AppTextDirection.defaultDirection,
+                          ))
+                    ],
+                  )
+              ),
+              //),
+              /* Expanded(
+           child:*/
+              UiSpacer.verticalSpace(space: 13),
+              Visibility(
+                  visible: appointment.appointmentType == "Store Visit",
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-    /*    ClipRRect(
-          *//*borderRadius: BorderRadius.all(
+                      SvgPicture.asset(
+                        'assets/images/dra_visit.svg',
+                      ),
+                      Expanded(
+                          child: Padding(
+                              padding: EdgeInsets.only(left: 8),
+                              child: Text(
+                                appointment.appointmentDetail == "Borivali"
+                                    ? _appointmentBloc.storeaddresses[0]
+                                    : _appointmentBloc.storeaddresses[1],
+                                style: AppTextStyle.h5TitleTextStyle(
+                                    color: AppColor.textColor(context),
+                                    fontWeight: FontWeight.w400),
+                                textAlign: TextAlign.start,
+                                textDirection: AppTextDirection
+                                    .defaultDirection,
+                              ))
+                      ),
+                    ],
+                  )
+              ),
+              // ),
+              UiSpacer.verticalSpace(space: 3),
+              Visibility(
+                  visible: appointment.appointmentType == "Store Visit",
+                  child: Container(
+                      padding: EdgeInsets.only(left: 22),
+                      alignment: Alignment.topLeft,
+                      child: InkWell(
+                        child: Text(
+                          'Directions',
+                          style: AppTextStyle.h5TitleTextStyle(
+                              color: AppColor.accentColor,
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.start,
+                          textDirection: AppTextDirection.defaultDirection,
+                        ),
+                        onTap: () {
+                          address = appointment.appointmentDetail == "Borivali"
+                              ? _appointmentBloc.storeaddresses[0]
+                              : _appointmentBloc.storeaddresses[1];
+                          getLocationPermissionStatus();
+                        },
+                      ))
+              ),
+              UiSpacer.verticalSpace(space: 13),
+              Visibility(
+                  visible: appointment.appointmentType == "Store Visit",
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/my_app_call.svg',
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: Text(
+                            appointment.appointmentDetail == "Borivali"
+                                ? _appointmentBloc.storePhone[0]
+                                : _appointmentBloc.storePhone[1],
+                            style: AppTextStyle.h5TitleTextStyle(
+                                color: AppColor.textColor(context),
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.center,
+                            textDirection: AppTextDirection.defaultDirection,
+                          ))
+                    ],
+                  )),
+              UiSpacer.verticalSpace(space: 24),
+              Container(
+                alignment: Alignment.topLeft,
+                child: CustomOutlineButton(
+                  padding: EdgeInsets.only(
+                      left: 20, right: 20, top: 10, bottom: 10),
+                  width: 143,
+                  borderColor: (days>0 || (days==0 && reshedule))?AppColor.hintTextColor(context):AppColor.accentColor,
+                  title: "Reschedule",
+                  onPressed: () {
+                    if(days>0|| (days==0 && reshedule)) {
+
+                    }else{
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.dateTimeRoute,
+                        arguments: DateTimeArguments(
+                            appointment: appointment,
+                            status: false
+                        ),
+                      );
+                    }
+                  },
+                ),
+              )
+            ],
+          )
+
+        /*    ClipRRect(
+          */ /*borderRadius: BorderRadius.all(
             Radius.circular(
               10.0,
             ),
-          ),*//*
+          ),*/ /*
           child: InkWell(
             onTap: () => widget.onBannerTapped(banner),
             child: Image(
@@ -256,11 +288,14 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
             ),
           ),
         ),*/
-      ),
-    )
-        .toList();
+      );
+    }).toList();
+
   }
 
+  bool isCurrentDateIsAfter(DateTime newCurrent,DateTime currentDate) {
+    return newCurrent.compareTo(currentDate) > 0 ;
+  }
 
   void launchMap() async {
     currentLocationData = await location.getLocation();

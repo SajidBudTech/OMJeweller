@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
 import 'package:flutter_om_jeweller/constants/api.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
@@ -16,18 +17,22 @@ import 'package:flutter_om_jeweller/utils/custom_dialog.dart';
 import 'package:flutter_om_jeweller/bloc/product.bloc.dart';
 import 'package:edge_alert/edge_alert.dart';
 import 'package:flutter_om_jeweller/data/models/product_arguments.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/product_page.viewmodel.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/count.viewmodel.dart';
 
 class ProductListViewItem extends StatefulWidget {
   ProductListViewItem({
     Key key,
     @required this.product,
     @required this.platinumRate,
+    this.model
 
   }) : super(key: key);
 
   final Product product;
   final double platinumRate;
-
+  final ProductPageViewModel model;
 
 
   @override
@@ -37,6 +42,7 @@ class ProductListViewItem extends StatefulWidget {
 class _ProductListViewItemState extends State<ProductListViewItem> {
   ProductBloc _produtBloc=ProductBloc();
 
+  var format = NumberFormat.currency(locale: 'HI',decimalDigits: 0,customPattern: 'INR #,##,###');
 
   @override
   void initState() {
@@ -50,10 +56,12 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
           context,
           title: _produtBloc.dialogData.title,
           description: _produtBloc.dialogData.body,
-          backgroundColor: _produtBloc.dialogData.backgroundColor,
+          backgroundColor: AppColor.accentColor,
           icon: _produtBloc.dialogData.iconData,
         );
         if(_produtBloc.dialogData.title=="Product Added To Wishlist Successfully!"){
+          CountViewModel countViewModel=CountViewModel(context);
+          countViewModel.incrementWishlistCount();
           setState(() {
             widget.product.isWishlist=101;
           });
@@ -83,7 +91,11 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
                 product: widget.product,
                 status: true
               ),
-            );
+            ).then((value) {
+              setState(() {
+
+              });
+            });
           },
           // elevation: 3,
           // shape: StadiumBorder(),
@@ -103,14 +115,14 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
                                 CachedNetworkImage(
                                   imageUrl: Api.ProductdownloadUrlPath + (widget.product.productImage==null?"":widget.product.productImage),
                                   placeholder: (context, url) => Container(
-                                    height: 181,
+                                    height: ((AppSizes.getScreenWidth(context)/2)-50)+(((AppSizes.getScreenWidth(context)/2)-50)*0.3),
                                     child: Center(
                                       child: CircularProgressIndicator(),
                                     ),
                                   ),
                                   errorWidget: (context, url, error) =>
                                       Icon(Icons.error),
-                                  height: 181,
+                                  height: ((AppSizes.getScreenWidth(context)/2)-50)+(((AppSizes.getScreenWidth(context)/2)-50)*0.3),
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                 ),
@@ -146,11 +158,12 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
                                             padding: EdgeInsets.only(top: 6),
                                             child:Text(
                                               widget.product.productName??"",
-                                              style: AppTextStyle.h4TitleTextStyle(
-                                                fontWeight: FontWeight.w600,
+                                              style: AppTextStyle.h5TitleTextStyle(
+                                                fontWeight: FontWeight.w500,
                                                 color: AppColor.textColor(context),
                                               ),
-                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                             // overflow: TextOverflow.ellipsis,
                                               textDirection: AppTextDirection.defaultDirection,
                                             ))
                                     ),
@@ -158,25 +171,35 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
                                         flex: 2,
                                         child:InkWell(
                                         onTap: (){
-                                           if(widget.product.isWishlist==null) {
-                                             _produtBloc.addToWishList(
-                                                 produtcId: widget.product
-                                                     .productID);
-                                           }else{
-                                             EdgeAlert.show(
-                                               context,
-                                               title: "Already Added In Wishlist",
-                                               description: "Please try with some other product!",
-                                               backgroundColor: AppColor.accentColor,
-                                               icon: FlutterIcons.error_mdi,
-                                             );
-                                           }
+                                        if (AuthBloc.authenticated()) {
+                                          if (widget.product.isWishlist ==
+                                              null) {
+                                            _produtBloc.addToWishList(produtcId: widget.product.productID);
+                                          } else {
+                                            EdgeAlert.show(
+                                              context,
+                                              title: "Already Added In Wishlist",
+                                              description: "Please try with some other product!",
+                                              backgroundColor: AppColor
+                                                  .accentColor,
+                                              icon: FlutterIcons.error_mdi,
+                                            );
+                                          }
+                                        }else{
+
+                                          Navigator.pushNamed(
+                                            context,
+                                            AppRoutes.loginRoute,
+                                          );
+
+                                        }
                                         },
                                         child:Container(
                                             alignment: Alignment.topRight,
+                                            padding: EdgeInsets.only(top: 6),
                                             child: Icon(
-                                              FlutterIcons.favorite_border_mdi,
-                                              size: 20,
+                                              widget.product.isWishlist==null?FlutterIcons.favorite_border_mdi:FlutterIcons.favorite_mdi,
+                                              size: 16,
                                               color: widget.product.isWishlist==null?AppColor.hintTextColor(context):AppColor.accentColor,
                                             )
                                         ))),
@@ -186,16 +209,18 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
                                 //product types and minimum order amount
                                 Text(
                                   (widget.product.collectionName==null?"":(widget.product.collectionName+" Collection")),
-                                  style: AppTextStyle.h5TitleTextStyle(
+                                  style: AppTextStyle.h7TitleTextStyle(
                                     color: AppColor.hintTextColor(context),
+                                    fontWeight: FontWeight.w400,
                                   ),
                                   textDirection: AppTextDirection.defaultDirection,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
-                                   "\u20B9 "+getProductPrice(),
-                                  style: AppTextStyle.h4TitleTextStyle(
+                                   getProductPrice(),
+                                  style: AppTextStyle.h5TitleTextStyle(
                                     color: AppColor.accentColor,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   textDirection: AppTextDirection.defaultDirection,
                                   overflow: TextOverflow.ellipsis,
@@ -331,8 +356,9 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
 
     }
 
-
-    return totalAmount.toStringAsFixed(2);
+    widget.product.productPrice=totalAmount.toInt();
+    
+    return format.format(totalAmount.toInt());
 
   }
 

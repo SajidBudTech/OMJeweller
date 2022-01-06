@@ -12,14 +12,18 @@ import 'package:flutter_om_jeweller/bloc/base.bloc.dart';
 import 'package:flutter_om_jeweller/data/repositories/auth.repository.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:flutter_om_jeweller/constants/validation_messages.dart';
+import 'package:flutter_om_jeweller/data/models/user_data.dart';
 
 
 class OTPBloc extends BaseBloc with CodeAutoFill{
     //Auth repository
     AuthRepository _authRepository = new AuthRepository();
 
+    User user;
+
     String appSignature;
     String otpCode;
+
     //text editing controller
     TextEditingController firstDigitTEC = new TextEditingController();
     TextEditingController secondDigitTEC = new TextEditingController();
@@ -194,6 +198,42 @@ class OTPBloc extends BaseBloc with CodeAutoFill{
       }
 
     }
+
+
+    void processOTP({BuildContext context}) async {
+      final mobile = user.cutomerMobile;
+      //final password = passwordTEC.text;
+
+      //check if the user entered email & password are valid
+
+        //update ui state
+       // setUiState(UiState.loading);
+        final resultDialogData = await _authRepository.sendOTP(
+            mobile: mobile,
+        );
+
+        //update ui state after operation
+       // setUiState(UiState.done);
+
+        //checking if operation was successful before either showing an error or redirect to home page
+        if (resultDialogData.dialogType == DialogType.success) {
+          // setUiState(UiState.redirect);
+          dialogData.title = resultDialogData.title;
+          dialogData.body = resultDialogData.body;
+          dialogData.iconData = FlutterIcons.done_mdi;
+          user.otp=int.parse(resultDialogData.title);
+          // goToVerifyOTP(context);
+          setShowAlert(true);
+        } else {
+          //prepare the data model to be used to show the alert on the view
+          dialogData.title = resultDialogData.title;
+          dialogData.body = resultDialogData.body;
+          dialogData.backgroundColor = AppColor.failedColor;
+          dialogData.iconData = FlutterIcons.error_mdi;
+          //notify listners to show show alert
+          setShowAlert(true);
+        }
+      }
 
   }
 

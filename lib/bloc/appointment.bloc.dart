@@ -37,17 +37,17 @@ class AppointmentBloc extends BaseBloc {
     super.initBloc();
     userName=AuthBloc.getUserName();
 
-    CompanyNameList.add('Narendra Jakhia');
-    CompanyNameList.add('Mukesh Jakhia');
-    CompanyNameList.add('Bhavin Jakhia');
-    CompanyNameList.add('Bhavna Jakhia');
-    CompanyNameList.add('Harsha & Mamta Jakhia');
-    CompanyNameList.add('Bhavesh Jakhia');
+    CompanyNameList.add('Narendra Jhakia');
+    CompanyNameList.add('Mukesh Jhakia');
+    CompanyNameList.add('Bhavin Jhakia');
+    CompanyNameList.add('Bhavana Jhakia');
+    CompanyNameList.add('Harsha & Mamta Jhakia');
+    CompanyNameList.add('Bhavesh Jhakia');
 
 
     CompanyPostList.add('Chairman');
     CompanyPostList.add('Managing Director');
-    CompanyPostList.add('Chairman');
+    CompanyPostList.add('Director');
     CompanyPostList.add('Head – Digital Ventures');
     CompanyPostList.add('Brand Ambassadors');
     CompanyPostList.add('CMO');

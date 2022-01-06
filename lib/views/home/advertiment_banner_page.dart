@@ -60,7 +60,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                             onTap: () {
                               if(model.advertismentBanners[0].bannertype=="category"){
                                 Category category=Category();
-                                category.categoryID=model.advertismentBanners[0].bannerID;
+                                category.categoryID=model.advertismentBanners[0].bannerUrl as int;
                                 category.categoryName=model.advertismentBanners[0].bannertype;
                                 Navigator.pushNamed(
                                     context,
@@ -73,7 +73,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                 );
                               }else if(model.advertismentBanners[0].bannertype=="subcategory"){
                                 Subcategory subategory=Subcategory();
-                                subategory.subcategoryID=model.advertismentBanners[0].bannerID;
+                                subategory.subcategoryID=int.parse(model.advertismentBanners[0].bannerUrl);
                                 subategory.subcategoryName=model.advertismentBanners[0].bannertype;
                                 Navigator.pushNamed(
                                     context,
@@ -86,7 +86,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                 );
                               }else if(model.advertismentBanners[0].bannertype=="collection"){
                                 Collection collection=Collection();
-                                collection.collectionID=model.advertismentBanners[0].bannerID;
+                                collection.collectionID=int.parse(model.advertismentBanners[0].bannerUrl);
                                 collection.collectionName=model.advertismentBanners[0].bannertype;
                                 Navigator.pushNamed(
                                     context,
@@ -99,7 +99,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                 );
                               }else if(model.advertismentBanners[0].bannertype=="product"){
                                 Product product=Product();
-                                product.productID=model.advertismentBanners[0].bannerID;
+                                product.productID=int.parse(model.advertismentBanners[0].bannerUrl);
                                 product.productName=model.advertismentBanners[0].bannertype;
                                 Navigator.pushNamed(
                                     context,
@@ -148,7 +148,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                     onTap: () {
                                       if(model.advertismentBanners[1].bannertype=="category"){
                                         Category category=Category();
-                                        category.categoryID=model.advertismentBanners[1].bannerID;
+                                        category.categoryID=int.parse(model.advertismentBanners[1].bannerUrl);
                                         category.categoryName=model.advertismentBanners[1].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -161,7 +161,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[1].bannertype=="subcategory"){
                                         Subcategory subategory=Subcategory();
-                                        subategory.subcategoryID=model.advertismentBanners[1].bannerID;
+                                        subategory.subcategoryID=int.parse(model.advertismentBanners[1].bannerUrl);
                                         subategory.subcategoryName=model.advertismentBanners[1].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -174,7 +174,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[1].bannertype=="collection"){
                                         Collection collection=Collection();
-                                        collection.collectionID=model.advertismentBanners[1].bannerID;
+                                        collection.collectionID=int.parse(model.advertismentBanners[1].bannerUrl);
                                         collection.collectionName=model.advertismentBanners[1].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -187,7 +187,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[1].bannertype=="product"){
                                         Product product=Product();
-                                        product.productID=model.advertismentBanners[1].bannerID;
+                                        product.productID=int.parse(model.advertismentBanners[1].bannerUrl);
                                         product.productName=model.advertismentBanners[1].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -239,7 +239,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                     onTap: () {
                                       if(model.advertismentBanners[2].bannertype=="category"){
                                         Category category=Category();
-                                        category.categoryID=model.advertismentBanners[2].bannerID;
+                                        category.categoryID=int.parse(model.advertismentBanners[2].bannerUrl);
                                         category.categoryName=model.advertismentBanners[2].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -252,7 +252,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[2].bannertype=="subcategory"){
                                         Subcategory subategory=Subcategory();
-                                        subategory.subcategoryID=model.advertismentBanners[2].bannerID;
+                                        subategory.subcategoryID=int.parse(model.advertismentBanners[2].bannerUrl);
                                         subategory.subcategoryName=model.advertismentBanners[2].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -265,7 +265,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[2].bannertype=="collection"){
                                         Collection collection=Collection();
-                                        collection.collectionID=model.advertismentBanners[2].bannerID;
+                                        collection.collectionID=int.parse(model.advertismentBanners[2].bannerUrl);
                                         collection.collectionName=model.advertismentBanners[2].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -278,7 +278,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[2].bannertype=="product"){
                                         Product product=Product();
-                                        product.productID=model.advertismentBanners[2].bannerID;
+                                        product.productID=int.parse(model.advertismentBanners[2].bannerUrl);
                                         product.productName=model.advertismentBanners[2].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -333,7 +333,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                     onTap: () {
                                       if(model.advertismentBanners[3].bannertype=="category"){
                                         Category category=Category();
-                                        category.categoryID=model.advertismentBanners[3].bannerID;
+                                        category.categoryID=int.parse(model.advertismentBanners[3].bannerUrl);
                                         category.categoryName=model.advertismentBanners[3].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -346,7 +346,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[3].bannertype=="subcategory"){
                                         Subcategory subategory=Subcategory();
-                                        subategory.subcategoryID=model.advertismentBanners[3].bannerID;
+                                        subategory.subcategoryID=int.parse(model.advertismentBanners[3].bannerUrl);
                                         subategory.subcategoryName=model.advertismentBanners[3].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -359,7 +359,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[3].bannertype=="collection"){
                                         Collection collection=Collection();
-                                        collection.collectionID=model.advertismentBanners[3].bannerID;
+                                        collection.collectionID=int.parse(model.advertismentBanners[3].bannerUrl);
                                         collection.collectionName=model.advertismentBanners[3].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -372,7 +372,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[3].bannertype=="product"){
                                         Product product=Product();
-                                        product.productID=model.advertismentBanners[3].bannerID;
+                                        product.productID=int.parse(model.advertismentBanners[3].bannerUrl);
                                         product.productName=model.advertismentBanners[3].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -424,7 +424,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                     onTap: () {
                                       if(model.advertismentBanners[4].bannertype=="category"){
                                         Category category=Category();
-                                        category.categoryID=model.advertismentBanners[4].bannerID;
+                                        category.categoryID=int.parse(model.advertismentBanners[4].bannerUrl);
                                         category.categoryName=model.advertismentBanners[4].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -437,7 +437,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[4].bannertype=="subcategory"){
                                         Subcategory subategory=Subcategory();
-                                        subategory.subcategoryID=model.advertismentBanners[4].bannerID;
+                                        subategory.subcategoryID=int.parse(model.advertismentBanners[4].bannerUrl);
                                         subategory.subcategoryName=model.advertismentBanners[4].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -450,7 +450,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[4].bannertype=="collection"){
                                         Collection collection=Collection();
-                                        collection.collectionID=model.advertismentBanners[4].bannerID;
+                                        collection.collectionID=int.parse(model.advertismentBanners[4].bannerUrl);
                                         collection.collectionName=model.advertismentBanners[4].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -463,7 +463,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         );
                                       }else if(model.advertismentBanners[4].bannertype=="product"){
                                         Product product=Product();
-                                        product.productID=model.advertismentBanners[4].bannerID;
+                                        product.productID=int.parse(model.advertismentBanners[4].bannerUrl);
                                         product.productName=model.advertismentBanners[4].bannertype;
                                         Navigator.pushNamed(
                                             context,
@@ -513,7 +513,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                             onTap: () {
                               if(model.advertismentBanners[5].bannertype=="category"){
                                 Category category=Category();
-                                category.categoryID=model.advertismentBanners[5].bannerID;
+                                category.categoryID=int.parse(model.advertismentBanners[5].bannerUrl);
                                 category.categoryName=model.advertismentBanners[5].bannertype;
                                 Navigator.pushNamed(
                                     context,
@@ -526,7 +526,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                 );
                               }else if(model.advertismentBanners[5].bannertype=="subcategory"){
                                 Subcategory subategory=Subcategory();
-                                subategory.subcategoryID=model.advertismentBanners[5].bannerID;
+                                subategory.subcategoryID=int.parse(model.advertismentBanners[5].bannerUrl);
                                 subategory.subcategoryName=model.advertismentBanners[5].bannertype;
                                 Navigator.pushNamed(
                                     context,
@@ -539,7 +539,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                 );
                               }else if(model.advertismentBanners[5].bannertype=="collection"){
                                 Collection collection=Collection();
-                                collection.collectionID=model.advertismentBanners[5].bannerID;
+                                collection.collectionID=int.parse(model.advertismentBanners[5].bannerUrl);
                                 collection.collectionName=model.advertismentBanners[5].bannertype;
                                 Navigator.pushNamed(
                                     context,

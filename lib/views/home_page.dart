@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_om_jeweller/bloc/home.bloc.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
+import 'package:flutter_om_jeweller/constants/globle_variable.dart';
 import 'package:flutter_om_jeweller/views/bookappointment/book_appointment_page.dart';
 import 'package:flutter_om_jeweller/views/home/main_home_page.dart';
 import 'package:flutter_om_jeweller/views/loyalty/loyalty_page.dart';
@@ -14,6 +15,8 @@ import 'package:flutter_om_jeweller/widgets/custome_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_om_jeweller/constants/string/app.string.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:stacked/stacked.dart';
+import 'package:flutter_om_jeweller/data/viewmodels/count.viewmodel.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -26,17 +29,26 @@ class _HomePageState extends State<HomePage> {
   //current bottom navigation bar index
   int currentPageIndex = 0;
   final PageController _pageController = PageController();
-
-  List<String> actionIcons=["assets/images/search_icon.svg","assets/images/wishlist_icon.svg","assets/images/call_icon.svg","assets/images/whatsapp_icon.svg","assets/images/notification_appbar_icon.svg"];
+  String buildNumber;
+  List<String> actionIcons = [
+    "assets/images/search_icon.svg",
+    "assets/images/wishlist_icon.svg",
+    "assets/images/call_icon.svg",
+    "assets/images/whatsapp_icon.svg",
+    "assets/images/notification_appbar_icon.svg"
+  ];
   @override
   void initState() {
     super.initState();
     //switch page from bloc, this allow another page/bloc to determine the page for the home page
+
     HomeBloc.initiBloc();
     HomeBloc.currentPageIndex.listen((currentPageIndex) {
       _updateCurrentPageIndex(currentPageIndex);
     });
   }
+
+
 
   @override
   void dispose() {
@@ -46,7 +58,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return /*ViewModelBuilder<CountViewModel>.reactive(
+    viewModelBuilder: () => CountViewModel(context),
+    onModelReady: (model) => model.init(),
+    builder: (context, model, child) =>*/
+
+      Scaffold(
       backgroundColor: AppColor.appBackground(context),
       appBar: AppBar(
         backgroundColor: AppColor.newprimaryColor,
@@ -56,12 +73,12 @@ class _HomePageState extends State<HomePage> {
         iconTheme: IconThemeData(color: Color(0xFF646464)),
         titleSpacing: 0,
         title: Padding(
-          padding:EdgeInsets.only(),
-          child:Image.asset("assets/images/appbar_logo.png",
-            width: 48,
-            height: 35,
-          )
-        ),
+            padding: EdgeInsets.only(),
+            child: Image.asset(
+              "assets/images/appbar_logo.png",
+              width: 48,
+              height: 35,
+            )),
         /* leading: Row(
            children: [
             // Icon(FlutterIcons.drawer_sli,color: Color(0xFF646464),size: 18,),
@@ -75,10 +92,10 @@ class _HomePageState extends State<HomePage> {
          ),*/
         actions: [
           getActionButton(0),
-          getActionButton(1),
+          getWishlistAction(),
           getActionButton(2),
           getActionButton(3),
-          getActionButton(4),
+          getNotificationAction(),
         ],
       ),
       drawer: AppDrawer(),
@@ -99,7 +116,7 @@ class _HomePageState extends State<HomePage> {
           MainHomePage(),
           ProductCategoryPage(),
           BookAppointmentPage(),
-         // LoyaltyPage(),
+          // LoyaltyPage(),
           ProfilePage(),
         ],
         onPageChanged: _updateCurrentPageIndex,
@@ -121,65 +138,151 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget getActionButton(int position){
-      return InkWell(
-          child:Padding(
-            padding: EdgeInsets.only(left: 8,right: position==4?18:8),
-             child:
-             SvgPicture.asset(
-                actionIcons[position],
-                width: 20,
-             )
-          ),
-         onTap: (){
-            switch(position){
-              case 0:
-                Navigator.pushNamed(
-                  context,
-                  AppRoutes.searchProductPage,
-                );
-                break;
-              case 1:
-                Navigator.pushNamed(
-                  context,
-                  AppRoutes.wishListPage,
-                );
-                break;
-              case 2:
-                _launchCaller();
-                break;
-              case 3:
-                _launchWhatsapp();
-                break;
-              case 4:
-                Navigator.pushNamed(
-                  context,
-                  AppRoutes.notificationsRoute,
-                );
-                break;
-            }
-         },
-      );
+  Widget getActionButton(int position) {
+    return InkWell(
+      child: Padding(
+          padding: EdgeInsets.only(left: 8, right: position == 4 ? 18 : 8),
+          child: SvgPicture.asset(
+            actionIcons[position],
+            width: 20,
+          )),
+      onTap: () {
+        switch (position) {
+          case 0:
+            Navigator.pushNamed(
+              context,
+              AppRoutes.searchProductPage,
+            );
+            break;
+          case 1:
+            Navigator.pushNamed(
+              context,
+              AppRoutes.wishListPage,
+            );
+            break;
+          case 2:
+            launchCaller();
+            break;
+          case 3:
+            launchWhatsapp();
+            break;
+          case 4:
+            Navigator.pushNamed(
+              context,
+              AppRoutes.notificationsRoute,
+            );
+            break;
+        }
+      },
+    );
   }
 
-
-  _launchWhatsapp() async {
-    const url = "https://wa.me/"+AppStrings.defaultAdminNumber+"?text=Welcome to OM Jewellers, How can we assist you?";
+  launchWhatsapp() async {
+    const url =
+        "https://wa.me/${AppStrings.defaultWhatsappNumber}?text=Welcome to OM Jewellers, How can we assist you?";
     var encoded = Uri.encodeFull(url);
-    if (await canLaunch(encoded)) {
+    await launch(encoded);
+    /*if (await canLaunch(encoded)) {
       await launch(encoded);
     } else {
       throw 'Could not launch $encoded';
-    }
+    }*/
   }
 
-  _launchCaller() async {
-    const url = "tel:"+AppStrings.defaultAdminNumber;
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  launchCaller() async {
+    const url = "tel:${AppStrings.defaultAdminNumber}";
+    await launch(url);
+
   }
 
+  Widget getNotificationAction() {
+    return Stack(
+      children: <Widget>[
+        new InkWell(
+            onTap: (){
+              Navigator.pushNamed(
+                context,
+                AppRoutes.notificationsRoute,
+              );
+            },
+            child:Padding(
+            padding: EdgeInsets.only(left: 8, right:18,top: 16),
+            child: SvgPicture.asset(
+              actionIcons[4],
+              width: 20,
+            ))),
+           GlobleVariable.NOTIFICATION_COUNT != 0
+            ? new Positioned(
+                right: 14,
+                top: 14,
+                child: new Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(2),
+                  decoration: new BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  constraints: BoxConstraints(
+                    minWidth: 12,
+                    minHeight: 12,
+                  ),
+                  child: Text(
+                    '${GlobleVariable.NOTIFICATION_COUNT}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 6,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+            : new Container()
+      ],
+    );
+  }
+  Widget getWishlistAction() {
+    return Stack(
+      children: <Widget>[
+        new InkWell(
+            onTap: (){
+              Navigator.pushNamed(
+                context,
+                AppRoutes.wishListPage,
+              );
+            },
+            child:Padding(
+                padding: EdgeInsets.only(left: 8, right: 8,top: 20),
+                child: SvgPicture.asset(
+                  actionIcons[1],
+                  width: 20,
+                ))),
+        GlobleVariable.WISHLIST_COUNT != 0
+            ? new Positioned(
+          right: 14,
+          top: 14,
+          child: new Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(2),
+            decoration: new BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            constraints: BoxConstraints(
+              minWidth: 12,
+              minHeight: 12,
+            ),
+            child: Text(
+              '${GlobleVariable.WISHLIST_COUNT}',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 6,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        )
+            : new Container()
+      ],
+    );
+  }
 }

@@ -48,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
           context,
           title: _registerBloc.dialogData.title,
           description: _registerBloc.dialogData.body,
-          backgroundColor: _registerBloc.dialogData.backgroundColor,
+          backgroundColor: AppColor.accentColor,
           icon: _registerBloc.dialogData.iconData,
         );
       }
@@ -89,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
           primary: false,
           appBar: EmptyAppBar(),
           extendBodyBehindAppBar: true,
-          backgroundColor: AppColor.appBackground(context),
+          backgroundColor: Colors.white,
           body: Stack(
             children: [
               //body

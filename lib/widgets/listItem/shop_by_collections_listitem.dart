@@ -61,11 +61,8 @@ class ShopByCollectionListViewItem extends StatelessWidget {
                           child:
                           CachedNetworkImage(
                             imageUrl: Api.downloadUrlPath +collection.collectionImage,
-                            fit: BoxFit.cover,
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
+                            fit: BoxFit.fill,
+                            width: MediaQuery.of(context).size.width,
                           )
                       ),
 

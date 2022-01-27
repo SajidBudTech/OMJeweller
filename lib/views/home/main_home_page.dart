@@ -338,7 +338,7 @@ class _MainHomePageState extends State<MainHomePage>
             SliverToBoxAdapter(
                 child: Container(
                   width: double.infinity,
-                  height:178,
+                  height:196,
                   child: model.collectionLoadingState == LoadingState.Loading
                   //the loadinng shimmer
                       ? Padding(

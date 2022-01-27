@@ -69,7 +69,7 @@ class _NewArrivalListViewItemState extends State<NewArrivalListViewItem> {
                               topRight: Radius.circular(10.0)),
                           child:
                           CachedNetworkImage(
-                            imageUrl: Api.ProductdownloadUrlPath + widget.product.productImage??"",
+                            imageUrl: Api.ProductdownloadUrlPath + widget.product.featureImage??"",
                             fit: BoxFit.cover,
                             width: double.infinity,
                           )

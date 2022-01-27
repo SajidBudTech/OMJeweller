@@ -46,6 +46,7 @@ class Product{
   int colourStatus;
   int productimagesID;
   String productImage;
+  String featureImage;
   int taxID;
   String taxName;
   int taxValue;
@@ -104,6 +105,7 @@ class Product{
         this.colourStatus,
         this.productimagesID,
         this.productImage,
+        this.featureImage,
         this.taxID,
         this.taxName,
         this.taxValue,
@@ -159,6 +161,7 @@ class Product{
     colourStatus = json['colourStatus'];
     productimagesID = json['productimagesID'];
     productImage = json['productImage'];
+    featureImage = json['featureImage'];
     taxID = json['taxID'];
     taxName = json['taxName'];
     taxValue = json['taxValue'];

@@ -24,10 +24,12 @@ class AppointmentBloc extends BaseBloc {
   bool feedBackButtonStatus=false;
 
   List<String> storeaddresses=["Ground Floor, Shangrila Apartments, LT Road, Near Borivali Station, Borivali West, Mumbai, Maharashtra 400092",
-                               "Shop No. 1, Shree Siddhi Plaza, RRT Rd, Mulund West, Mumbai, Maharashtra 400080"];
+                               "Shop No. 1, Shree Siddhi Plaza, RRT Rd, Mulund West, Mumbai, Maharashtra 400080",
+                                "36, Turner Rd,Bandra West,Mumbai, Maharashtra 400050",
+                                 "Coming soon"];
 
-  List<String> storePhone=["022 6158 7000","022 6158 7001"];
-  List<String> storeLocation=["OM JEWELLERS, BORIVALI","OM JEWELLERS, MULUND"];
+  List<String> storePhone=["022 6158 7000","022 6158 7001","022 6831 8282","Coming soon"];
+  List<String> storeLocation=["OM JEWELLERS, BORIVALI","OM JEWELLERS, MULUND","De Beers Forevermark Boutique","OM JEWELLERS, GHATKOPAR"];
   List<String> CompanyNameList = [];
   List<String> CompanyPostList = [];
   List<String> CompanyPostImage = [];

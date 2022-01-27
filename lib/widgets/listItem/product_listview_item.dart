@@ -113,7 +113,7 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
                           Stack(
                               children: <Widget>[
                                 CachedNetworkImage(
-                                  imageUrl: Api.ProductdownloadUrlPath + (widget.product.productImage==null?"":widget.product.productImage),
+                                  imageUrl: Api.ProductdownloadUrlPath + (widget.product.featureImage==null?"":widget.product.featureImage),
                                   placeholder: (context, url) => Container(
                                     height: ((AppSizes.getScreenWidth(context)/2)-50)+(((AppSizes.getScreenWidth(context)/2)-50)*0.3),
                                     child: Center(

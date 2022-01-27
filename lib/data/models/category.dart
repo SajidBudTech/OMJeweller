@@ -4,6 +4,7 @@ class Category{
   String categoryName;
   String categoryImage;
   int categoryStatus;
+  int productCount;
   String createdAt;
   String updatedAt;
   List<Subcategory> subcategory;
@@ -14,6 +15,7 @@ class Category{
         this.categoryName,
         this.categoryImage,
         this.categoryStatus,
+        this.productCount,
         this.createdAt,
         this.updatedAt,
         this.subcategory});
@@ -22,6 +24,7 @@ class Category{
     categoryName = json['categoryName'];
     categoryImage = json['categoryImage'];
     categoryStatus = json['categoryStatus'];
+    productCount = json['product_count'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     if (json['subcategory'] != null) {

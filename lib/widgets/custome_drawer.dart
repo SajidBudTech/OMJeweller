@@ -24,7 +24,7 @@ class AppDrawer extends StatelessWidget {
       Column(
         children: [
        Container(
-            height: 160,
+            height: 175,
             color: Colors.white,
            // alignment: Alignment.bottomLeft,
             child: _createHeader(context),
@@ -161,7 +161,7 @@ class AppDrawer extends StatelessWidget {
           color: Colors.white
         ),
         child:Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(

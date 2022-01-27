@@ -57,9 +57,9 @@ class BannerViewModel extends MyBaseViewModel {
     try {
       goldRate = await _bannerRepository.getGoldRate();
       for(GoldRate goldone in goldRate){
-        if(goldone.purityName=="18kt"){
+        if(goldone.purityName.startsWith("18kt")){
            karate18Price=(double.parse(goldone.purityPrice)*10).toString();
-        }else if(goldone.purityName=="22kt"){
+        }else if(goldone.purityName.startsWith("22kt")){
           karate22Price=(double.parse(goldone.purityPrice)*10).toString();
         }
       }

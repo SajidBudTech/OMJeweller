@@ -76,7 +76,12 @@ class MainHomeViewModel extends MyBaseViewModel {
     notifyListeners();
 
     try {
-      categories = await _homePageRepository.getCategories();
+      final allcategories = await _homePageRepository.getCategories();
+      allcategories.forEach((element) {
+        if(element.productCount > 0 && element.subcategory.length>0){
+          categories.add(element);
+        }
+      });
       categoriesLoadingState = LoadingState.Done;
       notifyListeners();
     } catch (error) {
@@ -114,6 +119,7 @@ class MainHomeViewModel extends MyBaseViewModel {
       notifyListeners();
     }
   }
+
   void getOMLive() async {
     //add null data so listener can show shimmer widget to indicate loading
     omLiveLoadingState = LoadingState.Loading;

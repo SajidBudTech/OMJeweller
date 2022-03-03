@@ -169,6 +169,7 @@ class _NotificationPageState extends State<NotificationPage> {
     //show the notifcation details
     CustomDialog.showCustomBottomSheet(
       context,
+      backgroundColor: Colors.white,
       content: NotificationDetails(
         notification: notification,
       ),

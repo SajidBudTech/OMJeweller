@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
+import 'package:flutter_om_jeweller/constants/app_images.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
@@ -61,6 +62,7 @@ class ShopByCollectionListViewItem extends StatelessWidget {
                           child:
                           CachedNetworkImage(
                             imageUrl: Api.downloadUrlPath +collection.collectionImage,
+                            errorWidget: (context, url, error) =>Padding(padding: AppPaddings.mediumButtonPadding(),child:Image.asset(AppImages.defaultPlaceHolder,fit: BoxFit.contain,)),
                             fit: BoxFit.fill,
                             width: MediaQuery.of(context).size.width,
                           )

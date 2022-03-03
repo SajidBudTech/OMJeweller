@@ -30,7 +30,6 @@ import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:edge_alert/edge_alert.dart';
 
-
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key}) : super(key: key);
 
@@ -41,7 +40,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   EditProfileBloc _profileBloc = EditProfileBloc();
   final GlobalKey<AppExpansionTileState> expansionTile = new GlobalKey();
-  String SELECTED_GENDER="";
+  String SELECTED_GENDER = "";
 
   DateTime _datetimeDOB;
   DateTime _datetimeAnniversary;
@@ -51,20 +50,21 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     _profileBloc.initBloc();
 
-    final dob=AuthBloc.getUserDOB();
-    if(dob!=""){
-      _datetimeDOB=DateTime.parse(dob);
+    final dob = AuthBloc.getUserDOB();
+    if (dob != "") {
+      _datetimeDOB = DateTime.parse(dob);
     }
-    final anniver=AuthBloc.getUserAnniversary();
-    if(anniver!=""){
-      _datetimeAnniversary=DateTime.parse(anniver);
+    final anniver = AuthBloc.getUserAnniversary();
+    if (anniver != "") {
+      _datetimeAnniversary = DateTime.parse(anniver);
     }
-    final geneder=AuthBloc.getUserGender();
-    if(geneder!=""){
-      SELECTED_GENDER=geneder;
+    final geneder = AuthBloc.getUserGender();
+    if (geneder != "") {
+      SELECTED_GENDER = geneder;
     }
 
-    _profileBloc.showDialogAlert.listen((show) {
+    _profileBloc.showDialogAlert.listen(
+      (show) {
         //when asked to show an alert
         /* if (show) {
           CustomDialog.showAlertDialog(
@@ -94,7 +94,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-
     Widget pageBody;
     if (AuthBloc.authenticated()) {
       pageBody = Scaffold(
@@ -108,355 +107,243 @@ class _ProfilePageState extends State<ProfilePage> {
             child: CustomScrollView(slivers: [
               SliverToBoxAdapter(
                   child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(bottom: 8),
-                    child: Row(children: <Widget>[
-                      Text(
-                        'Personal Details',
-                        style: AppTextStyle.h3TitleTextStyle(
-                            color: AppColor.textColor(context),
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.start,
-                        textDirection: AppTextDirection.defaultDirection,
-                      ),
-                      /*Padding(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 8),
+                child: Row(children: <Widget>[
+                  Text(
+                    'Personal Details',
+                    style: AppTextStyle.h3TitleTextStyle(
+                        color: AppColor.textColor(context),
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.start,
+                    textDirection: AppTextDirection.defaultDirection,
+                  ),
+                  /*Padding(
                               padding: EdgeInsets.only(left: 20),
                               child: Icon(
                                 FlutterIcons.edit_ant,
                                 color: AppColor.accentColor,
                               ))*/
-                    ]),
-                  )),
-
+                ]),
+              )),
               SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
               SliverToBoxAdapter(
                   child: StreamBuilder<bool>(
-                    stream: _profileBloc.validmobile,
-                    builder: (context, snapshot) {
-                      return CustomHintLableTextFormField(
-                        isFixedHeight: false,
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        labelText: "Phone Number",
-                        isReadOnly: false,
-                        keyboardType: TextInputType.phone,
-                        textStyle: AppTextStyle.h4TitleTextStyle(
-                            color: AppColor.textColor(context)
+                stream: _profileBloc.validmobile,
+                builder: (context, snapshot) {
+                  return CustomHintLableTextFormField(
+                    isFixedHeight: false,
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    labelText: "Phone Number",
+                    isReadOnly: false,
+                    keyboardType: TextInputType.phone,
+                    textStyle: AppTextStyle.h4TitleTextStyle(
+                        color: AppColor.textColor(context)),
+                    textInputAction: TextInputAction.next,
+                    textEditingController: _profileBloc.mobileTEC,
+                    errorText: snapshot.error,
+                    onChanged: _profileBloc.validateMobile,
+                  );
+                },
+              )),
+              SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
+              SliverToBoxAdapter(
+                  child: StreamBuilder<bool>(
+                stream: _profileBloc.validName,
+                builder: (context, snapshot) {
+                  return CustomHintLableTextFormField(
+                      isFixedHeight: false,
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      labelText: "Name",
+                      keyboardType: TextInputType.name,
+                      textStyle: AppTextStyle.h4TitleTextStyle(
+                          color: AppColor.textColor(context)),
+                      textInputAction: TextInputAction.next,
+                      textEditingController: _profileBloc.nameTEC,
+                      errorText: snapshot.error,
+                      onChanged: _profileBloc.validateName);
+                },
+              )),
+              SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
+              SliverToBoxAdapter(
+                  child: Column(children: [
+                Container(
+                    child: AppExpansionTile(
+                  key: expansionTile,
+                  contentPadding: EdgeInsets.all(0),
+                  title: Text(
+                    SELECTED_GENDER == "" ? "Gender" : SELECTED_GENDER,
+                    style: AppTextStyle.h4TitleTextStyle(
+                      fontWeight: SELECTED_GENDER == ""
+                          ? FontWeight.w300
+                          : FontWeight.w500,
+                      color: SELECTED_GENDER == ""
+                          ? AppColor.hintTextColor(context)
+                          : AppColor.textColor(context),
+                    ),
+                    //overflow: TextOverflow.ellipsis,
+                    textDirection: AppTextDirection.defaultDirection,
+                  ),
+                  children: [
+                    new ListTile(
+                      title: Text(
+                        'Male',
+                        style: AppTextStyle.h5TitleTextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.hintTextColor(context),
                         ),
-                        textInputAction: TextInputAction.next,
-                        textEditingController: _profileBloc.mobileTEC,
-                        errorText: snapshot.error,
-                        onChanged: _profileBloc.validateMobile,
-                      );
-                    },
-                  )),
+                        //overflow: TextOverflow.ellipsis,
+                        textDirection: AppTextDirection.defaultDirection,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          SELECTED_GENDER = "Male";
+                          expansionTile.currentState.collapse();
+                        });
+                      },
+                      contentPadding: EdgeInsets.all(0),
+                    ),
+                    new ListTile(
+                      title: Text(
+                        'Female',
+                        style: AppTextStyle.h5TitleTextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.hintTextColor(context),
+                        ),
+                        //overflow: TextOverflow.ellipsis,
+                        textDirection: AppTextDirection.defaultDirection,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          SELECTED_GENDER = "Female";
+                          expansionTile.currentState.collapse();
+                        });
+                      },
+                      contentPadding: EdgeInsets.all(0),
+                    ),
+                    new ListTile(
+                      title: Text(
+                        'TransGender',
+                        style: AppTextStyle.h5TitleTextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.hintTextColor(context),
+                        ),
+                        //overflow: TextOverflow.ellipsis,
+                        textDirection: AppTextDirection.defaultDirection,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          SELECTED_GENDER = "TransGender";
+                          expansionTile.currentState.collapse();
+                        });
+                      },
+                      contentPadding: EdgeInsets.all(0),
+                    ),
+                    new ListTile(
+                      title: Text(
+                        'Rather Not Say',
+                        style: AppTextStyle.h5TitleTextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.hintTextColor(context),
+                        ),
+                        //overflow: TextOverflow.ellipsis,
+                        textDirection: AppTextDirection.defaultDirection,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          SELECTED_GENDER = "Rather Not Say";
+                          expansionTile.currentState.collapse();
+                        });
+                      },
+                      contentPadding: EdgeInsets.all(0),
+                    ),
+                  ],
+                  rotateWidget: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Color(0xFF2C2C2C),
+                    size: 18,
+                  ),
+                )),
+                UiSpacer.divider(
+                    thickness: 0.5, color: AppColor.hintTextColor(context))
+              ])),
               SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
               SliverToBoxAdapter(
                   child: StreamBuilder<bool>(
-                    stream: _profileBloc.validName,
-                    builder: (context, snapshot) {
-                      return CustomHintLableTextFormField(
-                          isFixedHeight: false,
-                          left: 0,
-                          right: 0,
-                          top: 0,
-                          bottom: 0,
-                          labelText: "Name",
-                          keyboardType: TextInputType.name,
-                          textStyle: AppTextStyle.h4TitleTextStyle(
-                              color: AppColor.textColor(context)
-                          ),
-                          textInputAction: TextInputAction.next,
-                          textEditingController: _profileBloc.nameTEC,
-                          errorText: snapshot.error,
-                          onChanged: _profileBloc.validateName
-                      );
-                    },
-                  )),
+                stream: _profileBloc.validEmailAddress,
+                builder: (context, snapshot) {
+                  return CustomHintLableTextFormField(
+                      isFixedHeight: false,
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      labelText: "Email",
+                      keyboardType: TextInputType.emailAddress,
+                      textStyle: AppTextStyle.h4TitleTextStyle(
+                          color: AppColor.textColor(context)),
+                      textInputAction: TextInputAction.next,
+                      textEditingController: _profileBloc.emailAddressTEC,
+                      errorText: snapshot.error,
+                      onChanged: _profileBloc.validateEmailAddress);
+                },
+              )),
               SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
-/*                      SliverToBoxAdapter(
-                          child:StreamBuilder<bool>(
-                            stream: _profileBloc.validName,
-                            builder: (context, snapshot) {
-                              return  CustomHintLableTextFormField(
-                                isFixedHeight: false,
-                                left: 0,
-                                right: 0,
-                                top: 0,
-                                bottom: 0,
-                                labelText: "Gender",
-                                keyboardType: TextInputType.name,
-                                textStyle: AppTextStyle.h4TitleTextStyle(
-                                    color: AppColor.textColor(context)
-                                ),
-                                textInputAction: TextInputAction.next,
-                                textEditingController: _profileBloc.nameTEC,
-                                errorText: snapshot.error,
-                                onChanged: _profileBloc.validateName,
-                                suffixWidget: Icon(FlutterIcons.arrow_down_sli,size: 12,color: Colors.black,),
-
-                              );
-                            },
-                          )),*/
-              SliverToBoxAdapter(
-                  child: Column(
-                      children: [
-                        Container(
-                            child: AppExpansionTile(
-                              key: expansionTile,
-                              contentPadding: EdgeInsets.all(0),
-                              title: Text(
-                                SELECTED_GENDER == ""
-                                    ? "Gender"
-                                    : SELECTED_GENDER,
-                                style: AppTextStyle.h4TitleTextStyle(
-                                  fontWeight: SELECTED_GENDER == "" ? FontWeight
-                                      .w300 : FontWeight.w500,
-                                  color: SELECTED_GENDER == "" ? AppColor
-                                      .hintTextColor(context) : AppColor
-                                      .textColor(context),
-                                ),
-                                //overflow: TextOverflow.ellipsis,
-                                textDirection: AppTextDirection
-                                    .defaultDirection,
-                              ),
-                              children: [
-                                new ListTile(
-                                  title: Text(
-                                    'Male',
-                                    style: AppTextStyle
-                                        .h5TitleTextStyle(
-                                      fontWeight:
-                                      FontWeight.w500,
-                                      color: AppColor.hintTextColor(
-                                          context),
-                                    ),
-                                    //overflow: TextOverflow.ellipsis,
-                                    textDirection:
-                                    AppTextDirection
-                                        .defaultDirection,
-                                  ),
-                                  onTap: () {
-                                    setState(() {
-                                      SELECTED_GENDER = "Male";
-                                      expansionTile.currentState
-                                          .collapse();
-                                    });
-                                  },
-                                  contentPadding: EdgeInsets.all(0),
-                                ),
-                                new ListTile(
-                                  title: Text(
-                                    'Female',
-                                    style: AppTextStyle
-                                        .h5TitleTextStyle(
-                                      fontWeight:
-                                      FontWeight.w500,
-                                      color: AppColor.hintTextColor(
-                                          context),
-                                    ),
-                                    //overflow: TextOverflow.ellipsis,
-                                    textDirection:
-                                    AppTextDirection
-                                        .defaultDirection,
-                                  ),
-                                  onTap: () {
-                                    setState(() {
-                                      SELECTED_GENDER = "Female";
-                                      expansionTile.currentState
-                                          .collapse();
-                                    });
-                                  },
-                                  contentPadding: EdgeInsets.all(0),
-                                ),
-                                new ListTile(
-                                  title: Text(
-                                    'TransGender',
-                                    style: AppTextStyle
-                                        .h5TitleTextStyle(
-                                      fontWeight:
-                                      FontWeight.w500,
-                                      color: AppColor.hintTextColor(
-                                          context),
-                                    ),
-                                    //overflow: TextOverflow.ellipsis,
-                                    textDirection:
-                                    AppTextDirection
-                                        .defaultDirection,
-                                  ),
-                                  onTap: () {
-                                    setState(() {
-                                      SELECTED_GENDER = "TransGender";
-                                      expansionTile.currentState
-                                          .collapse();
-                                    });
-                                  },
-                                  contentPadding: EdgeInsets.all(0),
-                                ),
-                                new ListTile(
-                                  title: Text(
-                                    'Rather Not Say',
-                                    style: AppTextStyle
-                                        .h5TitleTextStyle(
-                                      fontWeight:
-                                      FontWeight.w500,
-                                      color: AppColor.hintTextColor(
-                                          context),
-                                    ),
-                                    //overflow: TextOverflow.ellipsis,
-                                    textDirection:
-                                    AppTextDirection
-                                        .defaultDirection,
-                                  ),
-                                  onTap: () {
-                                    setState(() {
-                                      SELECTED_GENDER = "Rather Not Say";
-                                      expansionTile.currentState
-                                          .collapse();
-                                    });
-                                  },
-                                  contentPadding: EdgeInsets.all(0),
-                                ),
-                              ],
-                              rotateWidget: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Color(0xFF2C2C2C),
-                                size: 18,
-                              ),
-                            )),
-                        UiSpacer.divider(thickness: 0.5,
-                            color: AppColor.hintTextColor(context))
-                      ])
-              ),
-              SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
-              SliverToBoxAdapter(
-                  child: StreamBuilder<bool>(
-                    stream: _profileBloc.validEmailAddress,
-                    builder: (context, snapshot) {
-                      return CustomHintLableTextFormField(
-                          isFixedHeight: false,
-                          left: 0,
-                          right: 0,
-                          top: 0,
-                          bottom: 0,
-                          labelText: "Email",
-                          keyboardType: TextInputType.emailAddress,
-                          textStyle: AppTextStyle.h4TitleTextStyle(
-                              color: AppColor.textColor(context)
-                          ),
-                          textInputAction: TextInputAction.next,
-                          textEditingController: _profileBloc.emailAddressTEC,
-                          errorText: snapshot.error,
-                          onChanged: _profileBloc.validateEmailAddress
-                      );
-                    },
-                  )),
-              SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
-
               SliverToBoxAdapter(
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-
-                    Expanded(child: getDOBWidget()
-                      /*StreamBuilder<bool>(
-                        stream: _profileBloc.validName,
-                          builder: (context, snapshot) {
-                            return  CustomHintLableTextFormField(
-                              isFixedHeight: false,
-                              left: 0,
-                              right: 0,
-                              top: 0,
-                              bottom: 0,
-                              labelText: "Date Of Birth",
-                              keyboardType: TextInputType.emailAddress,
-                              textStyle: AppTextStyle.h4TitleTextStyle(
-                                  color: AppColor.textColor(context)
-                              ),
-                              textInputAction: TextInputAction.next,
-                              textEditingController: _profileBloc.nameTEC,
-                              errorText: snapshot.error,
-                              onChanged: _profileBloc.validateName,
-                              suffixWidget: Icon(FlutterIcons.arrow_down_sli,size: 10,color: Colors.black,),
-
-                            );
-                          })*/
-
-                    ),
+                    Expanded(child: getDOBWidget()),
                     SizedBox(
                       width: 16,
                     ),
-                    Expanded(
-                        child: getAnniversaryWidget()
-
-                      /*StreamBuilder<bool>(
-                                stream: _profileBloc.validName,
-                                builder: (context, snapshot) {
-                                  return  CustomHintLableTextFormField(
-                                    isFixedHeight: false,
-                                    left: 0,
-                                    right: 0,
-                                    top: 0,
-                                    bottom: 0,
-                                    labelText: "Anniversary",
-                                    keyboardType: TextInputType.name,
-                                    textStyle: AppTextStyle.h4TitleTextStyle(
-                                        color: AppColor.textColor(context)
-                                    ),
-                                    textInputAction: TextInputAction.next,
-                                    textEditingController: _profileBloc.nameTEC,
-                                    errorText: snapshot.error,
-                                    onChanged: _profileBloc.validateName,
-                                    suffixWidget: Icon(FlutterIcons.arrow_down_sli,size: 10,color: Colors.black,),
-
-                                  );
-                                },
-                              )*/
-                    )
-
-
+                    Expanded(child: getAnniversaryWidget())
                   ],
                 ),
               ),
               SliverToBoxAdapter(child: UiSpacer.verticalSpace(space: 40)),
               SliverToBoxAdapter(
                   child: StreamBuilder<UiState>(
-                    stream: _profileBloc.uiState,
-                    builder: (context, snapshot) {
-                      final uiState = snapshot.data;
+                stream: _profileBloc.uiState,
+                builder: (context, snapshot) {
+                  final uiState = snapshot.data;
 
-                      return CustomButton(
-                        padding: AppPaddings.mediumButtonPadding(),
-                        color: AppColor.accentColor,
-                        onPressed: uiState != UiState.loading
-                            ? () {
-                          _profileBloc.processAccountUpdate(dob: _datetimeDOB ==
-                              null ? null : DateFormat('yyyy-MM-dd').format(
-                              _datetimeDOB),
-                              anniver: _datetimeAnniversary == null
-                                  ? null
-                                  : DateFormat('yyyy-MM-dd').format(
-                                  _datetimeAnniversary),
-                              gender: SELECTED_GENDER);
-                        }
-                            : null,
-                        child: uiState != UiState.loading
-                            ? Text(
-                          "Save Details",
-                          style: AppTextStyle.h4TitleTextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500
-                          ),
-                          textAlign: TextAlign.start,
-                          textDirection:
-                          AppTextDirection.defaultDirection,
-                        )
-                            : PlatformCircularProgressIndicator(),
-                      );
-                    },
-                  )),
+                  return CustomButton(
+                    padding: AppPaddings.mediumButtonPadding(),
+                    color: AppColor.accentColor,
+                    onPressed: uiState != UiState.loading
+                        ? () {
+                            _profileBloc.processAccountUpdate(
+                                dob: _datetimeDOB == null
+                                    ? null
+                                    : DateFormat('yyyy-MM-dd')
+                                        .format(_datetimeDOB),
+                                anniver: _datetimeAnniversary == null
+                                    ? null
+                                    : DateFormat('yyyy-MM-dd')
+                                        .format(_datetimeAnniversary),
+                                gender: SELECTED_GENDER);
+                          }
+                        : null,
+                    child: uiState != UiState.loading
+                        ? Text(
+                            "Save Details",
+                            style: AppTextStyle.h4TitleTextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.start,
+                            textDirection: AppTextDirection.defaultDirection,
+                          )
+                        : PlatformCircularProgressIndicator(),
+                  );
+                },
+              )),
               /*SliverToBoxAdapter(
                           child:StreamBuilder<bool>(
                             stream: _loginBloc.validMobileNumber,
@@ -507,68 +394,32 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                           )),*/
               SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
-
             ])),
       );
       //  );
       //);
-    }else{
-      pageBody=UnauthenticatedPage();
+    } else {
+      pageBody = UnauthenticatedPage();
     }
     return pageBody;
   }
 
   Widget getDOBWidget() {
-    return Column(
-      children:[
-      Container(
-      height: AppSizes.inputHeight,
-      padding: EdgeInsets.fromLTRB(0, 5, 20, 5),
-      child: Row(
-        children: [
-          Expanded(
-              flex: 9,
-              child: Text(
-                _datetimeDOB == null
-                    ? AuthStrings.registerDOB
-                    : DateFormat('dd/MM/yyyy').format(_datetimeDOB),
-                style: AppTextStyle.h4TitleTextStyle(
-                  color: AppColor.textColor(context),
-                ),
-                textDirection: AppTextDirection.defaultDirection,
-              )),
-          Expanded(
-            flex: 1,
-            child: IconButton(
-              icon: Icon(
-                Icons.keyboard_arrow_down,
-                color: Color(0xFF2C2C2C),
-                size: 18,
-              ),
-              onPressed: () => showDatePicker(
-                  context: context,
-                  initialDate: _datetimeDOB == null ? DateTime.now() : _datetimeDOB,
-                  firstDate: DateTime(1921),
-                  lastDate: DateTime(2022))
-                  .then((date) {
-                if(date!=null) {
-                  setState(() {
-                    _datetimeDOB = date;
-                  });
-                }
-              }),
-            ),
-          )
-        ],
-      ),
-    ),
-    UiSpacer.divider(thickness: 0.5,color: AppColor.hintTextColor(context))
-    ]);
-  }
-
-  Widget getAnniversaryWidget() {
-    return Column(
-        children:[
+    return InkWell(
+        onTap: () => showDatePicker(
+                    context: context,
+                    initialDate:
+                        _datetimeDOB == null ? DateTime.now() : _datetimeDOB,
+                    firstDate: DateTime(1901, 01, 01),
+                    lastDate: DateTime.now())
+                .then((date) {
+              if (date != null) {
+                setState(() {
+                  _datetimeDOB = date;
+                });
+              }
+            }),
+        child: Column(children: [
           Container(
             height: AppSizes.inputHeight,
             padding: EdgeInsets.fromLTRB(0, 5, 20, 5),
@@ -577,9 +428,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 Expanded(
                     flex: 9,
                     child: Text(
-                      _datetimeAnniversary == null
-                          ? AuthStrings.anniversaryDate
-                          : DateFormat('dd/MM/yyyy').format(_datetimeAnniversary),
+                      _datetimeDOB == null
+                          ? AuthStrings.registerDOB
+                          : DateFormat('dd/MM/yyyy').format(_datetimeDOB),
                       style: AppTextStyle.h4TitleTextStyle(
                         color: AppColor.textColor(context),
                       ),
@@ -594,12 +445,80 @@ class _ProfilePageState extends State<ProfilePage> {
                       size: 18,
                     ),
                     onPressed: () => showDatePicker(
-                        context: context,
-                        initialDate: _datetimeAnniversary == null ? DateTime.now() : _datetimeAnniversary,
-                        firstDate: DateTime(1921),
-                        lastDate: DateTime(2022))
+                            context: context,
+                            initialDate: _datetimeDOB == null
+                                ? DateTime.now()
+                                : _datetimeDOB,
+                            firstDate: DateTime(1901,01,01),
+                            lastDate: DateTime.now())
                         .then((date) {
-                      if(date!=null) {
+                      if (date != null) {
+                        setState(() {
+                          _datetimeDOB = date;
+                        });
+                      }
+                    }),
+                  ),
+                )
+              ],
+            ),
+          ),
+          UiSpacer.divider(
+              thickness: 0.5, color: AppColor.hintTextColor(context))
+        ]));
+  }
+
+  Widget getAnniversaryWidget() {
+    return InkWell(
+        onTap: () => showDatePicker(
+                    context: context,
+                    initialDate: _datetimeAnniversary == null
+                        ? DateTime.now()
+                        : _datetimeAnniversary,
+                    firstDate: DateTime(1921,01,01),
+                    lastDate: DateTime.now())
+                .then((date) {
+              if (date != null) {
+                setState(() {
+                  _datetimeAnniversary = date;
+                });
+              }
+            }),
+        child: Column(children: [
+          Container(
+            height: AppSizes.inputHeight,
+            padding: EdgeInsets.fromLTRB(0, 5, 20, 5),
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 9,
+                    child: Text(
+                      _datetimeAnniversary == null
+                          ? AuthStrings.anniversaryDate
+                          : DateFormat('dd/MM/yyyy')
+                              .format(_datetimeAnniversary),
+                      style: AppTextStyle.h4TitleTextStyle(
+                        color: AppColor.textColor(context),
+                      ),
+                      textDirection: AppTextDirection.defaultDirection,
+                    )),
+                Expanded(
+                  flex: 1,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Color(0xFF2C2C2C),
+                      size: 18,
+                    ),
+                    onPressed: () => showDatePicker(
+                            context: context,
+                            initialDate: _datetimeAnniversary == null
+                                ? DateTime.now()
+                                : _datetimeAnniversary,
+                            firstDate: DateTime(1921,01,01),
+                            lastDate: DateTime.now())
+                        .then((date) {
+                      if (date != null) {
                         setState(() {
                           _datetimeAnniversary = date;
                         });
@@ -610,7 +529,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          UiSpacer.divider(thickness: 0.5,color: AppColor.hintTextColor(context))
-        ]);
+          UiSpacer.divider(
+              thickness: 0.5, color: AppColor.hintTextColor(context))
+        ]));
   }
 }

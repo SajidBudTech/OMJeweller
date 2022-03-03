@@ -1,6 +1,7 @@
 class AppImages {
   static const appLogo = "assets/images/logo.png";
   static const defaultProfile = "assets/images/forgot_pasword.png";
+  static const defaultPlaceHolder = "assets/images/placeholder.png";
   static const emptyCart = "assets/images/empty_cart.png";
  // static const emptyDeliveryAddress = "assets/images/empty_address.png";
   static const emptyNotification = "assets/images/empty_notification.png";

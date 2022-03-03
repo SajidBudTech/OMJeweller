@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
 import 'package:flutter_om_jeweller/bloc/home.bloc.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
@@ -20,14 +21,13 @@ import 'package:flutter_om_jeweller/data/viewmodels/count.viewmodel.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
-
+  static int currentPageIndex = 0;
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   //current bottom navigation bar index
-  int currentPageIndex = 0;
   final PageController _pageController = PageController();
   String buildNumber;
   List<String> actionIcons = [
@@ -43,6 +43,12 @@ class _HomePageState extends State<HomePage> {
     //switch page from bloc, this allow another page/bloc to determine the page for the home page
 
     HomeBloc.initiBloc();
+
+    if(AuthBloc.authenticated()){
+      HomeBloc.getNotificationCount();
+      HomeBloc.getWishlistCount();
+    }
+
     HomeBloc.currentPageIndex.listen((currentPageIndex) {
       _updateCurrentPageIndex(currentPageIndex);
     });
@@ -100,7 +106,7 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: AppDrawer(),
       bottomNavigationBar: CustomBottomNavigationBar(
-        currentPageIndex: currentPageIndex,
+        currentPageIndex: HomePage.currentPageIndex,
         onItemTap: _updateCurrentPageIndex,
       ),
       body: PageView(
@@ -127,7 +133,7 @@ class _HomePageState extends State<HomePage> {
   //update the current page index
   void _updateCurrentPageIndex(int pageIndex) {
     setState(() {
-      currentPageIndex = pageIndex;
+      HomePage.currentPageIndex = pageIndex;
     });
     _pageController.animateToPage(
       pageIndex,

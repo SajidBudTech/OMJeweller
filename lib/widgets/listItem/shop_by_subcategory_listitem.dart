@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/api.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
+import 'package:flutter_om_jeweller/constants/app_images.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
@@ -58,7 +59,14 @@ class ShopBySubCategoryListViewItem extends StatelessWidget {
                           child:
                           CachedNetworkImage(
                             imageUrl: Api.downloadUrlPath+subCategory.subcategoryImage,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) => Container(
+                              //height: ((AppSizes.getScreenWidth(context)/2)-50)+(((AppSizes.getScreenWidth(context)/2)-50)*0.3),
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>Padding(padding: AppPaddings.mediumButtonPadding(),child:Image.asset(AppImages.defaultPlaceHolder,fit: BoxFit.contain,)),
                             width: MediaQuery.of(context).size.width,
                           )
                       ),

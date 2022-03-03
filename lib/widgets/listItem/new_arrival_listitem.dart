@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/api.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
+import 'package:flutter_om_jeweller/constants/app_images.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
@@ -70,6 +71,7 @@ class _NewArrivalListViewItemState extends State<NewArrivalListViewItem> {
                           child:
                           CachedNetworkImage(
                             imageUrl: Api.ProductdownloadUrlPath + widget.product.featureImage??"",
+                            errorWidget: (context, url, error) =>Padding(padding: AppPaddings.mediumButtonPadding(),child:Image.asset(AppImages.defaultPlaceHolder,fit: BoxFit.contain,)),
                             fit: BoxFit.cover,
                             width: double.infinity,
                           )

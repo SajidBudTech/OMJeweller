@@ -133,7 +133,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                     height: 178,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.fill,
                                     width: double.infinity,
                                   ),
                                 )
@@ -575,7 +575,7 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                     height: 178,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.fill,
                                     width: double.infinity,
                                   ),
                                 ))),

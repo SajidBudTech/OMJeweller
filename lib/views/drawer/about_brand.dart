@@ -115,8 +115,8 @@ class _AboutBrandPageState extends State<AboutBrandPage> {
                                         'OM is more than jewellery… it embodies family values, based on trust & understanding. Our lineage is committed to learning and progressing. We thank our customers, fellow jewellers and hope to grow, while staying true to our roots. Jewels & Family Bonds… Live Forever…Your Family Jeweller',
                                         style: AppTextStyle.h5TitleTextStyle(
                                             color:
-                                                AppColor.hintTextColor(context),
-                                            fontWeight: FontWeight.w500),
+                                                AppColor.textColor(context),
+                                            fontWeight: FontWeight.w400),
                                         textAlign: TextAlign.start,
                                         textDirection:
                                             AppTextDirection.defaultDirection,
@@ -353,7 +353,7 @@ class _AboutBrandPageState extends State<AboutBrandPage> {
             child: Text(
               discription,
               style: AppTextStyle.h7TitleTextStyle(
-                  color: AppColor.hintTextColor(context),
+                  color: AppColor.textColor(context),
                   fontWeight: FontWeight.w400),
               textAlign: TextAlign.center,
               textDirection: AppTextDirection.defaultDirection,

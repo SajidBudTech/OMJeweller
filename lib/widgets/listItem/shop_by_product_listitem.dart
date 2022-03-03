@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/api.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
+import 'package:flutter_om_jeweller/constants/app_images.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
@@ -71,6 +72,7 @@ class _ShopByProductListViewItemState extends State<ShopByProductListViewItem> {
                           CachedNetworkImage(
                             imageUrl: Api.downloadUrlPath + widget.category.categoryImage,
                             fit: BoxFit.cover,
+                            errorWidget: (context, url, error) =>Padding(padding: AppPaddings.mediumButtonPadding(),child:Image.asset(AppImages.defaultPlaceHolder,fit: BoxFit.contain,)),
                             width: double.infinity,
                           )
                       ),

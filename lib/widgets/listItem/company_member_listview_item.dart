@@ -51,7 +51,7 @@ class _CompanyListViewItemState extends State<CompanyListViewItem> {
         Container(
           // alignment: Alignment.topRight,
           // margin: EdgeInsets.only(top: 16),
-          height: 147,
+          height: 150,
           decoration: BoxDecoration(
             color: Color(0xFFC4C4C4),
             borderRadius: BorderRadius.circular(8),
@@ -60,8 +60,8 @@ class _CompanyListViewItemState extends State<CompanyListViewItem> {
           borderRadius: BorderRadius.circular(8.0),
           child: Image.asset(
             widget.image,
-            height: 147,
-            fit: BoxFit.cover,
+            height: 150,
+            fit: BoxFit.fill,
             width: double.infinity,
           ),
         ),
@@ -91,7 +91,7 @@ class _CompanyListViewItemState extends State<CompanyListViewItem> {
                         widget.post,
                         style: AppTextStyle.h7TitleTextStyle(
                           fontWeight: FontWeight.w400,
-                          color: AppColor.hintTextColor(context),
+                          color: Color(0xFFe87806),
                         ),
                       //  overflow: TextOverflow.ellipsis,
                         textDirection: AppTextDirection.defaultDirection,

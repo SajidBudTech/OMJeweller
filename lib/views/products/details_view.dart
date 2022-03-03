@@ -209,7 +209,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                             style: AppTextStyle.h5TitleTextStyle(
                                 color: AppColor.hintTextColor(context),
                                 fontWeight: FontWeight.w400),
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.right,
                             textDirection: AppTextDirection.defaultDirection,
                           )),
                       Container(
@@ -224,7 +224,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                             style: AppTextStyle.h4TitleTextStyle(
                                 color: AppColor.textColor(context),
                                 fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.right,
                             textDirection: AppTextDirection.defaultDirection,
                           )),
                     ],

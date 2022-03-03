@@ -172,17 +172,18 @@ class ProductPageViewModel extends MyBaseViewModel {
       productbyCategoryList.sort((a,b){
         var adate = a.productPrice; //before -> var adate = a.expiry;
         var bdate = b.productPrice; //before -> var bdate = b.expiry;
-        return adate.compareTo(bdate);
+        return (adate??0).compareTo(bdate??0);
       });
     }else if(sortType=="Price - High to Low"){
       productbyCategoryList.sort((a,b){
         var adate = a.productPrice; //before -> var adate = a.expiry;
         var bdate = b.productPrice; //before -> var bdate = b.expiry;
-        return bdate.compareTo(adate);
+        return (bdate??0).compareTo(adate??0);
       });
     }
 
-    print(productbyCategoryList);
+    //print(productbyCategoryList);
+
     notifyListeners();
 
   }
@@ -286,7 +287,7 @@ class ProductPageViewModel extends MyBaseViewModel {
     //add null data so listener can show shimmer widget to indicate loading
 
     CountViewModel countViewModel=CountViewModel(viewContext);
-    countViewModel.setNotificationCount();
+    countViewModel.setWishListCount();
 
     productByWishlistLoadingState = LoadingState.Loading;
     notifyListeners();

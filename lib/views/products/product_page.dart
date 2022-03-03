@@ -223,6 +223,7 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   void showSortBottomSheetDialog(ProductPageViewModel model) {
+
     CustomDialog.showCustomBottomSheet(
       context,
       backgroundColor: AppColor.newprimaryColor,

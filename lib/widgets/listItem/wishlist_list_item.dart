@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
+import 'package:flutter_om_jeweller/constants/app_images.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
@@ -115,10 +116,9 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
                       child: CircularProgressIndicator(),
                     ),
                   ),
-                  errorWidget: (context, url, error) =>
-                      Icon(Icons.error),
+                  errorWidget: (context, url, error) =>Padding(padding: AppPaddings.mediumButtonPadding(),child:Image.asset(AppImages.defaultPlaceHolder,fit: BoxFit.contain,)),
                   height: ((AppSizes.getScreenWidth(context)/2)-50)+(((AppSizes.getScreenWidth(context)/2)-50)*0.15),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitHeight,
                   width: double.infinity,
                 ),
               Align(

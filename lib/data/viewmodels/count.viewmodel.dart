@@ -1,4 +1,5 @@
 import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
+import 'package:flutter_om_jeweller/bloc/home.bloc.dart';
 import 'package:flutter_om_jeweller/constants/globle_variable.dart';
 import 'package:flutter_om_jeweller/data/models/advertisment_banner.dart';
 import 'package:flutter_om_jeweller/data/models/category_banner.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_om_jeweller/data/repositories/notification.repository.da
 import 'package:flutter_om_jeweller/data/viewmodels/base.viewmodel.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_om_jeweller/views/home_page.dart';
 class CountViewModel extends MyBaseViewModel {
 
   NotificationRepository _notificationRepository=new NotificationRepository();
@@ -47,7 +49,8 @@ class CountViewModel extends MyBaseViewModel {
     //add null data so listener can show shimmer widget to indicate loading
 
     GlobleVariable.WISHLIST_COUNT++;
-    notifyListeners();
+    HomeBloc.currentPageIndex.add(HomePage.currentPageIndex);
+    //notifyListeners();
 
   }
 
@@ -83,10 +86,10 @@ class CountViewModel extends MyBaseViewModel {
 
       GlobleVariable.WISHLIST_COUNT = await _notificationRepository.getWishlistCount(userId);
 
-
     } catch (error) {
 
     }
+
     notifyListeners();
   }
 

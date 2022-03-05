@@ -57,7 +57,7 @@ class _FAQListViewItemState extends State<FAQListViewItem> {
               title: Text(widget.answer??"",
                 style: AppTextStyle.h5TitleTextStyle(
                   fontWeight: FontWeight.w400,
-                  color: AppColor.hintTextColor(context),
+                  color: AppColor.textColor(context),
                 ),
                 //overflow: TextOverflow.ellipsis,
                 textDirection: AppTextDirection.defaultDirection,

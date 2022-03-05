@@ -22,28 +22,52 @@ class VisitStoreListViewItem extends StatefulWidget {
     @required this.address,
     @required this.location,
     @required this.phone,
+    @required this.latLng
   }) : super(key: key);
 
   final String address;
   final String location;
   final String phone;
+  final LatLng latLng;
 
   @override
   _VisitStoreListViewItemState createState() => _VisitStoreListViewItemState();
 }
 
 class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
-
+  MarkerId markerId;
   Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(19.155001,72.849998);
+ // static const LatLng _center = const LatLng(19.155001,72.849998);
   void _onMapCreated(GoogleMapController controller) {
+     controller.showMarkerInfoWindow(markerId);
+     controller.moveCamera(CameraUpdate.newLatLng(widget.latLng));
     _controller.complete(controller);
+
   }
+
+  Iterable markers={};
+
 
   String address;
   bool isLocationAvailable = false;
   Location location = new Location();
   LocationData currentLocationData;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    markerId=MarkerId(widget.location);
+    markers={
+      Marker(
+        markerId: MarkerId(widget.location),
+        position: widget.latLng,
+        infoWindow: InfoWindow(title:"Om Jeweller"),
+        visible: true,
+      )
+    };
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +83,15 @@ class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
           child: GoogleMap(
             mapType: MapType.normal,
             onMapCreated: _onMapCreated,
-            zoomControlsEnabled: false,
+            zoomControlsEnabled: true,
+            mapToolbarEnabled: true,
+            trafficEnabled: true,
+            buildingsEnabled: true,
+            markers: Set.from(markers),
+            indoorViewEnabled: true,
             initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 14.0,
+              target: widget.latLng,
+              zoom: 13.5,
             ),
           ),
         ),

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 import 'package:flutter_om_jeweller/bloc/base.bloc.dart';
@@ -30,6 +31,8 @@ class AppointmentBloc extends BaseBloc {
 
   List<String> storePhone=["022 6158 7000","022 6158 7001","022 6831 8282","Coming soon"];
   List<String> storeLocation=["OM JEWELLERS, BORIVALI","OM JEWELLERS, MULUND","De Beers Forevermark Boutique","OM JEWELLERS, GHATKOPAR"];
+  List<LatLng> storeLatLong = [LatLng(19.27329761480423, 72.85137028796589),LatLng(19.25630094356059, 72.93757705489094),LatLng(19.19868874909404, 72.82455979011867),LatLng(19.22950327065217, 72.9118773706876)];
+
   List<String> CompanyNameList = [];
   List<String> CompanyPostList = [];
   List<String> CompanyPostImage = [];

@@ -224,7 +224,7 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                                                           fontWeight:
                                                           FontWeight.w500,
                                                           color: AppColor
-                                                              .hintTextColor(
+                                                              .textColor(
                                                               context),
                                                         ),
                                                         //overflow: TextOverflow.ellipsis,
@@ -252,7 +252,7 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                                                           fontWeight:
                                                           FontWeight.w500,
                                                           color: AppColor
-                                                              .hintTextColor(
+                                                              .textColor(
                                                               context),
                                                         ),
                                                         //overflow: TextOverflow.ellipsis,
@@ -271,6 +271,42 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                                                       },
                                                       contentPadding: EdgeInsets
                                                           .all(0),
+                                                    ),
+                                                    new ListTile(
+                                                      title: Text(
+                                                        'TransGender',
+                                                        style: AppTextStyle.h5TitleTextStyle(
+                                                          fontWeight: FontWeight.w500,
+                                                          color: AppColor.textColor(context),
+                                                        ),
+                                                        //overflow: TextOverflow.ellipsis,
+                                                        textDirection: AppTextDirection.defaultDirection,
+                                                      ),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          SELECTED_GENDER = "TransGender";
+                                                          expansionTile.currentState.collapse();
+                                                        });
+                                                      },
+                                                      contentPadding: EdgeInsets.all(0),
+                                                    ),
+                                                    new ListTile(
+                                                      title: Text(
+                                                        'Rather Not Say',
+                                                        style: AppTextStyle.h5TitleTextStyle(
+                                                          fontWeight: FontWeight.w500,
+                                                          color: AppColor.textColor(context),
+                                                        ),
+                                                        //overflow: TextOverflow.ellipsis,
+                                                        textDirection: AppTextDirection.defaultDirection,
+                                                      ),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          SELECTED_GENDER = "Rather Not Say";
+                                                          expansionTile.currentState.collapse();
+                                                        });
+                                                      },
+                                                      contentPadding: EdgeInsets.all(0),
                                                     ),
                                                   ],
                                                   rotateWidget: Icon(

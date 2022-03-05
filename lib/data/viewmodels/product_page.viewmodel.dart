@@ -194,38 +194,49 @@ class ProductPageViewModel extends MyBaseViewModel {
     for(Product product in productFilterList){
 
       availableCategoryMap.forEach((key, value) {
-        if(product.categoryName==key && value){
-           bool check=newFilterList.any((item) => item.productID == product.productID);
-            if(!check){
-               newFilterList.add(product);
+        if(product.categoryName !=null && key!=null) {
+          if (product.categoryName == key && value) {
+            bool check = newFilterList.any((item) =>
+            item.productID == product.productID);
+            if (!check) {
+              newFilterList.add(product);
             }
-
-         }
+          }
+        }
       });
 
       availableSubCategoryMap.forEach((key, value) {
-        if(product.subcategoryName==key && value){
-          bool check=newFilterList.any((item) => item.productID == product.productID);
-          if(!check){
-            newFilterList.add(product);
+        if(product.subcategoryName !=null && key!=null) {
+          if (product.subcategoryName == key && value) {
+            bool check = newFilterList.any((item) =>
+            item.productID == product.productID);
+            if (!check) {
+              newFilterList.add(product);
+            }
           }
         }
       });
 
       availableCollectionMap.forEach((key, value) {
-        if(product.collectionName==key && value){
-          bool check=newFilterList.any((item) => item.productID == product.productID);
-          if(!check){
-            newFilterList.add(product);
+        if(product.collectionName !=null && key!=null) {
+          if (product.collectionName == key && value) {
+            bool check = newFilterList.any((item) =>
+            item.productID == product.productID);
+            if (!check) {
+              newFilterList.add(product);
+            }
           }
         }
       });
 
       availableGoldPurityMap.forEach((key, value) {
-        if(product.purityName==key && value){
-          bool check=newFilterList.any((item) => item.productID == product.productID);
-          if(!check){
-            newFilterList.add(product);
+        if(product.purityName !=null && key!=null) {
+          if (product.purityName == key && value) {
+            bool check = newFilterList.any((item) =>
+            item.productID == product.productID);
+            if (!check) {
+              newFilterList.add(product);
+            }
           }
         }
       });

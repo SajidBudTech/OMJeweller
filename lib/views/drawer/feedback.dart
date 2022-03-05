@@ -128,7 +128,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                           style:
                                           AppTextStyle.h5TitleTextStyle(
                                             fontWeight: FontWeight.w400,
-                                            color: AppColor.hintTextColor(
+                                            color: AppColor.textColor(
                                                 context),
                                           ),
                                           //overflow: TextOverflow.ellipsis,
@@ -175,7 +175,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                                       .h5TitleTextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: AppColor
-                                                        .hintTextColor(context),
+                                                        .textColor(context),
                                                   ),
                                                   //overflow: TextOverflow.ellipsis,
                                                   textDirection:
@@ -203,7 +203,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                                     fontWeight:
                                                     FontWeight.w500,
                                                     color: AppColor
-                                                        .hintTextColor(
+                                                        .textColor(
                                                         context),
                                                   ),
                                                   //overflow: TextOverflow.ellipsis,
@@ -231,7 +231,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                                     fontWeight:
                                                     FontWeight.w500,
                                                     color: AppColor
-                                                        .hintTextColor(
+                                                        .textColor(
                                                         context),
                                                   ),
                                                   //overflow: TextOverflow.ellipsis,
@@ -260,7 +260,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                                                     fontWeight:
                                                     FontWeight.w500,
                                                     color: AppColor
-                                                        .hintTextColor(
+                                                        .textColor(
                                                         context),
                                                   ),
                                                   //overflow: TextOverflow.ellipsis,

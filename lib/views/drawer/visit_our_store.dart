@@ -68,6 +68,7 @@ class _VisitOurStorePageState extends State<VisitOurStorePage> {
                                       address: _appointmentBloc.storeaddresses[index],
                                       location: _appointmentBloc.storeLocation[index],
                                       phone: _appointmentBloc.storePhone[index],
+                                      latLng: _appointmentBloc.storeLatLong[index],
                                     );
                                   },
                                   childCount: _appointmentBloc.storeaddresses.length,

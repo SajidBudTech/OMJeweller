@@ -196,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         'Male',
                         style: AppTextStyle.h5TitleTextStyle(
                           fontWeight: FontWeight.w500,
-                          color: AppColor.hintTextColor(context),
+                          color: AppColor.textColor(context),
                         ),
                         //overflow: TextOverflow.ellipsis,
                         textDirection: AppTextDirection.defaultDirection,
@@ -214,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         'Female',
                         style: AppTextStyle.h5TitleTextStyle(
                           fontWeight: FontWeight.w500,
-                          color: AppColor.hintTextColor(context),
+                          color: AppColor.textColor(context),
                         ),
                         //overflow: TextOverflow.ellipsis,
                         textDirection: AppTextDirection.defaultDirection,
@@ -232,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         'TransGender',
                         style: AppTextStyle.h5TitleTextStyle(
                           fontWeight: FontWeight.w500,
-                          color: AppColor.hintTextColor(context),
+                          color: AppColor.textColor(context),
                         ),
                         //overflow: TextOverflow.ellipsis,
                         textDirection: AppTextDirection.defaultDirection,
@@ -250,7 +250,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         'Rather Not Say',
                         style: AppTextStyle.h5TitleTextStyle(
                           fontWeight: FontWeight.w500,
-                          color: AppColor.hintTextColor(context),
+                          color: AppColor.textColor(context),
                         ),
                         //overflow: TextOverflow.ellipsis,
                         textDirection: AppTextDirection.defaultDirection,

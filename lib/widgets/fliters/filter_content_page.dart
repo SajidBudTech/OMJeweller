@@ -53,10 +53,18 @@ class _FilterProductPageState extends State<FilterProductPage> {
     super.initState();
 
     for(Product product in widget.productList){
-      availableCategory.add(product.categoryName);
-      availableSubCategory.add(product.subcategoryName);
-      availableCollection.add(product.collectionName);
-      availableGoldPurity.add(product.purityName);
+      if(product.categoryName!=null && product.categoryName!="") {
+        availableCategory.add(product.categoryName);
+      }
+      if(product.subcategoryName!=null && product.subcategoryName!="") {
+        availableSubCategory.add(product.subcategoryName);
+      }
+      if(product.collectionName!=null && product.collectionName!="") {
+        availableCollection.add(product.collectionName);
+      }
+      if(product.purityName!=null && product.purityName!="") {
+        availableGoldPurity.add(product.purityName);
+      }
     }
 
     availableCategory.toSet().toList();

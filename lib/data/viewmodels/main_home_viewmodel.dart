@@ -78,7 +78,7 @@ class MainHomeViewModel extends MyBaseViewModel {
     try {
       final allcategories = await _homePageRepository.getCategories();
       allcategories.forEach((element) {
-        if(element.productCount > 0 && element.subcategory.length>0){
+        if(int.parse(element.productCount??"0") > 0 && element.subcategory.length>0){
           categories.add(element);
         }
       });

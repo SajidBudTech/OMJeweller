@@ -31,15 +31,11 @@ class FAQListViewItem extends StatefulWidget {
 
 class _FAQListViewItemState extends State<FAQListViewItem> {
   final GlobalKey<AppExpansionTileState> expansionTile = new GlobalKey();
-  Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(19.155001,72.849998);
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      //width: double.infinity,
       color: Colors.white,
       // margin: EdgeInsets.only(bottom: 4),
       child:AppExpansionTile(

@@ -96,13 +96,13 @@ class _ConfirmedBookingPageState extends State<ConfirmedBookingPage> {
                                       children: <TextSpan>[
                                         new TextSpan(
                                             text: 'You booked an appointment with\n',
-                                            style: AppTextStyle.h4TitleTextStyle(color: AppColor.hintTextColor(context),fontWeight: FontWeight.w400)),
+                                            style: AppTextStyle.h4TitleTextStyle(color: AppColor.textColor(context),fontWeight: FontWeight.w400)),
                                         new TextSpan(
                                             text: 'OM Jewellers, '+widget.appointment.appointmentDetail,
                                             style: AppTextStyle.h4TitleTextStyle(color: AppColor.textColor(context),fontWeight: FontWeight.w500)),
                                         new TextSpan(
                                             text: ' on ',
-                                            style: AppTextStyle.h4TitleTextStyle(color: AppColor.hintTextColor(context),fontWeight: FontWeight.w400)),
+                                            style: AppTextStyle.h4TitleTextStyle(color: AppColor.textColor(context),fontWeight: FontWeight.w400)),
                                         new TextSpan(
                                             text: DateFormat("MMMM dd,yyyy").format(DateFormat("yyyy-MM-dd").parse(widget.appointment.appointmentDate))+'\n',
                                             style: AppTextStyle.h4TitleTextStyle(color: AppColor.textColor(context),fontWeight: FontWeight.w500)),

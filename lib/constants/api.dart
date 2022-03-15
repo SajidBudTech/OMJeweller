@@ -1,14 +1,15 @@
 class Api {
 
-  // static const baseUrl = "https://food.thesnaptask.com/api";
-  // static const baseUrl = "https://testbud.in/ayurvedaadmin/public/api";
 
-   //static const LIVE URL  = "https://thelifeshaper.com/api";
-     static const baseUrl = "https://testbud.in/omjewellers/public/api";
- // static const baseUrl = "https://173db198c876.ngrok.io/ayurveda_new/public/api";
+   //static const LIVE URL  = "https://omjewellers.com/public/api";
+     static const baseUrl = "https://omjewellers.com/omjewellers/public/api";
+ // static const Test URL = "https://testbud.in/omjewellers/public/api";
 
-     static const downloadUrlPath = "https://testbud.in/omjewellers/public/contentupload/";
-     static const ProductdownloadUrlPath = "https://testbud.in/omjewellers/public";
+     static const downloadUrlPath = "https://omjewellers.com/public/contentupload/";
+     static const ProductdownloadUrlPath = "https://omjewellers.com/public";
+
+
+
 
   static const login = "/customerlogin";
   static const loginOTP = "/login_otp";

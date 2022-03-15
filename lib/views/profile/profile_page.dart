@@ -138,6 +138,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     top: 0,
                     bottom: 0,
                     labelText: "Phone Number",
+                    labelTextStyle: AppTextStyle.h5TitleTextStyle(
+                      color: AppColor.textColor(context)
+                    ),
                     isReadOnly: false,
                     keyboardType: TextInputType.phone,
                     textStyle: AppTextStyle.h4TitleTextStyle(
@@ -161,6 +164,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       top: 0,
                       bottom: 0,
                       labelText: "Name",
+                      labelTextStyle: AppTextStyle.h5TitleTextStyle(
+                          color: AppColor.textColor(context)
+                      ),
                       keyboardType: TextInputType.name,
                       textStyle: AppTextStyle.h4TitleTextStyle(
                           color: AppColor.textColor(context)),
@@ -285,6 +291,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       top: 0,
                       bottom: 0,
                       labelText: "Email",
+                      labelTextStyle: AppTextStyle.h5TitleTextStyle(
+                          color: AppColor.textColor(context)
+                      ),
                       keyboardType: TextInputType.emailAddress,
                       textStyle: AppTextStyle.h4TitleTextStyle(
                           color: AppColor.textColor(context)),

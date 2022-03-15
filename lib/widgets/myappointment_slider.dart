@@ -72,11 +72,7 @@ class _MyAppointmentSliderState extends State<MyAppointmentSlider> {
   String currentdate=DateFormat("yyyy-MM-dd").format(DateTime.now());
   DateTime newDate=DateTime.now();
   List<Widget> _getPageSliders(List<Appointment> appointments, BuildContext context) {
-
-
-
-    return appointments
-        .map((appointment) {
+    return appointments.map((appointment) {
           int days=DateFormat("yyyy-MM-dd").parse(currentdate).difference(DateTime.parse(appointment.appointmentDate)).inDays;
           bool reshedule=false;
           DateTime currentSheduleDate=DateFormat("yyyy-MM-dd hh:mm aa").parse(appointment.appointmentDate+" "+appointment.appointmentTime);

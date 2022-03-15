@@ -95,7 +95,7 @@ class ProductPageViewModel extends MyBaseViewModel {
   }
 
 
-  void getProductsByCategory({Category category,int categoryId}) async {
+  void getProductsByCategory({Category category,var categoryId}) async {
     //add null data so listener can show shimmer widget to indicate loading
 
     CountViewModel countViewModel=CountViewModel(viewContext);
@@ -170,78 +170,143 @@ class ProductPageViewModel extends MyBaseViewModel {
 
     if(sortType=="Price - Low to High") {
       productbyCategoryList.sort((a,b){
-        var adate = a.productPrice; //before -> var adate = a.expiry;
-        var bdate = b.productPrice; //before -> var bdate = b.expiry;
+        var adate = getProductPrice(a); //before -> var adate = a.expiry;
+        var bdate = getProductPrice(b); //before -> var bdate = b.expiry;
         return (adate??0).compareTo(bdate??0);
       });
     }else if(sortType=="Price - High to Low"){
       productbyCategoryList.sort((a,b){
-        var adate = a.productPrice; //before -> var adate = a.expiry;
-        var bdate = b.productPrice; //before -> var bdate = b.expiry;
+        var adate = getProductPrice(a); //before -> var adate = a.expiry;
+        var bdate = getProductPrice(b); //before -> var bdate = b.expiry;
         return (bdate??0).compareTo(adate??0);
       });
     }
 
-    //print(productbyCategoryList);
+  //  print(productbyCategoryList);
+
 
     notifyListeners();
+
+  }
+
+  int getProductPrice(Product product) {
+    double totalAmount=0;
+
+    double calculatedTotalAmount=0;
+    double calculatedTotalWieght=0;
+
+
+    for(Productattributes productattributes in product.productattributes){
+      calculatedTotalAmount=calculatedTotalAmount+double.parse(productattributes.diamondamount??"0");
+    }
+    for(Productattributes productattributes in product.productattributes){
+      calculatedTotalWieght=calculatedTotalWieght+double.parse(productattributes.diamondweight??"0");
+    }
+
+    if(int.tryParse(product.productType??"0")==1){
+      double makingCharges=double.parse(product.purityPrice??"0")*(double.parse(product.makingwastage??"0")/100);
+      double price=((makingCharges+double.parse(product.purityPrice??"0"))*(double.parse(product.netweight)))+double.parse(product.stonecharges??"0");
+      double tax=price*((double.parse(product.taxValue??"0"))/100);
+      totalAmount=price+tax;
+    }else if(int.tryParse(product.productType??"0")==2){
+
+      double price=(((double.parse(product.makingcost??"0")+double.parse(product.purityPrice??"0"))*(double.parse(product.netweight))))+(double.parse(product.stonecharges??"0"))+calculatedTotalAmount;
+      double tax=price*((double.parse(product.taxValue??"0"))/100);
+
+      totalAmount=price+tax;
+
+    }else if(int.tryParse(product.productType??"0")==3){
+      double platinumAmount=(double.parse(product.platiniummaking??"0")+platiniumRate)*(double.parse(product.platiniumweight??"0"));
+
+      double price=((double.parse(product.makingcost??"0")+double.parse(product.purityPrice??"0"))*(double.parse(product.netweight)))+platinumAmount+(double.parse(product.stonecharges??"0"))+calculatedTotalAmount;
+      double tax=price*((double.parse(product.taxValue??"0"))/100);
+
+      totalAmount=price+tax;
+
+    }else if(int.tryParse(product.productType??"0")==4){
+      double polkiAmount =(double.parse(product.polkiamount??"0"))*(double.parse(product.polkiweight??"0"));
+
+      double price=((double.parse(product.makingcost??"0")+double.parse(product.purityPrice??"0"))*(double.parse(product.netweight)))+polkiAmount+(double.parse(product.stonecharges??"0"))+calculatedTotalAmount;
+      double tax=price*((double.parse(product.taxValue??"0"))/100);
+
+      totalAmount=price+tax;
+
+    }
+
+   // widget.product.productPrice=totalAmount.toInt();
+
+
+    return totalAmount.toInt();
 
   }
 
   filterProductList() async{
     //productFilterList=productbyCategoryList;
     List<Product> newFilterList=[];
-    for(Product product in productFilterList){
+    newFilterList.addAll(productFilterList);
+    List<Product> filterResult=[];
 
-      availableCategoryMap.forEach((key, value) {
-        if(product.categoryName !=null && key!=null) {
-          if (product.categoryName == key && value) {
-            bool check = newFilterList.any((item) =>
-            item.productID == product.productID);
-            if (!check) {
-              newFilterList.add(product);
-            }
-          }
-        }
-      });
+    availableCategoryMap.forEach((key, value) {
+      if(value){
+         //newFilterList.removeWhere((element) => (element.categoryName??"")!=key);
+         final list=newFilterList.where((element) => (element.categoryName??"")==key).toList();
+         filterResult.addAll(list.where((element) => !filterResult.contains(element)));
+      }
+    });
 
-      availableSubCategoryMap.forEach((key, value) {
-        if(product.subcategoryName !=null && key!=null) {
-          if (product.subcategoryName == key && value) {
-            bool check = newFilterList.any((item) =>
-            item.productID == product.productID);
-            if (!check) {
-              newFilterList.add(product);
-            }
-          }
-        }
-      });
-
-      availableCollectionMap.forEach((key, value) {
-        if(product.collectionName !=null && key!=null) {
-          if (product.collectionName == key && value) {
-            bool check = newFilterList.any((item) =>
-            item.productID == product.productID);
-            if (!check) {
-              newFilterList.add(product);
-            }
-          }
-        }
-      });
-
-      availableGoldPurityMap.forEach((key, value) {
-        if(product.purityName !=null && key!=null) {
-          if (product.purityName == key && value) {
-            bool check = newFilterList.any((item) =>
-            item.productID == product.productID);
-            if (!check) {
-              newFilterList.add(product);
-            }
-          }
-        }
-      });
-
+    if(filterResult.length>0) {
+      newFilterList.clear();
+      newFilterList.addAll(filterResult.where((element) => !newFilterList.contains(element)));
+      filterResult.clear();
     }
+    availableSubCategoryMap.forEach((key, value) {
+      if(value){
+         //newFilterList.removeWhere((element) => (element.subcategoryName??"")!=key);
+         final list=newFilterList.where((element) => (element.subcategoryName??"")==key).toList();
+         filterResult.addAll(list.where((element) => !filterResult.contains(element)));
+      }
+    });
+
+    if(filterResult.length>0) {
+      newFilterList.clear();
+      newFilterList.addAll(filterResult.where((element) => !newFilterList.contains(element)));
+      filterResult.clear();
+    }
+
+    availableCollectionMap.forEach((key, value) {
+      if(value){
+        // newFilterList.removeWhere((element) => (element.collectionName??"")!=key);
+         final list=newFilterList.where((element) => (element.collectionName??"")==key).toList();
+         filterResult.addAll(list.where((element) => !filterResult.contains(element)));
+      }
+    });
+
+    if(filterResult.length>0) {
+      newFilterList.clear();
+      newFilterList.addAll(filterResult.where((element) => !newFilterList.contains(element)));
+      filterResult.clear();
+    }
+
+    availableGoldPurityMap.forEach((key, value) {
+      if(value){
+        //newFilterList.removeWhere((element) => (element.purityName??"")!=key);
+         final list =newFilterList.where((element) => (element.purityName??"")==key).toList();
+         filterResult.addAll(list.where((element) => !filterResult.contains(element)));
+      }
+    });
+
+    if(filterResult.length>0) {
+      newFilterList.clear();
+      newFilterList.addAll(filterResult.where((element) => !newFilterList.contains(element)));
+      filterResult.clear();
+    }
+
+    /*newFilterList.clear();
+    filterResult.forEach((element) {
+       if(!newFilterList.contains(element)){
+          newFilterList.add(element);
+       }
+    });*/
 
     productbyCategoryList=newFilterList;
     notifyListeners();

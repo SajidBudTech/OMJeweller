@@ -26,7 +26,7 @@ class SimilarProductPage extends StatefulWidget {
   }) : super(key: key);
 
 
-  int categoryId;
+  var categoryId;
 
   @override
   _SimilarProductPageState createState() => _SimilarProductPageState();

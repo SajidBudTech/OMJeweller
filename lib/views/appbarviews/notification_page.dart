@@ -153,7 +153,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 ),
               ));
     }else{
-      pageBody=UnauthenticatedPage();
+      pageBody=Scaffold(body:UnauthenticatedPage());
     }
     return pageBody;
     //);

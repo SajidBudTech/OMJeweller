@@ -39,7 +39,7 @@ class ProductPageHeader extends StatelessWidget {
                     errorWidget: (context, url, error) =>
                         Icon(Icons.error),
                     height: (AppSizes.getScreenheight(context)*0.55),
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.fill,
                     width: double.infinity,
                   ),
                   /*Image.asset(

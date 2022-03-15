@@ -14,7 +14,7 @@ import 'package:flutter_om_jeweller/constants/string/auth.string.dart';
 
 class ProductRepository extends HttpService {
   //get vendors from server base on the type
-  Future<List<Product>> getProductByCategories({int userID,int categoryId}) async {
+  Future<List<Product>> getProductByCategories({int userID,var categoryId}) async {
     List<Product> products = [];
 
     //make http call for vendors data

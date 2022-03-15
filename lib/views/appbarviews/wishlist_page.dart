@@ -137,7 +137,7 @@ class _WishlistPageState extends State<WishlistPage> {
                     ),
                   )));
     }else{
-      pageBody=UnauthenticatedPage();
+      pageBody=Scaffold(body:UnauthenticatedPage());
     }
     return pageBody;
     //);

@@ -125,14 +125,14 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                     imageUrl: Api.downloadUrlPath +
                                         model.advertismentBanners[0].bannerImage,
                                     placeholder: (context, url) => Container(
-                                      height: 178,
+                                      height: 260,
                                       child: Center(
                                         child: CircularProgressIndicator(),
                                       ),
                                     ),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
-                                    height: 178,
+                                    height: 260,
                                     fit: BoxFit.fill,
                                     width: double.infinity,
                                   ),
@@ -567,14 +567,14 @@ class _AdvertismentSliderPageState extends State<AdvertismentSliderPage> {
                                         model
                                             .advertismentBanners[5].bannerImage,
                                     placeholder: (context, url) => Container(
-                                      height: 178,
+                                      height: 260,
                                       child: Center(
                                         child: CircularProgressIndicator(),
                                       ),
                                     ),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
-                                    height: 178,
+                                    height: 260,
                                     fit: BoxFit.fill,
                                     width: double.infinity,
                                   ),

@@ -50,8 +50,9 @@ class _BannerSliderState extends State<BannerSlider> {
                 items: _getImageSliders(model.scrollingBanners),
                 options: CarouselOptions(
                   autoPlay: true,
+                  height: 186,
                   enlargeCenterPage: false,
-                  aspectRatio: 2.4,
+                  //aspectRatio: 2.4,
                   viewportFraction: 1,
                   onPageChanged: (index, reason) {
                     setState(() {
@@ -101,7 +102,7 @@ class _BannerSliderState extends State<BannerSlider> {
             onTap: () => widget.onBannerTapped(banner),
             child: CachedNetworkImage(
               imageUrl: Api.downloadUrlPath+banner.bannerImage,
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
               width: MediaQuery.of(context).size.width,
             ),
           ),

@@ -2,11 +2,11 @@ import 'package:intl/intl.dart';
 
 class NotificationData {
   int id;
-  int userId;
+  var userId;
   String sendBy;
   String title;
   String notification;
-  int status;
+  var status;
   String createdAt;
   String updatedAt;
 

@@ -109,7 +109,7 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
               Stack(
               children: <Widget>[
                 CachedNetworkImage(
-                  imageUrl: Api.ProductdownloadUrlPath + (widget.product.productImage==null?"":widget.product.productImage),
+                  imageUrl: Api.ProductdownloadUrlPath + (widget.product.productImage==null?widget.product.featureImage:widget.product.productImage),
                   placeholder: (context, url) => Container(
                     height: ((AppSizes.getScreenWidth(context)/2)-50)+(((AppSizes.getScreenWidth(context)/2)-50)*0.15),
                     child: Center(
@@ -118,7 +118,7 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
                   ),
                   errorWidget: (context, url, error) =>Padding(padding: AppPaddings.mediumButtonPadding(),child:Image.asset(AppImages.defaultPlaceHolder,fit: BoxFit.contain,)),
                   height: ((AppSizes.getScreenWidth(context)/2)-50)+(((AppSizes.getScreenWidth(context)/2)-50)*0.15),
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.fill,
                   width: double.infinity,
                 ),
               Align(
@@ -163,7 +163,7 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
                     Text(
                       (widget.product.collectionName==null?"":(widget.product.collectionName+" Collection")),
                       style: AppTextStyle.h7TitleTextStyle(
-                        color: AppColor.hintTextColor(context),
+                        color: AppColor.textColor(context),
                         fontWeight: FontWeight.w400,
                       ),
                       textDirection: AppTextDirection.defaultDirection,
@@ -271,7 +271,7 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
     );
   }
 
-  String getProductPrice() {
+  /*String getProductPrice() {
     double totalAmount=0;
 
     double calculatedTotalAmount=0;
@@ -314,6 +314,58 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
       totalAmount=price+tax;
 
     }
+
+
+    return format.format(totalAmount.toInt());
+
+  }*/
+
+  String getProductPrice() {
+    double totalAmount=0;
+
+    double calculatedTotalAmount=0;
+    double calculatedTotalWieght=0;
+
+
+    for(Productattributes productattributes in widget.product.productattributes){
+      calculatedTotalAmount=calculatedTotalAmount+double.parse(productattributes.diamondamount??"0");
+    }
+    for(Productattributes productattributes in widget.product.productattributes){
+      calculatedTotalWieght=calculatedTotalWieght+double.parse(productattributes.diamondweight??"0");
+    }
+
+    if(int.tryParse(widget.product.productType??"0")==1){
+      double makingCharges=double.parse(widget.product.purityPrice??"0")*((double.parse(widget.product.makingwastage??"0"))/100);
+      double price=((makingCharges+double.parse(widget.product.purityPrice??"0"))*(double.parse(widget.product.netweight)))+double.parse(widget.product.stonecharges??"0");
+      //double tax=price*((widget.product.taxValue??0)/100);
+      double tax=price*((double.parse(widget.product.taxValue??"0"))/100);
+      totalAmount=price+tax;
+    }else if(int.tryParse(widget.product.productType??"0")==2){
+
+      double price=(((double.parse(widget.product.makingcost??"0")+double.parse(widget.product.purityPrice??"0"))*(double.parse(widget.product.netweight))))+(double.parse(widget.product.stonecharges??"0"))+calculatedTotalAmount;
+      double tax=price*((double.parse(widget.product.taxValue??"0"))/100);
+
+      totalAmount=price+tax;
+
+    }else if(int.tryParse(widget.product.productType??"0")==3){
+      double platinumAmount=(double.parse(widget.product.platiniummaking??"0")+widget.platinumRate)*(double.parse(widget.product.platiniumweight??"0"));
+
+      double price=((double.parse(widget.product.makingcost??"0")+double.parse(widget.product.purityPrice??"0"))*(double.parse(widget.product.netweight)))+platinumAmount+(double.parse(widget.product.stonecharges??"0"))+calculatedTotalAmount;
+      //double tax=price*((widget.product.taxValue??0)/100);
+      double tax=price*((double.parse(widget.product.taxValue??"0"))/100);
+      totalAmount=price+tax;
+
+    }else if(int.tryParse(widget.product.productType??"0")==4){
+      double polkiAmount =(double.parse(widget.product.polkiamount??"0"))*(double.parse(widget.product.polkiweight??"0"));
+
+      double price=((double.parse(widget.product.makingcost??"0")+double.parse(widget.product.purityPrice??"0"))*(double.parse(widget.product.netweight)))+polkiAmount+(double.parse(widget.product.stonecharges??"0"))+calculatedTotalAmount;
+      //double tax=price*((widget.product.taxValue??0)/100);
+      double tax=price*((double.parse(widget.product.taxValue??"0"))/100);
+      totalAmount=price+tax;
+
+    }
+
+    widget.product.productPrice=totalAmount.toInt();
 
 
     return format.format(totalAmount.toInt());

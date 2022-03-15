@@ -139,6 +139,9 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                                             top: 0,
                                             bottom: 0,
                                             labelText: "Phone Number",
+                                            labelTextStyle: AppTextStyle.h5TitleTextStyle(
+                                                color: AppColor.textColor(context)
+                                            ),
                                             isReadOnly: true,
                                             keyboardType: TextInputType.phone,
                                             textStyle: AppTextStyle
@@ -169,6 +172,9 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                                               top: 0,
                                               bottom: 0,
                                               labelText: "Name",
+                                              labelTextStyle: AppTextStyle.h5TitleTextStyle(
+                                                  color: AppColor.textColor(context)
+                                              ),
                                               keyboardType: TextInputType.name,
                                               textStyle: AppTextStyle
                                                   .h4TitleTextStyle(
@@ -333,6 +339,9 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                                               top: 0,
                                               bottom: 0,
                                               labelText: "Email",
+                                              labelTextStyle: AppTextStyle.h5TitleTextStyle(
+                                                  color: AppColor.textColor(context)
+                                              ),
                                               keyboardType: TextInputType
                                                   .emailAddress,
                                               textStyle: AppTextStyle
@@ -422,15 +431,29 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                 ),
               )));
     }else{
-      pageBody=UnauthenticatedPage();
+      pageBody=Scaffold(body: UnauthenticatedPage());
     }
     return pageBody;
     //);
   }
 
+
   Widget getDOBWidget() {
-    return Column(
-        children:[
+    return InkWell(
+        onTap: () => showDatePicker(
+            context: context,
+            initialDate:
+            _datetimeDOB == null ? DateTime.now() : _datetimeDOB,
+            firstDate: DateTime(1901, 01, 01),
+            lastDate: DateTime.now())
+            .then((date) {
+          if (date != null) {
+            setState(() {
+              _datetimeDOB = date;
+            });
+          }
+        }),
+        child: Column(children: [
           Container(
             height: AppSizes.inputHeight,
             padding: EdgeInsets.fromLTRB(0, 5, 20, 5),
@@ -441,7 +464,7 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                     child: Text(
                       _datetimeDOB == null
                           ? AuthStrings.registerDOB
-                          : DateFormat('yyyy-MM-dd').format(_datetimeDOB),
+                          : DateFormat('dd/MM/yyyy').format(_datetimeDOB),
                       style: AppTextStyle.h4TitleTextStyle(
                         color: AppColor.textColor(context),
                       ),
@@ -457,11 +480,13 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                     ),
                     onPressed: () => showDatePicker(
                         context: context,
-                        initialDate: _datetimeDOB == null ? DateTime.now() : _datetimeDOB,
-                        firstDate: DateTime(1921),
-                        lastDate: DateTime(2022))
+                        initialDate: _datetimeDOB == null
+                            ? DateTime.now()
+                            : _datetimeDOB,
+                        firstDate: DateTime(1901,01,01),
+                        lastDate: DateTime.now())
                         .then((date) {
-                      if(date!=null) {
+                      if (date != null) {
                         setState(() {
                           _datetimeDOB = date;
                         });
@@ -472,13 +497,29 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
               ],
             ),
           ),
-          UiSpacer.divider(thickness: 0.5,color: AppColor.hintTextColor(context))
-        ]);
+          UiSpacer.divider(
+              thickness: 0.5, color: AppColor.hintTextColor(context))
+        ]));
   }
 
+
   Widget getAnniversaryWidget() {
-    return Column(
-        children:[
+    return InkWell(
+        onTap: () => showDatePicker(
+            context: context,
+            initialDate: _datetimeAnniversary == null
+                ? DateTime.now()
+                : _datetimeAnniversary,
+            firstDate: DateTime(1921,01,01),
+            lastDate: DateTime.now())
+            .then((date) {
+          if (date != null) {
+            setState(() {
+              _datetimeAnniversary = date;
+            });
+          }
+        }),
+        child: Column(children: [
           Container(
             height: AppSizes.inputHeight,
             padding: EdgeInsets.fromLTRB(0, 5, 20, 5),
@@ -489,7 +530,8 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                     child: Text(
                       _datetimeAnniversary == null
                           ? AuthStrings.anniversaryDate
-                          : DateFormat('yyyy-MM-dd').format(_datetimeAnniversary),
+                          : DateFormat('dd/MM/yyyy')
+                          .format(_datetimeAnniversary),
                       style: AppTextStyle.h4TitleTextStyle(
                         color: AppColor.textColor(context),
                       ),
@@ -505,11 +547,13 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                     ),
                     onPressed: () => showDatePicker(
                         context: context,
-                        initialDate: _datetimeAnniversary == null ? DateTime.now() : _datetimeAnniversary,
-                        firstDate: DateTime(1921),
-                        lastDate: DateTime(2022))
+                        initialDate: _datetimeAnniversary == null
+                            ? DateTime.now()
+                            : _datetimeAnniversary,
+                        firstDate: DateTime(1921,01,01),
+                        lastDate: DateTime.now())
                         .then((date) {
-                      if(date!=null) {
+                      if (date != null) {
                         setState(() {
                           _datetimeAnniversary = date;
                         });
@@ -520,7 +564,8 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
               ],
             ),
           ),
-          UiSpacer.divider(thickness: 0.5,color: AppColor.hintTextColor(context))
-        ]);
+          UiSpacer.divider(
+              thickness: 0.5, color: AppColor.hintTextColor(context))
+        ]));
   }
 }

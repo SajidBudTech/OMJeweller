@@ -94,7 +94,7 @@ class _MyAppointmentPageState extends State<MyAppointmentListPage> {
                     ),
                   )));
     }else{
-      pageBody=UnauthenticatedPage();
+      pageBody=Scaffold(body: UnauthenticatedPage());
     }
     return pageBody;
     //);

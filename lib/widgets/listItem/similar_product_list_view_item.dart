@@ -107,7 +107,7 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
                                   ),
                                   errorWidget: (context, url, error) =>Padding(padding: AppPaddings.mediumButtonPadding(),child:Image.asset(AppImages.defaultPlaceHolder,fit: BoxFit.contain,)),
                                   height: 181,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fill,
                                   width: (AppSizes.getScreenWidth(context)/2)-50,
                                 ),
                                /* Align(
@@ -212,7 +212,7 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
     // );
   }
 
-  String getProductPrice() {
+ /* String getProductPrice() {
     double totalAmount=0;
 
     double calculatedTotalAmount=0;
@@ -259,6 +259,58 @@ class _SimilarProdcutListViewItemState extends State<SimilarProdcutListViewItem>
 
     return  format.format(totalAmount.toInt());
 
+  }*/
+  String getProductPrice() {
+    double totalAmount=0;
+
+    double calculatedTotalAmount=0;
+    double calculatedTotalWieght=0;
+
+
+    for(Productattributes productattributes in widget.product.productattributes){
+      calculatedTotalAmount=calculatedTotalAmount+double.parse(productattributes.diamondamount??"0");
+    }
+    for(Productattributes productattributes in widget.product.productattributes){
+      calculatedTotalWieght=calculatedTotalWieght+double.parse(productattributes.diamondweight??"0");
+    }
+
+    if(int.tryParse(widget.product.productType??"0")==1){
+      double makingCharges=double.parse(widget.product.purityPrice??"0")*((double.parse(widget.product.makingwastage??"0"))/100);
+      double price=((makingCharges+double.parse(widget.product.purityPrice??"0"))*(double.parse(widget.product.netweight)))+double.parse(widget.product.stonecharges??"0");
+      //double tax=price*((widget.product.taxValue??0)/100);
+      double tax=price*((double.parse(widget.product.taxValue??"0"))/100);
+      totalAmount=price+tax;
+    }else if(int.tryParse(widget.product.productType??"0")==2){
+
+      double price=(((double.parse(widget.product.makingcost??"0")+double.parse(widget.product.purityPrice??"0"))*(double.parse(widget.product.netweight))))+(double.parse(widget.product.stonecharges??"0"))+calculatedTotalAmount;
+      double tax=price*((double.parse(widget.product.taxValue??"0"))/100);
+
+      totalAmount=price+tax;
+
+    }else if(int.tryParse(widget.product.productType??"0")==3){
+      double platinumAmount=(double.parse(widget.product.platiniummaking??"0")+widget.platinumRate)*(double.parse(widget.product.platiniumweight??"0"));
+
+      double price=((double.parse(widget.product.makingcost??"0")+double.parse(widget.product.purityPrice??"0"))*(double.parse(widget.product.netweight)))+platinumAmount+(double.parse(widget.product.stonecharges??"0"))+calculatedTotalAmount;
+      //double tax=price*((widget.product.taxValue??0)/100);
+      double tax=price*((double.parse(widget.product.taxValue??"0"))/100);
+      totalAmount=price+tax;
+
+    }else if(int.tryParse(widget.product.productType??"0")==4){
+      double polkiAmount =(double.parse(widget.product.polkiamount??"0"))*(double.parse(widget.product.polkiweight??"0"));
+
+      double price=((double.parse(widget.product.makingcost??"0")+double.parse(widget.product.purityPrice??"0"))*(double.parse(widget.product.netweight)))+polkiAmount+(double.parse(widget.product.stonecharges??"0"))+calculatedTotalAmount;
+      //double tax=price*((widget.product.taxValue??0)/100);
+      double tax=price*((double.parse(widget.product.taxValue??"0"))/100);
+      totalAmount=price+tax;
+
+    }
+
+    widget.product.productPrice=totalAmount.toInt();
+
+
+    return format.format(totalAmount.toInt());
+
   }
+
 
 }

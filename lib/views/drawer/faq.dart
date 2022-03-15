@@ -73,7 +73,7 @@ class _FAQPageState extends State<FAQPage> {
                 body: Container(
                   child: SafeArea(
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        //crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
                             child: LeadingAppBar(

@@ -2,7 +2,7 @@ class Collection{
   int collectionID;
   String collectionName;
   String collectionImage;
-  int collectionStatus;
+  var collectionStatus;
   String createdAt;
   String updatedAt;
   Collection(

@@ -2,7 +2,7 @@ class GoldRate{
   int purityID;
   String purityName;
   String purityPrice;
-  int purityStatus;
+  var purityStatus;
   String createdAt;
   String updatedAt;
 

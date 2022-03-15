@@ -56,7 +56,7 @@ class LeadingAppBar extends PreferredSize {
                     child: Text(
                     subTitle,
                     style: AppTextStyle.h5TitleTextStyle(
-                        color: AppColor.hintTextColor(context),
+                        color: AppColor.textColor(context),
                     ),
                     textAlign: TextAlign.start,
                     textDirection: AppTextDirection.defaultDirection,

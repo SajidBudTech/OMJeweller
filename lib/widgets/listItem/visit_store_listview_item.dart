@@ -142,7 +142,7 @@ class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
              Text(
                  widget.address,
                 style: AppTextStyle.h5TitleTextStyle(
-                  color: AppColor.hintTextColor(context),
+                  color: AppColor.textColor(context),
                   fontWeight: FontWeight.w400
                 ),
                 textDirection: AppTextDirection.defaultDirection,
@@ -155,7 +155,7 @@ class _VisitStoreListViewItemState extends State<VisitStoreListViewItem> {
                   Text(
                     "Phone No: ",
                     style: AppTextStyle.h5TitleTextStyle(
-                        color: AppColor.hintTextColor(context),
+                        color: AppColor.textColor(context),
                         fontWeight: FontWeight.w400
                     ),
                     textDirection: AppTextDirection.defaultDirection,

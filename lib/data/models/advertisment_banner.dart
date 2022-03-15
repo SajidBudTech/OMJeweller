@@ -3,7 +3,7 @@ class AdvertismentBanner{
   String bannertype;
   String bannerUrl;
   String bannerImage;
-  int bannerStatus;
+  var bannerStatus;
   String createdAt;
   String updatedAt;
 

@@ -103,7 +103,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                           ? ""
                           : _appointmentBloc.userName),
                       style: AppTextStyle.h4TitleTextStyle(
-                          color: AppColor.hintTextColor(context),
+                          color: AppColor.textColor(context),
                           fontWeight: FontWeight.w400
                       ),
                       textAlign: TextAlign.start,

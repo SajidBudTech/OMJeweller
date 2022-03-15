@@ -1,9 +1,9 @@
 class Subcategory {
   int subcategoryID;
-  int categoryID;
+  var categoryID;
   String subcategoryName;
   String subcategoryImage;
-  int subcategoryStatus;
+  var subcategoryStatus;
   String createdAt;
   String updatedAt;
 

@@ -115,13 +115,14 @@ class AppExpansionTileState extends State<AppExpansionTile> with SingleTickerPro
       ),
       child: new Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           IconTheme.merge(
             data: new IconThemeData(color: _iconColor.evaluate(_easeInAnimation)),
             child: new ListTile(
               onTap: toggle,
               leading: widget.leading,
-              contentPadding: widget.contentPadding??EdgeInsets.only(left: 16,right: 8),
+              contentPadding: widget.contentPadding??EdgeInsets.only(left: 16,right: 0),
               title: new DefaultTextStyle(
                 style: Theme
                     .of(context)
@@ -133,6 +134,7 @@ class AppExpansionTileState extends State<AppExpansionTile> with SingleTickerPro
               ),
               trailing: widget.trailing ?? new RotationTransition(
                 turns: _iconTurns,
+                //alignment: Alignment.topLeft,
                 //child: const Icon(Icons.expand_more),
                 child: widget.rotateWidget ?? SvgPicture.asset('assets/images/expand_more.svg')
               ),

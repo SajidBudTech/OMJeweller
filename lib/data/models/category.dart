@@ -3,8 +3,8 @@ class Category{
   int categoryID;
   String categoryName;
   String categoryImage;
-  int categoryStatus;
-  int productCount;
+  var categoryStatus;
+  var productCount;
   String createdAt;
   String updatedAt;
   List<Subcategory> subcategory;

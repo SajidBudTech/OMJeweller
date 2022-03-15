@@ -446,7 +446,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
               ))
       );
     }else{
-      pageBody=UnauthenticatedPage();
+      pageBody=Scaffold(body: UnauthenticatedPage());
     }
     return pageBody;
   }

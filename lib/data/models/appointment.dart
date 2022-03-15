@@ -1,6 +1,6 @@
 class Appointment{
   int id;
-  int userId;
+  var userId;
   String appointmentType;
   String appointmentDetail;
   String appointmentDate;

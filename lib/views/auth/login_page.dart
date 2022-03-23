@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         UiSpacer.verticalSpace(space: 9),
                             Text(
-                              "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                              "We will send you confirmation code.",
                               style: AppTextStyle.h4TitleTextStyle(
                                 color: AppColor.hintTextColor(context),
                                   fontWeight: FontWeight.w400

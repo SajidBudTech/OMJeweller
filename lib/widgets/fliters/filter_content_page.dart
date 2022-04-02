@@ -59,8 +59,8 @@ class _FilterProductPageState extends State<FilterProductPage> {
       if(product.subcategoryName!=null && product.subcategoryName!="") {
         availableSubCategory.add(product.subcategoryName);
       }
-      if(product.collectionName!=null && product.collectionName!="") {
-        availableCollection.add(product.collectionName);
+      if(product.collection_Name!=null && product.collection_Name!="") {
+        availableCollection.add(product.collection_Name);
       }
       if(product.purityName!=null && product.purityName!="") {
         availableGoldPurity.add(product.purityName);
@@ -151,7 +151,7 @@ class _FilterProductPageState extends State<FilterProductPage> {
                     contentScrollAxis: Axis.vertical,
                     changePageDuration: Duration(milliseconds: 500),
                     tabs: <Tab>[
-                      Tab(
+                      /*Tab(
                           child:
                           Text(
                         'Category',
@@ -170,7 +170,7 @@ class _FilterProductPageState extends State<FilterProductPage> {
                             fontWeight: FontWeight.w500),
                         textAlign: TextAlign.start,
                         textDirection: AppTextDirection.defaultDirection,
-                      )),
+                      )),*/
                       Tab(child:  Text(
                         'Collection',
                         style: AppTextStyle.h4TitleTextStyle(
@@ -206,8 +206,8 @@ class _FilterProductPageState extends State<FilterProductPage> {
                       )),*/
                     ],
                     contents: <Widget>[
-                      tabsContent('Categories',widget.model.availableCategoryMap),
-                      tabsContent('Sub Categories',widget.model.availableSubCategoryMap),
+                     // tabsContent('Categories',widget.model.availableCategoryMap),
+                    //  tabsContent('Sub Categories',widget.model.availableSubCategoryMap),
                       tabsContent('Collections',widget.model.availableCollectionMap),
                       tabsContent('Gold Purity',widget.model.availableGoldPurityMap),
                     ],
@@ -291,6 +291,8 @@ class _FilterProductPageState extends State<FilterProductPage> {
                 return new CheckboxListTile(
                   title: new Text(key??""),
                   value: items[key],
+                  dense: true,
+                  contentPadding: EdgeInsets.only(left: 4),
                   activeColor: AppColor.accentColor,
                   checkColor: Colors.white,
                   onChanged: (bool value) {

@@ -4,6 +4,7 @@ import 'package:flutter_om_jeweller/data/models/api_response.dart';
 import 'package:flutter_om_jeweller/data/models/category.dart';
 import 'package:flutter_om_jeweller/data/models/collection.dart';
 import 'package:flutter_om_jeweller/data/models/gold_rate.dart';
+import 'package:flutter_om_jeweller/data/models/new_category.dart';
 import 'package:flutter_om_jeweller/services/http.service.dart';
 import 'package:flutter_om_jeweller/utils/api_response.utils.dart';
 import 'package:flutter_om_jeweller/data/models/advertisment_banner.dart';
@@ -31,6 +32,31 @@ class HomePageRepository extends HttpService {
     (apiResponse.body['data'] as List).forEach((categoryJSONObject) {
       //vendor data
       categories.add(Category.fromJson(categoryJSONObject));
+
+    });
+
+    return categories;
+
+  }
+
+  Future<List<NewCategory>> getNewCategories() async {
+    List<NewCategory> categories = [];
+
+    //make http call for vendors data
+    final apiResult = await post(Api.newcategories,{});
+
+    // print("Api result ==> ${apiResult.data}");
+    //format the resposne
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+    if (!apiResponse.allGood) {
+      throw apiResponse.errors;
+    }
+
+    // print("About to collect");
+    //convert the data to list of category model
+    (apiResponse.body['data'] as List).forEach((categoryJSONObject) {
+      //vendor data
+      categories.add(NewCategory.fromJson(categoryJSONObject));
 
     });
 

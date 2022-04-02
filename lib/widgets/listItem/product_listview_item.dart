@@ -163,8 +163,8 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
                                                 fontWeight: FontWeight.w500,
                                                 color: AppColor.textColor(context),
                                               ),
-                                              maxLines: 2,
-                                             // overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               textDirection: AppTextDirection.defaultDirection,
                                             ))
                                     ),
@@ -209,13 +209,14 @@ class _ProductListViewItemState extends State<ProductListViewItem> {
 
                                 //product types and minimum order amount
                                 Text(
-                                  (widget.product.collectionName==null?"":(widget.product.collectionName+" Collection")),
+                                  (widget.product.collection_Name==null?"":(widget.product.collection_Name+" Collection")),
                                   style: AppTextStyle.h7TitleTextStyle(
                                     color: AppColor.textColor(context),
                                     fontWeight: FontWeight.w400,
                                   ),
-                                  textDirection: AppTextDirection.defaultDirection,
+                                  maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
+                                  textDirection: AppTextDirection.defaultDirection,
                                 ),
                                 Text(
                                   getProductPrice(),

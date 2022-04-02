@@ -27,6 +27,7 @@ class Product{
   String updatedAt;
   var categoryID;
   String categoryName;
+
   String categoryImage;
   var categoryStatus;
   var subcategoryID;
@@ -35,6 +36,7 @@ class Product{
   var subcategoryStatus;
   var collectionID;
   String collectionName;
+  String collection_Name;
   String collectionImage;
   var collectionStatus;
   var purityID;
@@ -94,6 +96,7 @@ class Product{
         this.subcategoryStatus,
         this.collectionID,
         this.collectionName,
+        this.collection_Name,
         this.collectionImage,
         this.collectionStatus,
         this.purityID,
@@ -150,6 +153,7 @@ class Product{
     subcategoryStatus = json['subcategoryStatus'];
     collectionID = json['collectionID'];
     collectionName = json['collectionName'];
+    collection_Name = json['collection_name'];
     collectionImage = json['collectionImage'];
     collectionStatus = json['collectionStatus'];
     purityID = json['purityID'];

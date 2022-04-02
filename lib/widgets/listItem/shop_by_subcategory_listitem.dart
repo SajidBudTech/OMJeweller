@@ -9,8 +9,8 @@ import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/data/models/category.dart';
-import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/data/models/subcategory.dart';
+import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/data/models/page_arguments.dart';
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/data/models/category.dart';
 import 'package:flutter_om_jeweller/data/models/collection.dart';
+import 'package:flutter_om_jeweller/data/models/new_category.dart';
 import 'package:flutter_om_jeweller/data/models/wishlist_data.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/repositories/home.repository.dart';
@@ -27,6 +28,8 @@ class MainHomeViewModel extends MyBaseViewModel {
   int listingStyle = 2;
 
   List<Category> categories = [];
+
+  List<NewCategory> newCategories = [];
 
   List<Collection> collections = [];
   List<Product> newArrivalList = [];
@@ -88,6 +91,29 @@ class MainHomeViewModel extends MyBaseViewModel {
       categoriesLoadingState = LoadingState.Failed;
       notifyListeners();
     }
+  }
+
+
+  void getNewCategories() async {
+    //add null data so listener can show shimmer widget to indicate loading
+    categoriesLoadingState = LoadingState.Loading;
+    notifyListeners();
+
+    try {
+
+      newCategories = await _homePageRepository.getNewCategories();
+      /*allcategories.forEach((element) {
+        if(int.parse(element.productCount??"0") > 0 && element.subcategory.length>0){
+          categories.add(element);
+        }
+      });*/
+      categoriesLoadingState = LoadingState.Done;
+      notifyListeners();
+    } catch (error) {
+      categoriesLoadingState = LoadingState.Failed;
+      notifyListeners();
+    }
+
   }
 
   void getCollection() async {

@@ -137,7 +137,7 @@ class ProductPageViewModel extends MyBaseViewModel {
     notifyListeners();
     final int userId=AuthBloc.getUserID();
     try {
-      productbyCategoryList = await _productRepository.getProductByCollection(userID: userId,collectionId: collection.collectionID);
+      productbyCategoryList = await _productRepository.getProductByCollection(userID: userId,collectionId: collection.addCollectionId);
       productByCategoryLoadingState = LoadingState.Done;
       productFilterList=productbyCategoryList;
       notifyListeners();
@@ -246,7 +246,7 @@ class ProductPageViewModel extends MyBaseViewModel {
     newFilterList.addAll(productFilterList);
     List<Product> filterResult=[];
 
-    availableCategoryMap.forEach((key, value) {
+    /*availableCategoryMap.forEach((key, value) {
       if(value){
          //newFilterList.removeWhere((element) => (element.categoryName??"")!=key);
          final list=newFilterList.where((element) => (element.categoryName??"")==key).toList();
@@ -271,12 +271,12 @@ class ProductPageViewModel extends MyBaseViewModel {
       newFilterList.clear();
       newFilterList.addAll(filterResult.where((element) => !newFilterList.contains(element)));
       filterResult.clear();
-    }
+    }*/
 
     availableCollectionMap.forEach((key, value) {
       if(value){
         // newFilterList.removeWhere((element) => (element.collectionName??"")!=key);
-         final list=newFilterList.where((element) => (element.collectionName??"")==key).toList();
+         final list=newFilterList.where((element) => (element.collection_Name??"")==key).toList();
          filterResult.addAll(list.where((element) => !filterResult.contains(element)));
       }
     });
@@ -322,6 +322,7 @@ class ProductPageViewModel extends MyBaseViewModel {
 
      productbyCategoryList=productFilterList;
      notifyListeners();
+
   }
 
   @override

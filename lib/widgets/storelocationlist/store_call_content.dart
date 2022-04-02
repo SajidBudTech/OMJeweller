@@ -82,7 +82,7 @@ class _StoreCallContentState extends State<StoreCallContent> {
                       actionButtonStyle: AppTextStyle.h4TitleTextStyle(
                         color: Colors.red,
                       ),
-                      actionFunction: model.getCategories,
+                      actionFunction: model.getStoreVisitData,
                     ),
                   )
                       : ListView.separated(

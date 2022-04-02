@@ -13,20 +13,10 @@ import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
-import 'package:flutter_om_jeweller/widgets/appbars/empty_appbar.dart';
-import 'package:flutter_om_jeweller/widgets/appbars/leading_app_bar.dart';
-import 'package:flutter_om_jeweller/widgets/buttons/custom_button.dart';
-import 'package:flutter_om_jeweller/widgets/empty/empty_product.dart';
-import 'package:flutter_om_jeweller/widgets/empty/empty_wishlist.dart';
-import 'package:flutter_om_jeweller/widgets/inputs/textinput_edittext_textfield.dart';
-import 'package:flutter_om_jeweller/widgets/listItem/shop_by_product_listitem.dart';
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/shop_by_categories_listitem.dart';
-import 'package:flutter_om_jeweller/bloc/base.bloc.dart';
-import 'package:flutter_om_jeweller/constants/app_routes.dart';
-import 'package:flutter_om_jeweller/widgets/platform/platform_circular_progress_indicator.dart';
 
 
 class ProductCategoryPage extends StatefulWidget {
@@ -61,7 +51,7 @@ class _ProductCategoryPageState extends State<ProductCategoryPage> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainHomeViewModel>.reactive(
       viewModelBuilder: () => MainHomeViewModel(context),
-      onModelReady: (model) => model.getCategories(),
+      onModelReady: (model) => model.getNewCategories(),
       builder: (context, model, child) =>
           Scaffold(
             body: SingleChildScrollView(
@@ -89,20 +79,20 @@ class _ProductCategoryPageState extends State<ProductCategoryPage> {
                             actionButtonStyle: AppTextStyle.h4TitleTextStyle(
                               color: Colors.red,
                             ),
-                            actionFunction: model.getCategories,
+                            actionFunction: model.getNewCategories,
                           ),
                         )
                             : ListView.separated(
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           physics: ClampingScrollPhysics(),
-                          itemCount: model.categories.length,
+                          itemCount: model.newCategories.length,
                         //  padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
                           separatorBuilder: (context, index) =>
                               UiSpacer.horizontalSpace(space: 0),
                           itemBuilder: (context, index) {
                             return ShopByCategoryListViewItem(
-                              category: model.categories[index],
+                              category: model.newCategories[index],
                             );
                           },
                         ),

@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
+
 class Collection{
   int collectionID;
+  String addCollectionId;
   String collectionName;
   String collectionImage;
   var collectionStatus;
@@ -7,6 +10,7 @@ class Collection{
   String updatedAt;
   Collection(
       {this.collectionID,
+        this.addCollectionId,
         this.collectionName,
         this.collectionImage,
         this.collectionStatus,
@@ -15,6 +19,7 @@ class Collection{
 
   Collection.fromJson(Map<String, dynamic> json) {
     collectionID = json['collectionID'];
+    addCollectionId = json['add_collection_id'];
     collectionName = json['collectionName'];
     collectionImage = json['collectionImage'];
     collectionStatus = json['collectionStatus'];
@@ -26,6 +31,7 @@ class Collection{
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['collectionID'] = this.collectionID;
+    data['add_collection_id'] = this.addCollectionId;
     data['collectionName'] = this.collectionName;
     data['collectionImage'] = this.collectionImage;
     data['collectionStatus'] = this.collectionStatus;

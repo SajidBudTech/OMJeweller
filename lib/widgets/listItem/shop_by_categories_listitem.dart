@@ -5,13 +5,14 @@ import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
+import 'package:flutter_om_jeweller/data/models/new_category.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/data/models/category.dart';
 import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/shop_by_subcategory_listitem.dart';
 
 class ShopByCategoryListViewItem extends StatelessWidget {
-  final Category category;
+  final NewCategory category;
   //final Function(String) onPressed;
   const ShopByCategoryListViewItem({
     this.category,

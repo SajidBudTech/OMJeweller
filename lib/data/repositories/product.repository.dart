@@ -79,7 +79,7 @@ class ProductRepository extends HttpService {
 
   }
 
-  Future<List<Product>> getProductByCollection({int userID,int collectionId}) async {
+  Future<List<Product>> getProductByCollection({int userID,var collectionId}) async {
     List<Product> products = [];
 
     //make http call for vendors data

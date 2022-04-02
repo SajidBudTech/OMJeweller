@@ -234,8 +234,8 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
           ),
           UiSpacer.verticalSpace(space: 24),
           Visibility(
-              visible: (widget.product.productType == 3 ||
-                  widget.product.productType == 4),
+              visible: (widget.product.productType == "3" ||
+                  widget.product.productType == "4"),
               child: Column(
                 children: [
                   UiSpacer.divider(
@@ -257,8 +257,8 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                 ],
               )),
           Visibility(
-              visible: (widget.product.productType == 3 ||
-                  widget.product.productType == 4),
+              visible: (widget.product.productType == "3" ||
+                  widget.product.productType == "4"),
               child: Column(
                 children: [
                   Row(
@@ -288,7 +288,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                                   right: AppPaddings.contentPaddingSize,
                                   top: 12),
                               child: Text(
-                                 widget.product.productType == 3
+                                 widget.product.productType == "3"
                                     ? "950 Platinum"
                                     : widget.product.purityName,
                                 style: AppTextStyle.h5TitleTextStyle(
@@ -311,7 +311,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                                   right: AppPaddings.contentPaddingSize,
                                   top: 10),
                               child: Text(
-                                widget.product.productType==3?"Platinium Wt":"Polki Wt",
+                                widget.product.productType=="3"?"Platinium Wt":"Polki Wt",
                                 style: AppTextStyle.h5TitleTextStyle(
                                     color: AppColor.hintTextColor(context),
                                     fontWeight: FontWeight.w400),
@@ -327,7 +327,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                                   right: AppPaddings.contentPaddingSize,
                                   top: 10),
                               child: Text(
-                                widget.product.productType==3?(widget.product.platiniumweight??""):(widget.product.polkiweight??""),
+                                widget.product.productType=="3"?(widget.product.platiniumweight??""):(widget.product.polkiweight??""),
                                 style: AppTextStyle.h5TitleTextStyle(
                                     color: AppColor.textColor(context),
                                     fontWeight: FontWeight.w500),
@@ -338,7 +338,7 @@ class _ProductDetailsViewItemState extends State<ProductDetailsViewItem> {
                     ],
                   ),
                   Visibility(
-                    visible: widget.product.productType==3,
+                    visible: widget.product.productType=="3",
                   child:Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [

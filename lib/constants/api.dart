@@ -29,6 +29,7 @@ class Api {
   static const scrollingbanners = "/get_scrolling_banner";
   static const advertismentbanners = "/get_adevertisment_banner";
   static const categories = "/get_category";
+  static const newcategories = "/get_category_new";
   static const collections = "/get_collection";
   static const newArrival = "/new_arrival";
   static const omLive = "/get_videos";

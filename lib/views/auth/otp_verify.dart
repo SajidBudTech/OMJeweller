@@ -59,9 +59,10 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
   void initState() {
     super.initState();
     _otpBloc.user=widget.user;
-    Future.delayed(Duration.zero, () async {
+     print(widget.user.otp.toString());
+    /*Future.delayed(Duration.zero, () async {
       callShowOTP();
-    });
+    });*/
 
     //listen to the need to show a dialog alert or a normal snackbar alert type
     _otpBloc.showAlert.listen((show) {
@@ -81,12 +82,12 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
     _otpBloc.uiState.listen((uiState) async {
       if (uiState == UiState.redirect) {
         // await Navigator.popUntil(context, (route) => false);
-         Navigator.pushNamed(context, AppRoutes.homeRoute);
-        // Navigator.pushNamedAndRemoveUntil(
-        //   context,
-        //   AppRoutes.homeRoute,
-        //   (route) => false,
-        // );
+        // Navigator.pushNamed(context, AppRoutes.homeRoute);
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.homeRoute,
+          (route) => false,
+        );
       }
     });
   }
@@ -376,18 +377,15 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                                         ? () {
                                       if(widget.user.loginRegister){
                                         _otpBloc.processLogin(
-                                            mobile:
-                                            widget.user.cutomerMobile,
-                                            serverOTP:
-                                            _otpBloc.user.otp.toString());
+                                            mobile: widget.user.cutomerMobile,
+                                            serverOTP: _otpBloc.user.otp.toString());
                                       }else{
                                         _otpBloc.processRegister(
-                                            mobile:
-                                            widget.user.cutomerMobile,
-                                            serverOTP:
-                                            _otpBloc.user.otp.toString(),
-                                        name: widget.user.customerName,
-                                        email: widget.user.customerEmail);
+                                            mobile: widget.user.cutomerMobile,
+                                            serverOTP: _otpBloc.user.otp.toString(),
+                                            name: widget.user.customerName,
+                                            email: widget.user.customerEmail,
+                                        password: widget.user.customerPassword);
                                       }
                                           }
                                         : null,
@@ -425,18 +423,15 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
     if (code.length == 4) {
         if(widget.user.loginRegister){
           _otpBloc.processLogin(
-              mobile:
-              widget.user.cutomerMobile,
-              serverOTP:
-              _otpBloc.user.otp.toString());
+              mobile: widget.user.cutomerMobile,
+              serverOTP: _otpBloc.user.otp.toString());
         }else{
           _otpBloc.processRegister(
-              mobile:
-              widget.user.cutomerMobile,
-              serverOTP:
-              _otpBloc.user.otp.toString(),
+              mobile: widget.user.cutomerMobile,
+              serverOTP: _otpBloc.user.otp.toString(),
               name: widget.user.customerName,
-              email: widget.user.customerEmail);
+              email: widget.user.customerEmail,
+              password: widget.user.customerPassword);
         }
     }
   }

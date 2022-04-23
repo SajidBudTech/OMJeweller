@@ -3,7 +3,10 @@ import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/views/appbarviews/notification_page.dart';
 import 'package:flutter_om_jeweller/views/appbarviews/search_product.dart';
 import 'package:flutter_om_jeweller/views/appbarviews/wishlist_page.dart';
+import 'package:flutter_om_jeweller/views/auth/change_password.dart';
 import 'package:flutter_om_jeweller/views/auth/login_page.dart';
+import 'package:flutter_om_jeweller/views/auth/login_with_password.dart';
+import 'package:flutter_om_jeweller/views/auth/otp_forgotpassword.dart';
 import 'package:flutter_om_jeweller/views/auth/otp_verify.dart';
 import 'package:flutter_om_jeweller/views/auth/register_page.dart';
 import 'package:flutter_om_jeweller/views/bookappointment/confirmed_booking_page.dart';
@@ -36,9 +39,25 @@ Route<dynamic> generateRoute(RouteSettings settings) {
          user: settings.arguments,
         ),
       );
+    case AppRoutes.forgotOTPRoute:
+      return MaterialPageRoute(
+        builder: (context) => ForgotOTPPage(
+          user: settings.arguments,
+        ),
+      );
+    case AppRoutes.changePasswordRoute:
+      return MaterialPageRoute(
+        builder: (context) => ChangePasswordPage(
+          user: settings.arguments,
+        ),
+      );
     case AppRoutes.registerRoute:
       return MaterialPageRoute(builder: (context) => RegisterPage(
              user: settings.arguments,
+      ));
+    case AppRoutes.loginWithRoute:
+      return MaterialPageRoute(builder: (context) => LoginWithPassword(
+       user: settings.arguments,
       ));
 
     case AppRoutes.homeRoute:

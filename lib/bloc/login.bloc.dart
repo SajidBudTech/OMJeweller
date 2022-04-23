@@ -34,6 +34,7 @@ class LoginBloc extends BaseBloc {
   bool loginButtonStatus=false;
 
   bool OTP_OR_REGISTER=false;
+  bool LOGIN_OR_REGISTER=false;
 
   User user;
   @override
@@ -45,6 +46,50 @@ class LoginBloc extends BaseBloc {
   void initApp() async {
     // FirebaseApp defaultApp = await Firebase.initializeApp();
     //_firebaseAuth = FirebaseAuth.instanceFor(app: defaultApp);
+  }
+
+  void processForgotPassword({BuildContext context}) async {
+    final mobile = mobileNumberTEC.text;
+    //final password = passwordTEC.text;
+
+    //check if the user entered email & password are valid
+    if (validateMobileNumber(mobile)) {
+      //update ui state
+      setUiState(UiState.loading);
+      final resultDialogData = await _authRepository.forgotPassword(
+          mobile: mobile
+      );
+
+      //update ui state after operation
+      setUiState(UiState.done);
+
+      //checking if operation was successful before either showing an error or redirect to home page
+      if (resultDialogData.dialogType == DialogType.success) {
+        // setUiState(UiState.redirect);
+        /*if(resultDialogData.title!="go to registration"){
+          OTP_OR_REGISTER=true;
+          user.otp=int.parse(resultDialogData.title);
+          user.loginRegister=true;
+        }else{
+          OTP_OR_REGISTER=false;
+          user.loginRegister=false;
+        }*/
+        // goToVerifyOTP(context);
+        user=User.fromJson(resultDialogData.extraData);
+        user.otp=int.parse(resultDialogData.title);
+        print(resultDialogData.title);
+        Navigator.pushNamed(context, AppRoutes.forgotOTPRoute,arguments: user);
+       //setUiState(UiState.redirect);
+      } else {
+        //prepare the data model to be used to show the alert on the view
+        dialogData.title = resultDialogData.title;
+        dialogData.body = resultDialogData.body;
+        dialogData.backgroundColor = AppColor.failedColor;
+        dialogData.iconData = FlutterIcons.error_mdi;
+        //notify listners to show show alert
+        setShowAlert(true);
+      }
+    }
   }
 
   //process login when user tap on the login button
@@ -68,15 +113,90 @@ class LoginBloc extends BaseBloc {
        // setUiState(UiState.redirect);
         user=User();
         user.cutomerMobile=mobile;
-        if(resultDialogData.title!="go to registration"){
+        user.otp=int.parse(resultDialogData.title);
+        user.loginRegister=true;
+        OTP_OR_REGISTER=true;
+        print(resultDialogData.title);
+        /*if(resultDialogData.title!="go to registration"){
           OTP_OR_REGISTER=true;
           user.otp=int.parse(resultDialogData.title);
           user.loginRegister=true;
         }else{
           OTP_OR_REGISTER=false;
           user.loginRegister=false;
-        }
+        }*/
        // goToVerifyOTP(context);
+        setUiState(UiState.redirect);
+      } else {
+        //prepare the data model to be used to show the alert on the view
+        dialogData.title = resultDialogData.title;
+        dialogData.body = resultDialogData.body;
+        dialogData.backgroundColor = AppColor.failedColor;
+        dialogData.iconData = FlutterIcons.error_mdi;
+        //notify listners to show show alert
+        setShowAlert(true);
+      }
+    }
+  }
+
+  void processLoginWithPassword({BuildContext context}) async {
+    final mobile = mobileNumberTEC.text;
+    final password = passwordTEC.text;
+
+    //check if the user entered email & password are valid
+    if (validateMobileNumber(mobile) && validatePassword(password)) {
+      //update ui state
+      setUiState(UiState.loading);
+      final resultDialogData = await _authRepository.loginWithPassword(
+          mobile: mobile,
+          password: password,
+      );
+
+      //update ui state after operation
+      setUiState(UiState.done);
+
+      //checking if operation was successful before either showing an error or redirect to home page
+      if (resultDialogData.dialogType == DialogType.success) {
+        // goToVerifyOTP(context);
+        OTP_OR_REGISTER=false;
+        setUiState(UiState.redirect);
+      } else {
+        //prepare the data model to be used to show the alert on the view
+        dialogData.title = resultDialogData.title;
+        dialogData.body = resultDialogData.body;
+        dialogData.backgroundColor = AppColor.failedColor;
+        dialogData.iconData = FlutterIcons.error_mdi;
+        //notify listners to show show alert
+        setShowAlert(true);
+      }
+    }
+  }
+
+  void checkMobileNumber({BuildContext context}) async {
+    final mobile = mobileNumberTEC.text;
+    //final password = passwordTEC.text;
+
+    //check if the user entered email & password are valid
+    if (validateMobileNumber(mobile)) {
+      //update ui state
+      setUiState(UiState.loading);
+      final resultDialogData = await _authRepository.checkMobileNumber(
+          mobile: mobile
+      );
+
+      //update ui state after operation
+      setUiState(UiState.done);
+
+      //checking if operation was successful before either showing an error or redirect to home page
+      if (resultDialogData.dialogType == DialogType.success) {
+        // setUiState(UiState.redirect);
+        user=User();
+        user.cutomerMobile=mobile;
+        if(resultDialogData.title=="go to Login"){
+          LOGIN_OR_REGISTER=true;
+        }else{
+          LOGIN_OR_REGISTER=false;
+        }
         setUiState(UiState.redirect);
       } else {
         //prepare the data model to be used to show the alert on the view

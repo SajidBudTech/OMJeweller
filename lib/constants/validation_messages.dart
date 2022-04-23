@@ -11,7 +11,7 @@ class ValidationMessages {
   static const String invalidPhoneNumber = "Please enter a valid phone number";
   // Invlaid password
   static const String invalidPassword =
-      "Paasword must contain at least min 6 characters";
+      "Password must contain at least min 6 characters";
 
   static const invalidDeliveryAddressName = "Please enter a valid name";
 

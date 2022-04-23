@@ -1,9 +1,11 @@
 class Api {
 
 
-   //static const LIVE URL  = "https://omjewellers.com/public/api";
-     static const baseUrl = "https://omjewellers.com/omjewellers/public/api";
- // static const Test URL = "https://testbud.in/omjewellers/public/api";
+      //static const baseUrl  = "https://omjewellers.com/public/api";
+      //LiVE
+      static const baseUrl = "https://omjewellers.com/omjewellers/public/api";
+      //TEST
+     //static const baseUrl = "https://testbud.in/omjewellers/public/api";
 
      static const downloadUrlPath = "https://omjewellers.com/public/contentupload/";
      static const ProductdownloadUrlPath = "https://omjewellers.com/public";
@@ -11,9 +13,11 @@ class Api {
 
 
 
-  static const login = "/customerlogin";
-  static const loginOTP = "/login_otp";
-  static const sendOTP = "/send_otp";
+  static const login = "/login_with_mobile_password";
+  static const loginOTP = "/get_otp";
+  static const loginDetail = "/customerloginwithmobile";
+  static const registeSendOTP = "/sent_otp";
+  static const checkMobile="/check_mobile_number";
   static const register = "/customerregister";
 
 
@@ -21,9 +25,9 @@ class Api {
   static const loginSocial = "/login/social";
   static const otp = "/otp";
   static const logout = "/logout";
-  static const forgotPassword = "/password/reset/init";
+  static const forgotPassword = "/forgot_password";
 
-  static const changePassword = "/password/change";
+  static const changePassword = "/confirm_password";
   static const updateProfile = "/update_user";
 
   static const scrollingbanners = "/get_scrolling_banner";

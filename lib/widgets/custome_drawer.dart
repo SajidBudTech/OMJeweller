@@ -146,6 +146,7 @@ class AppDrawer extends StatelessWidget {
 
   void _processLogout(BuildContext context) async {
     AuthBloc.prefs.setBool(AppStrings.authenticated, false);
+    await AuthBloc.clearUserData();
     Navigator.pushNamedAndRemoveUntil(
       context,
       AppRoutes.loginRoute,

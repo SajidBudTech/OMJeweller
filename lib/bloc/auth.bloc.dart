@@ -49,6 +49,9 @@ class AuthBloc extends BaseBloc {
     prefs.setString(PreferenceString.UserAnni,userDetails["anniversary"]??"");
     prefs.setString(PreferenceString.USERGeneder,userDetails["gender"]??"");
   }
+  static void clearUserData() async{
+    await prefs.clear();
+  }
 
 
   static int getUserID() {

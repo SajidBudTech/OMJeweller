@@ -4,9 +4,11 @@ class AppRoutes {
   static const loginRoute = "login";
   static const registerRoute = "register";
   static const loginOTPRoute = "login_otp";
+  static const loginWithRoute = "loginwithpassword";
 
   static const enterPhoneRoute = "enterPhonenumber";
   static const verifyOTPRoute = "verifyOTP";
+  static const forgotOTPRoute = "forgotOTP";
 
   static const forgotPasswordRoute = "forgot_password";
   static const homeRoute = "home";

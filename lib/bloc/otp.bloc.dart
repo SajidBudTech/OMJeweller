@@ -71,9 +71,8 @@ class OTPBloc extends BaseBloc with CodeAutoFill{
       setUiState(UiState.loading);
 
       if(firstDigitTEC.text+secondDigitTEC.text+threeDigitTEC.text+fourthDigitTEC.text==serverOTP) {
-        final resultDialogData = await _authRepository.login(
+        final resultDialogData = await _authRepository.loginDetails(
           mobile: mobile,
-          password: serverOTP,
         );
 
         //update ui state after operation
@@ -157,7 +156,7 @@ class OTPBloc extends BaseBloc with CodeAutoFill{
    }
 
 
-    void processRegister({String name,String email,String mobile,String serverOTP}) async {
+    void processRegister({String name,String email,String mobile,String serverOTP,String password}) async {
 
       //check if the user entered email & password are valid
       //update ui state
@@ -168,7 +167,7 @@ class OTPBloc extends BaseBloc with CodeAutoFill{
           mobile: mobile,
           email: email,
           name: name,
-          otp: serverOTP
+          password: password
         );
 
         //update ui state after operation
@@ -218,10 +217,11 @@ class OTPBloc extends BaseBloc with CodeAutoFill{
         //checking if operation was successful before either showing an error or redirect to home page
         if (resultDialogData.dialogType == DialogType.success) {
           // setUiState(UiState.redirect);
-          dialogData.title = resultDialogData.title;
+          dialogData.title = "OTP Sent Successfully";
           dialogData.body = resultDialogData.body;
           dialogData.iconData = FlutterIcons.done_mdi;
           user.otp=int.parse(resultDialogData.title);
+          print(resultDialogData.title);
           // goToVerifyOTP(context);
           setShowAlert(true);
         } else {

@@ -9,15 +9,22 @@ class AuthStrings {
   static const String otpButtonTitle = "Verify";
 
 
+  static const String loginWithTitle = "Login";
+
+
+
+
   static const String registerTitle = "Hello";
   static const String registerSubTitle = "Sign up to get started";
   static const String oregisterButtonTitle = "Register";
 
 
 
-  static const String registerPhone = "Phone Number *";
+  static const String registerPhone = "Mobile Number *";
   static const String registerName = "Name *";
   static const String registerEmail = "Email *";
+  static const String registerPassword = "Password *";
+  static const String confirmPassword = "Confirm Password *";
   static const String registerDOB = "Date Of Birth";
   static const String anniversaryDate = "Anniversary Date";
 

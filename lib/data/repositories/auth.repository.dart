@@ -31,7 +31,144 @@ class AuthRepository extends HttpService {
       resultDialogData.dialogType = DialogType.success;
 
       if(apiResponse.message=="OTP sent Successfully"){
-        resultDialogData.title=apiResponse.body['data']['data'].toString();
+        resultDialogData.title=apiResponse.body['get_otp_number'].toString();
+      }else {
+        resultDialogData.title = AuthStrings.processFailedTitle;
+        resultDialogData.body = apiResponse.message;
+        resultDialogData.dialogType = DialogType.failed;
+      }
+
+    } else {
+      resultDialogData.title = AuthStrings.processFailedTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.failed;
+    }
+
+    return resultDialogData;
+  }
+
+  Future<DialogData> forgotPassword({String mobile}) async {
+    //instance of the model to be returned
+    final resultDialogData = DialogData();
+    final apiResult = await post(
+      Api.forgotPassword,
+      {
+        "mobile": mobile,
+      },
+    );
+
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+
+    if (apiResponse.allGood) {
+      resultDialogData.title = AuthStrings.processCompleteTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.success;
+
+      if(apiResponse.message=="OTP sent Successfully"){
+        resultDialogData.title=apiResponse.body['get_otp_number'].toString();
+        resultDialogData.extraData=apiResponse.body['data'][0];
+      }else {
+        resultDialogData.title = AuthStrings.processFailedTitle;
+        resultDialogData.body = apiResponse.message;
+        resultDialogData.dialogType = DialogType.failed;
+      }
+
+    } else {
+      resultDialogData.title = AuthStrings.processFailedTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.failed;
+    }
+
+    return resultDialogData;
+  }
+  Future<DialogData> changePassword({int customerID,String password}) async {
+    //instance of the model to be returned
+    final resultDialogData = DialogData();
+    final apiResult = await post(
+      Api.changePassword,
+      {
+        "customerID": customerID,
+        "password": password,
+      },
+    );
+
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+
+    if (apiResponse.allGood) {
+      resultDialogData.title = AuthStrings.processCompleteTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.success;
+
+      if(apiResponse.message=="User Password updated"){
+        saveuserData(apiResponse.body['data']);
+      }else {
+        resultDialogData.title = AuthStrings.processFailedTitle;
+        resultDialogData.body = apiResponse.message;
+        resultDialogData.dialogType = DialogType.failed;
+      }
+
+    } else {
+      resultDialogData.title = AuthStrings.processFailedTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.failed;
+    }
+
+    return resultDialogData;
+  }
+
+  Future<DialogData> loginWithPassword({String mobile,String password}) async {
+    //instance of the model to be returned
+    final resultDialogData = DialogData();
+    final apiResult = await post(
+      Api.login,
+      {
+        "mobile": mobile,
+        "password": password,
+      },
+    );
+
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+
+    if (apiResponse.allGood) {
+      resultDialogData.title = AuthStrings.processCompleteTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.success;
+      if(apiResponse.body["success"]){
+        saveuserData(apiResponse.body["data"],
+        );
+      }else{
+        resultDialogData.title = AuthStrings.processFailedTitle;
+        resultDialogData.body = apiResponse.message;
+        resultDialogData.dialogType = DialogType.failed;
+      }
+    } else {
+      resultDialogData.title = AuthStrings.processFailedTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.failed;
+    }
+
+    return resultDialogData;
+  }
+
+  Future<DialogData> checkMobileNumber({String mobile}) async {
+    //instance of the model to be returned
+    final resultDialogData = DialogData();
+    final apiResult = await post(
+      Api.checkMobile,
+      {
+        "mobile": mobile,
+      },
+    );
+
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+
+    if (apiResponse.allGood) {
+      resultDialogData.title = AuthStrings.processCompleteTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.success;
+
+      if(apiResponse.message!="This account is not registered with us."){
+        resultDialogData.title="go to Login";
       }else{
         resultDialogData.title="go to registration";
       }
@@ -45,6 +182,37 @@ class AuthRepository extends HttpService {
     return resultDialogData;
   }
 
+  Future<DialogData> loginDetails({String mobile}) async {
+    //instance of the model to be returned
+    final resultDialogData = DialogData();
+    final apiResult = await post(
+      Api.loginDetail,
+      {
+        "mobile": mobile,
+      },
+    );
+
+    ApiResponse apiResponse = ApiResponseUtils.parseApiResponse(apiResult);
+
+    if (apiResponse.allGood) {
+      resultDialogData.title = AuthStrings.processCompleteTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.success;
+
+      //save the user data to hive box
+      saveuserData(
+        apiResponse.body["data"][0],
+      );
+      // AuthBloc.prefs.setBool(AppStrings.authenticated, true);
+
+    } else {
+      resultDialogData.title = AuthStrings.processFailedTitle;
+      resultDialogData.body = apiResponse.message;
+      resultDialogData.dialogType = DialogType.failed;
+    }
+
+    return resultDialogData;
+  }
   //process user account login
   Future<DialogData> login({String mobile, String password}) async {
     //instance of the model to be returned
@@ -84,7 +252,7 @@ class AuthRepository extends HttpService {
     //instance of the model to be returned
     final resultDialogData = DialogData();
     final apiResult = await post(
-      Api.sendOTP,
+      Api.registeSendOTP,
       {
         "mobile": mobile,
       },
@@ -97,7 +265,7 @@ class AuthRepository extends HttpService {
       resultDialogData.body = apiResponse.message;
       resultDialogData.dialogType = DialogType.success;
 
-      resultDialogData.title=apiResponse.body['data'].toString();
+      resultDialogData.title=apiResponse.body['get_otp_number'].toString();
 
     } else {
       resultDialogData.title = AuthStrings.processFailedTitle;
@@ -112,7 +280,7 @@ class AuthRepository extends HttpService {
     String name,
     String email,
     String mobile,
-    String otp,
+    String password,
   }) async {
     //instance of the model to be returned
     final resultDialogData = DialogData();
@@ -122,8 +290,7 @@ class AuthRepository extends HttpService {
       "name": name,
       "email_id": email,
       "mobile": mobile,
-      "password ": otp,
-
+      "password": password,
     };
 
     final apiResult = await post(
@@ -139,7 +306,7 @@ class AuthRepository extends HttpService {
       resultDialogData.body = apiResponse.message;
       resultDialogData.dialogType = DialogType.success;
 
-     if(apiResponse.message=="Registration Successfull"){
+     if(apiResponse.message=="Registration Successfully"){
        saveuserData(
          apiResponse.body["data"],
        );

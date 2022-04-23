@@ -33,6 +33,7 @@ class HomeBloc extends BaseBloc {
 
     }
 
+    if(!currentPageIndex.isClosed)
     currentPageIndex.add(0);
    // notifyListeners();
 
@@ -49,6 +50,7 @@ class HomeBloc extends BaseBloc {
     } catch (error) {
 
     }
+    if(!currentPageIndex.isClosed)
     currentPageIndex.add(0);
     //notifyListeners();
   }

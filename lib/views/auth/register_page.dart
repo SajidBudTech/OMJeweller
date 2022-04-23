@@ -40,6 +40,8 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     super.initState();
 
+    _registerBloc.mobileTEC.text=widget.user.cutomerMobile;
+
     //listen to the need to show a dialog alert or a normal snackbar alert type
     _registerBloc.showAlert.listen((show) {
       //when asked to show an alert
@@ -58,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _registerBloc.uiState.listen((uiState) async {
       if (uiState == UiState.redirect) {
         // await Navigator.popUntil(context, (route) => false);
-        Navigator.pushNamed(context, AppRoutes.verifyOTPRoute,arguments: _registerBloc.user);
+         Navigator.pushNamed(context, AppRoutes.verifyOTPRoute,arguments: _registerBloc.user);
       }
     });
   }
@@ -100,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       sliver: SliverList(
                           delegate: SliverChildListDelegate([
                             //page title
-                            UiSpacer.verticalSpace(space:80),
+                            UiSpacer.verticalSpace(space:65),
                             Text(
                               AuthStrings.registerTitle,
                               style: AppTextStyle.h1TitleTextStyle(
@@ -119,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               textAlign: TextAlign.start,
                               textDirection: AppTextDirection.defaultDirection,
                             ),
-                            UiSpacer.verticalSpace(space: 50),
+                            UiSpacer.verticalSpace(space: 40),
                             StreamBuilder<bool>(
                               stream: _registerBloc.validName,
                               builder: (context, snapshot) {
@@ -140,7 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 );
                               },
                             ),
-                            UiSpacer.verticalSpace(space: 50),
+                            UiSpacer.verticalSpace(space: 20),
                             StreamBuilder<bool>(
                               stream: _registerBloc.validEmailAddress,
                               builder: (context, snapshot) {
@@ -159,6 +161,48 @@ class _RegisterPageState extends State<RegisterPage> {
                                 );
                               },
                             ),
+                            UiSpacer.verticalSpace(space: 20),
+                            StreamBuilder<bool>(
+                              stream: _registerBloc.validPhoneNumber,
+                              builder: (context, snapshot) {
+                                return CustomTextFormField(
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  top: 0,
+                                  isReadOnly: true,
+                                  hintText: AuthStrings.registerPhone,
+                                  labelText: AuthStrings.registerPhone,
+                                  keyboardType: TextInputType.phone,
+                                  textInputAction: TextInputAction.next,
+                                  textEditingController: _registerBloc.mobileTEC,
+                                  errorText: snapshot.error,
+                                  onChanged: _registerBloc.validatePhone,
+                                );
+                              },
+                            ),
+                            UiSpacer.verticalSpace(space: 20),
+                            StreamBuilder<bool>(
+                              stream: _registerBloc.validPassword,
+                              builder: (context, snapshot) {
+                                return CustomTextFormField(
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  top: 0,
+                                  togglePassword: true,
+                                  obscureText: true,
+                                  hintText: AuthStrings.registerPassword,
+                                  labelText: AuthStrings.registerPassword,
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.next,
+                                  textEditingController: _registerBloc.passwordTEC,
+                                  errorText: snapshot.error,
+                                  onChanged: _registerBloc.validatePassword,
+                                );
+                              },
+                            ),
+
                             UiSpacer.verticalSpace(space: 65),
                             //login button
                             //listen to the uistate to know the appropriated state to put the login button
@@ -178,6 +222,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           AppRoutes.homeRoute,
                                        );*/
                                     _registerBloc.processSendOTP(mobile: widget.user.cutomerMobile);
+
                                   }
                                       : null,
                                   child: uiState != UiState.loading

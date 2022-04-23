@@ -10,7 +10,7 @@ class Validators {
   }
 
   static bool isPhoneNumberValid(String phone) {
-    if (phone.length >= 10 && phone.length <= 15) {
+    if (phone.length == 10) {
       return true;
     } else {
       return false;

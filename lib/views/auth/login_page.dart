@@ -60,8 +60,8 @@ class _LoginPageState extends State<LoginPage> {
         //   AppRoutes.homeRoute,
         //   (route) => false,
         // );
-        if(_loginBloc.OTP_OR_REGISTER){
-          Navigator.pushNamed(context, AppRoutes.verifyOTPRoute,arguments: _loginBloc.user);
+        if(_loginBloc.LOGIN_OR_REGISTER){
+          Navigator.pushNamed(context, AppRoutes.loginWithRoute,arguments: _loginBloc.user);
         }else{
           Navigator.pushNamed(context, AppRoutes.registerRoute,arguments: _loginBloc.user);
         }
@@ -179,7 +179,8 @@ class _LoginPageState extends State<LoginPage> {
                               disabledColor: AppColor.disableColor,
                               onPressed: _loginBloc.loginButtonStatus
                                   ?  (){
-                                     _loginBloc.processOTP(context: context);
+                                     _loginBloc.checkMobileNumber(context: context);
+                                      //Navigator.pushNamed(context, AppRoutes.loginWithRoute);
                                    }
                                 : null,
                                 child: uiState != UiState.loading

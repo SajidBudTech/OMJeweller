@@ -24,6 +24,15 @@ class RegisterBloc extends BaseBloc {
   TextEditingController emailAddressTEC = new TextEditingController(
       // text: "client_${DateTime.now().millisecondsSinceEpoch}@demo.com",
       );
+  TextEditingController mobileTEC = new TextEditingController(
+    // text: "client_${DateTime.now().millisecondsSinceEpoch}@demo.com",
+  );
+  TextEditingController passwordTEC = new TextEditingController(
+    // text: "client_${DateTime.now().millisecondsSinceEpoch}@demo.com",
+  );
+  TextEditingController confirmpasswordTEC = new TextEditingController(
+    // text: "client_${DateTime.now().millisecondsSinceEpoch}@demo.com",
+  );
 
   User user;
 
@@ -57,10 +66,11 @@ class RegisterBloc extends BaseBloc {
 
     final name = nameTEC.text;
     final email =emailAddressTEC.text;
+    final password =passwordTEC.text;
 
     //check if the user entered email & password are valid
 
-    if (validateName(name) && validateEmailAddress(email)){
+    if (validateName(name) && validateEmailAddress(email) && validatePassword(password)){
       //update ui state
       setUiState(UiState.loading);
       final resultDialogData = await _authRepository.sendOTP(
@@ -77,8 +87,10 @@ class RegisterBloc extends BaseBloc {
         user.cutomerMobile=mobile;
         user.customerEmail=email;
         user.customerName=name;
+        user.customerPassword=password;
         user.otp=int.parse(resultDialogData.title);
         user.loginRegister=false;
+        print(user.otp.toString());
         // goToVerifyOTP(context);
         setUiState(UiState.redirect);
       } else {
@@ -90,6 +102,47 @@ class RegisterBloc extends BaseBloc {
         //notify listners to show show alert
         setShowAlert(true);
       }
+    }
+  }
+
+  //process login when user tap on the login button
+  void processChangePassword() async {
+
+    final password =passwordTEC.text;
+    final confirmpassword =confirmpasswordTEC.text;
+
+    //check if the user entered email & password are valid
+
+    if (validatePassword(password) && validatePassword(confirmpassword) || (password==confirmpassword)){
+      //update ui state
+      setUiState(UiState.loading);
+      final resultDialogData = await _authRepository.changePassword(
+          password: password,
+          customerID: user.customerID
+      );
+
+      //update ui state after operation
+      setUiState(UiState.done);
+
+      //checking if operation was successful before either showing an error or redirect to home page
+      if (resultDialogData.dialogType == DialogType.success) {
+        setUiState(UiState.redirect);
+      } else {
+        //prepare the data model to be used to show the alert on the view
+        dialogData.title = resultDialogData.title;
+        dialogData.body = resultDialogData.body;
+        dialogData.backgroundColor = AppColor.failedColor;
+        dialogData.iconData = FlutterIcons.error_mdi;
+        //notify listners to show show alert
+        setShowAlert(true);
+      }
+    }else{
+      dialogData.title = "Invalid Password";
+      dialogData.body = "Please check your password!";
+      dialogData.backgroundColor = AppColor.failedColor;
+      dialogData.iconData = FlutterIcons.error_mdi;
+      //notify listners to show show alert
+      setShowAlert(true);
     }
   }
 

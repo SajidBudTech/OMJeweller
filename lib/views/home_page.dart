@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     super.dispose();
-    HomeBloc.closeListener();
+    //HomeBloc.closeListener();
   }
 
   @override

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/api.dart';
 import 'package:flutter_om_jeweller/data/models/api_response.dart';
@@ -10,6 +13,7 @@ import 'package:flutter_om_jeweller/utils/api_response.utils.dart';
 import 'package:flutter_om_jeweller/data/models/advertisment_banner.dart';
 import 'package:flutter_om_jeweller/data/models/product.dart';
 import 'package:flutter_om_jeweller/data/models/omlive.dart';
+import 'package:http/http.dart' as http;
 
 
 class HomePageRepository extends HttpService {
@@ -36,6 +40,37 @@ class HomePageRepository extends HttpService {
     });
 
     return categories;
+
+  }
+
+  Future<String> getLoyaltyPoints({String mobile}) async {
+     String points="0";
+
+
+     final response = await http.post(Uri.parse('https://app.exclusife.com/api_business_V2'),
+       headers: {
+         "Content-Type": "application/x-www-form-urlencoded",
+       },
+       encoding: Encoding.getByName('utf-8'),
+       body: {
+          "method": "getCustomerLoyalty",
+          "data":json.encode({
+            "businessId" : "30566998",
+            "auth_key":"MHRHNm5sMEN5S1B0dDllN0lEUFFjK2loMEovREtMYlpUSEFGdnM5UmVnaz0=",
+            "customerNumber" : mobile,
+            "sendOtp" : "N"}),
+       },
+     );
+
+     if(response.statusCode==200){
+       var resp=json.decode(response.body);
+       if(resp['status']=="success"){
+         points=resp['customerPoint']??"0";
+       }
+     }
+
+
+    return points;
 
   }
 

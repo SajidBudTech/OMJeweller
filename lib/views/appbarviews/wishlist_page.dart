@@ -113,14 +113,12 @@ class _WishlistPageState extends State<WishlistPage> {
                                               .productbyWishList[index],
                                           listViewItem:
                                           WishlistListViewItem(
-                                            product: model
-                                                .productbyWishList[index],
+                                            product: model.productbyWishList[index],
                                             platinumRate: model.platiniumRate,
                                             productPageViewModel: model,
                                             onPressed: (product) {
                                               setState(() {
-                                                model.productbyWishList.remove(
-                                                    product);
+                                                model.productbyWishList.remove(product);
                                               });
                                             },
                                           ),

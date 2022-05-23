@@ -4,6 +4,7 @@ import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
 import 'package:flutter_om_jeweller/constants/app_sizes.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
+import 'package:flutter_om_jeweller/constants/globle_variable.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/notification.viewmodel.dart';
@@ -40,6 +41,7 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   void initState() {
     super.initState();
+    GlobleVariable.NOTIFICATION_COUNT=0;
     _notificationBloc.initBloc();
   }
 

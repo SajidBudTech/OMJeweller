@@ -98,8 +98,8 @@ class ProductPageViewModel extends MyBaseViewModel {
   void getProductsByCategory({Category category,var categoryId}) async {
     //add null data so listener can show shimmer widget to indicate loading
 
-    CountViewModel countViewModel=CountViewModel(viewContext);
-    countViewModel.setWishListCount();
+    //CountViewModel countViewModel=CountViewModel(viewContext);
+    //countViewModel.setWishListCount();
 
     productByCategoryLoadingState = LoadingState.Loading;
     notifyListeners();
@@ -363,8 +363,8 @@ class ProductPageViewModel extends MyBaseViewModel {
   void getWishListProducts() async {
     //add null data so listener can show shimmer widget to indicate loading
 
-    CountViewModel countViewModel=CountViewModel(viewContext);
-    countViewModel.setWishListCount();
+   // CountViewModel countViewModel=CountViewModel(viewContext);
+    //countViewModel.setWishListCount();
 
     productByWishlistLoadingState = LoadingState.Loading;
     notifyListeners();

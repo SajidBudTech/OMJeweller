@@ -1,5 +1,6 @@
 // ViewModel
 import 'package:flutter/material.dart';
+import 'package:flutter_om_jeweller/bloc/auth.bloc.dart';
 import 'package:flutter_om_jeweller/constants/app_routes.dart';
 import 'package:flutter_om_jeweller/data/models/category.dart';
 import 'package:flutter_om_jeweller/data/models/collection.dart';
@@ -57,6 +58,7 @@ class MainHomeViewModel extends MyBaseViewModel {
 
   List<Wishlist> wishlistList = [];
   List<String> availableslotList = [];
+  String loyaltyPoints="0";
  /* List<Category> categories = [];
   List<Vendor> nearbyVendors = [];
   List<Vendor> popularVendors = [];
@@ -169,6 +171,7 @@ class MainHomeViewModel extends MyBaseViewModel {
 
     storeVisitList.add('Borivali');
     storeVisitList.add('Mulund');
+    storeVisitList.add('Bandra');
 
 
     storeVisitType.add("Store Visit");
@@ -188,6 +191,7 @@ class MainHomeViewModel extends MyBaseViewModel {
       getCollection();
       getNewArrival();
       getOMLive();
+      getLoyaltyPoints();
     //categoriesLoadingState=LoadingState.Done;
     //categories.add('assets/images/ugaani.png');
     //categories.add('assets/images/jodha.png');
@@ -491,5 +495,19 @@ class MainHomeViewModel extends MyBaseViewModel {
       AppRoutes.myAppointmentlistRoute,
       //arguments: category,
     );*/
+  }
+
+  void getLoyaltyPoints() async{
+     String mobilenumber=AuthBloc.getUserMobile();
+     if(mobilenumber!="") {
+       try {
+         loyaltyPoints = await _homePageRepository.getLoyaltyPoints(mobile: mobilenumber);
+         //categoriesLoadingState = LoadingState.Done;
+         notifyListeners();
+       } catch (error) {
+         //categoriesLoadingState = LoadingState.Failed;
+         notifyListeners();
+       }
+     }
   }
 }

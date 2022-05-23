@@ -187,14 +187,14 @@ class _FillDetailsPageState extends State<FillDetailsPage> {
                           right: 0,
                           top: 0,
                           bottom: 0,
-                          labelText: "Product*",
+                          labelText: "Product",
                           keyboardType: TextInputType.text,
                           textStyle: AppTextStyle.h4TitleTextStyle(
                               color: AppColor.textColor(context)
                           ),
                           textInputAction: TextInputAction.next,
                           textEditingController: _fillDetailsBloc.productTEC,
-                          errorText: snapshot.error,
+                          //errorText: snapshot.error,
                           //onChanged: _fillDetailsBloc.validateMobileNumber
                       );
                     },

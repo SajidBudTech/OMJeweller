@@ -20,8 +20,7 @@ class Validators {
   static bool isPasswordValid(String password,
       {bool includeCaps = false, int minLength = 6}) {
     if (password.isEmpty ||
-        password.length < minLength ||
-        RegExp(r".*[A-Z].*").hasMatch(password) != includeCaps) {
+        password.length < minLength /*|| RegExp(r".*[A-Z].*").hasMatch(password) != includeCaps*/) {
       return false;
     } else {
       return true;

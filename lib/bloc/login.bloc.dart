@@ -225,7 +225,7 @@ class LoginBloc extends BaseBloc {
   bool validatePassword(String value) {
     //validating if password, contains at least one uppercase and length is of 6 minimum charater
     if (!Validators.isPasswordValid(value)) {
-      _passwordValid.addError(AuthStrings.invalidPhoneMessage);
+      _passwordValid.addError(AuthStrings.invalidPasswordMessage);
       return false;
     } else {
       _passwordValid.add(true);

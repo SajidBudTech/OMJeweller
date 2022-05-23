@@ -56,7 +56,7 @@ class FillDetailsBloc extends BaseBloc {
 
     //check if the user entered email & password are valid
 
-    if (validateName(name) && validateMobile(mobile) &&validateEmailAddress(email) && validateProduct(product)){
+    if (validateName(name) && validateMobile(mobile) &&validateEmailAddress(email)){
       //update ui state
        final int userId=AuthBloc.getUserID();
       setUiState(UiState.loading);

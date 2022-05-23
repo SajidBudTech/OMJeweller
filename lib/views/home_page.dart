@@ -209,7 +209,11 @@ class _HomePageState extends State<HomePage> {
               Navigator.pushNamed(
                 context,
                 AppRoutes.notificationsRoute,
-              );
+              ).then((value) {
+                setState(() {
+
+                });
+              });
             },
             child:Padding(
             padding: EdgeInsets.only(left: 8, right:18,top: 16),
@@ -254,7 +258,11 @@ class _HomePageState extends State<HomePage> {
               Navigator.pushNamed(
                 context,
                 AppRoutes.wishListPage,
-              );
+              ).then((value) {
+                setState(() {
+
+                });
+              });
             },
             child:Padding(
                 padding: EdgeInsets.only(left: 8, right: 8,top: 20),

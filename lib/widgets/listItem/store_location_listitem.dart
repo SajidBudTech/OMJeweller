@@ -31,7 +31,7 @@ class _StoreLocationListViewItemState extends State<StoreLocationListViewItem> {
       onTap:widget.onPressed,
       child:Container(
         alignment: Alignment.center,
-        width: (AppSizes.getScreenWidth(context)/2)-40,
+        width: (AppSizes.getScreenWidth(context)/2)-55,
         margin: EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           border: Border.all(color: widget.SELECTED_INDEX==widget.current_index?AppColor.accentColor:AppColor.hintTextColor(context)),

@@ -34,6 +34,7 @@ class AuthStrings {
 
 
   static const String invalidPhoneMessage = "Please enter valid mobile number";
+  static const String invalidPasswordMessage = "Password contain atleast 6 character.";
 
 
 

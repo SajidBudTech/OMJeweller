@@ -55,127 +55,145 @@ class _MainHomePageState extends State<MainHomePage>
       onModelReady: (model) => model.initialise(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: Colors.white,
-        body: CustomScrollView(
-          slivers: [ //
-           /* SliverToBoxAdapter(
+        body: CustomScrollView(slivers: [
+          //
+          /* SliverToBoxAdapter(
               child: UiSpacer.verticalSpace(),
             ),*/
-            //banners
-            SliverToBoxAdapter(
-              child: Container(
-                margin: EdgeInsets.only(
-                  top: 19,
-                ),
-                child: BannerSlider(
-                  //search base on the category select from the banner
-                  onBannerTapped: (value){
-                    if(value.bannertype=="category"){
-                      Category category=Category();
-                      category.categoryID=value.bannerID;
-                      category.categoryName=value.bannertype;
-                      Navigator.pushNamed(
-                          context,
-                          AppRoutes.productListPageRoute,
-                          arguments: PageArguments(
-                              category: category,
-                              subCategory: null,
-                              collection: null
-                          )
-                      );
-                    }else if(value.bannertype=="subcategory"){
-                      Subcategory subategory=Subcategory();
-                      subategory.subcategoryID=value.bannerID;
-                      subategory.subcategoryName=value.bannertype;
-                      Navigator.pushNamed(
-                          context,
-                          AppRoutes.productListPageRoute,
-                          arguments: PageArguments(
-                              category: null,
-                              subCategory: subategory,
-                              collection: null
-                          )
-                      );
-                    }else if(value.bannertype=="collection"){
-                      Collection collection=Collection();
-                      collection.collectionID=value.bannerID;
-                      collection.collectionName=value.bannertype;
-                      Navigator.pushNamed(
-                          context,
-                          AppRoutes.productListPageRoute,
-                          arguments: PageArguments(
-                              category: null,
-                              subCategory: null,
-                              collection: collection
-                          )
-                      );
-                    }else if(value.bannertype=="product"){
-                      Product product=Product();
-                      product.productID=value.bannerID;
-                      product.productName=value.bannertype;
-                      Navigator.pushNamed(
-                          context,
-                          AppRoutes.productDetailRoute,
-                          arguments: ProductArguments(
-                             product: product,
-                             status: false
-                          )
-                      );
-                    }
-
-                  },
-                ),
+          //banners
+          SliverToBoxAdapter(
+            child: Container(
+              margin: EdgeInsets.only(
+                top: 19,
+              ),
+              child: BannerSlider(
+                //search base on the category select from the banner
+                onBannerTapped: (value) {
+                  if (value.bannertype == "category") {
+                    Category category = Category();
+                    category.categoryID = value.bannerID;
+                    category.categoryName = value.bannertype;
+                    Navigator.pushNamed(context, AppRoutes.productListPageRoute,
+                        arguments: PageArguments(
+                            category: category,
+                            subCategory: null,
+                            collection: null));
+                  } else if (value.bannertype == "subcategory") {
+                    Subcategory subategory = Subcategory();
+                    subategory.subcategoryID = value.bannerID;
+                    subategory.subcategoryName = value.bannertype;
+                    Navigator.pushNamed(context, AppRoutes.productListPageRoute,
+                        arguments: PageArguments(
+                            category: null,
+                            subCategory: subategory,
+                            collection: null));
+                  } else if (value.bannertype == "collection") {
+                    Collection collection = Collection();
+                    collection.collectionID = value.bannerID;
+                    collection.collectionName = value.bannertype;
+                    Navigator.pushNamed(context, AppRoutes.productListPageRoute,
+                        arguments: PageArguments(
+                            category: null,
+                            subCategory: null,
+                            collection: collection));
+                  } else if (value.bannertype == "product") {
+                    Product product = Product();
+                    product.productID = value.bannerID;
+                    product.productName = value.bannertype;
+                    Navigator.pushNamed(context, AppRoutes.productDetailRoute,
+                        arguments:
+                            ProductArguments(product: product, status: false));
+                  }
+                },
               ),
             ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 18),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
-            ),
-           /* SliverToBoxAdapter(
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 18),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.divider(
+                thickness: 10, color: AppColor.newDividerColor),
+          ),
+          /* SliverToBoxAdapter(
               child:UiSpacer.verticalSpace(space: 8),
             ),*/
-            SliverToBoxAdapter(
-              child:CardGoldRate(),
-            ),
+          SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.only(left: 20,right: 20,top: 10),
+                  child:Column(
+               children: [
+              RaisedButton(
+                  onPressed: () {},
+                  color: Colors.white,
+                  padding: EdgeInsets.only(top: 8, bottom: 8, left: 10, right: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        "assets/images/points.png",
+                        width: 42,
+                        height: 42,
+                      ),
+                      UiSpacer.horizontalSpace(space: 10),
+                      Text(
+                        ("Loyalty Points "), //'PADEL',
+                        style: AppTextStyle.h4TitleTextStyle(
+                            color: Colors.black87, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.start,
+                        textDirection: AppTextDirection.defaultDirection,
+                      ),
+                      Flexible(
+                           child:Align(
+                             alignment: Alignment.topRight,
+                          child: Text((model.loyaltyPoints??"0"), //'PADEL',
+                        style: AppTextStyle.h4TitleTextStyle(
+                            color: Colors.black87, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.start,
+                        textDirection: AppTextDirection.defaultDirection,
+                      ))),
+                    ],
+                  )),
+              CardGoldRate(),
+            ],
+          ))),
           /*  SliverToBoxAdapter(
               child:UiSpacer.verticalSpace(space: 18),
             ),*/
-            SliverToBoxAdapter(
-              child:UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 18),
-            ),
-            SliverToBoxAdapter(
-              child:
-              Container(
+          SliverToBoxAdapter(
+            child: UiSpacer.divider(
+                thickness: 10, color: AppColor.newDividerColor),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 18),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
                 alignment: Alignment.center,
-                  padding: EdgeInsets.only(bottom: 12),
-                  child:Text(
-                'Shop by Products',
-                style: AppTextStyle.h4TitleTextStyle(
-                  color: AppColor.accentColor,
-                    fontWeight: FontWeight.w600
-                ),
-                textAlign: TextAlign.start,
-                textDirection: AppTextDirection.defaultDirection,
-              )),
-            ),
-            SliverToBoxAdapter(
-                child: AdvertismentSliderPage()
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 12),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 18),
-            ),
+                padding: EdgeInsets.only(bottom: 12),
+                child: Text(
+                  'Shop by Products',
+                  style: AppTextStyle.h4TitleTextStyle(
+                      color: AppColor.accentColor, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.start,
+                  textDirection: AppTextDirection.defaultDirection,
+                )),
+          ),
+          SliverToBoxAdapter(child: AdvertismentSliderPage()),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 12),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.divider(
+                thickness: 10, color: AppColor.newDividerColor),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 18),
+          ),
 
-            /*SliverToBoxAdapter(
+          /*SliverToBoxAdapter(
                 child: Container(
                   width: double.infinity,
                   height:160,
@@ -215,62 +233,58 @@ class _MainHomePageState extends State<MainHomePage>
 
                 )
             ),*/
-            SliverToBoxAdapter(
-              child:
-              Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(bottom: 13),
-                  child:Text(
-                    'New Arrivals',
-                    style: AppTextStyle.h4TitleTextStyle(
-                      color: AppColor.accentColor,
-                        fontWeight: FontWeight.w600
-                    ),
-                    textAlign: TextAlign.start,
-                    textDirection: AppTextDirection.defaultDirection,
-                  )
-              ),
-            ),
-            SliverToBoxAdapter(
-                child: Container(
-                  width: double.infinity,
-                  height:195,
-                  child: model.newArrivalLoadingState == LoadingState.Loading
-                  //the loadinng shimmer
-                      ? Padding(
+          SliverToBoxAdapter(
+            child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 13),
+                child: Text(
+                  'New Arrivals',
+                  style: AppTextStyle.h4TitleTextStyle(
+                      color: AppColor.accentColor, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.start,
+                  textDirection: AppTextDirection.defaultDirection,
+                )),
+          ),
+          SliverToBoxAdapter(
+              child: Container(
+            width: double.infinity,
+            height: 195,
+            child: model.newArrivalLoadingState == LoadingState.Loading
+                //the loadinng shimmer
+                ? Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: AppPaddings.contentPaddingSize,
                     ),
                     child: VendorShimmerListViewItem(),
                   )
-                  // the faild view
-                      : model.newArrivalLoadingState == LoadingState.Failed
-                      ? LoadingStateDataView(
-                    stateDataModel: StateDataModel(
-                      showActionButton: true,
-                      actionButtonStyle: AppTextStyle.h4TitleTextStyle(
-                        color: Colors.red,
+                // the faild view
+                : model.newArrivalLoadingState == LoadingState.Failed
+                    ? LoadingStateDataView(
+                        stateDataModel: StateDataModel(
+                          showActionButton: true,
+                          actionButtonStyle: AppTextStyle.h4TitleTextStyle(
+                            color: Colors.red,
+                          ),
+                          actionFunction: model.getNewArrival,
+                        ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: model.newArrivalList.length,
+                        padding: EdgeInsets.only(
+                            left: AppPaddings.contentPaddingSize,
+                            right: AppPaddings.contentPaddingSize),
+                        separatorBuilder: (context, index) =>
+                            UiSpacer.horizontalSpace(space: 0),
+                        itemBuilder: (context, index) {
+                          return NewArrivalListViewItem(
+                            product: model.newArrivalList[index],
+                          );
+                        },
                       ),
-                      actionFunction: model.getNewArrival,
-                    ),
-                  )
-                      : ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: model.newArrivalList.length,
-                    padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
-                    separatorBuilder: (context, index) =>
-                        UiSpacer.horizontalSpace(space: 0),
-                    itemBuilder: (context, index) {
-                      return NewArrivalListViewItem(
-                         product: model.newArrivalList[index],
-                      );
-                    },
-                  ),
-
-                )
-            ),
-           /* SliverToBoxAdapter(
+          )),
+          /* SliverToBoxAdapter(
               child:UiSpacer.verticalSpace(space: 24),
             ),
             SliverToBoxAdapter(
@@ -279,7 +293,7 @@ class _MainHomePageState extends State<MainHomePage>
             SliverToBoxAdapter(
               child:UiSpacer.verticalSpace(space: 18),
             ),*/
-            /*SliverToBoxAdapter(
+          /*SliverToBoxAdapter(
               child:
               Container(
                   alignment: Alignment.center,
@@ -294,7 +308,7 @@ class _MainHomePageState extends State<MainHomePage>
                     textDirection: AppTextDirection.defaultDirection,
                   )),
             ),*/
-            /*SliverToBoxAdapter(
+          /*SliverToBoxAdapter(
               child:
               Container(
                   width: (AppSizes.getScreenWidth(context))-46,
@@ -310,110 +324,105 @@ class _MainHomePageState extends State<MainHomePage>
                       borderRadius: BorderRadius.circular(10)
                   )
             )),*/
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 24),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 18),
-            ),
-            SliverToBoxAdapter(
-              child:
-              Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(bottom: 12),
-                  child:Text(
-                    'Shop by Collections',
-                    style: AppTextStyle.h4TitleTextStyle(
-                        color: AppColor.accentColor,
-                        fontWeight: FontWeight.w600
-                    ),
-                    textAlign: TextAlign.start,
-                    textDirection: AppTextDirection.defaultDirection,
-                  )
-              ),
-            ),
-            SliverToBoxAdapter(
-                child: Container(
-                  width: double.infinity,
-                  height:245,
-                  child: model.collectionLoadingState == LoadingState.Loading
-                  //the loadinng shimmer
-                      ? Padding(
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 24),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.divider(
+                thickness: 10, color: AppColor.newDividerColor),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 18),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 12),
+                child: Text(
+                  'Shop by Collections',
+                  style: AppTextStyle.h4TitleTextStyle(
+                      color: AppColor.accentColor, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.start,
+                  textDirection: AppTextDirection.defaultDirection,
+                )),
+          ),
+          SliverToBoxAdapter(
+              child: Container(
+            width: double.infinity,
+            height: 245,
+            child: model.collectionLoadingState == LoadingState.Loading
+                //the loadinng shimmer
+                ? Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: AppPaddings.contentPaddingSize,
                     ),
                     child: VendorShimmerListViewItem(),
                   )
-                  // the faild view
-                      : model.collectionLoadingState == LoadingState.Failed
-                      ? LoadingStateDataView(
-                    stateDataModel: StateDataModel(
-                      showActionButton: true,
-                      actionButtonStyle: AppTextStyle.h4TitleTextStyle(
-                        color: Colors.red,
+                // the faild view
+                : model.collectionLoadingState == LoadingState.Failed
+                    ? LoadingStateDataView(
+                        stateDataModel: StateDataModel(
+                          showActionButton: true,
+                          actionButtonStyle: AppTextStyle.h4TitleTextStyle(
+                            color: Colors.red,
+                          ),
+                          actionFunction: model.getCategories,
+                        ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: model.collections.length,
+                        padding: EdgeInsets.only(
+                            left: AppPaddings.contentPaddingSize,
+                            right: AppPaddings.contentPaddingSize),
+                        separatorBuilder: (context, index) =>
+                            UiSpacer.horizontalSpace(space: 0),
+                        itemBuilder: (context, index) {
+                          return ShopByCollectionListViewItem(
+                            collection: model.collections[index],
+                          );
+                        },
                       ),
-                      actionFunction: model.getCategories,
-                    ),
-                  )
-                      : ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: model.collections.length,
-                    padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
-                    separatorBuilder: (context, index) =>
-                        UiSpacer.horizontalSpace(space: 0),
-                    itemBuilder: (context, index) {
-                      return ShopByCollectionListViewItem(
-                        collection: model.collections[index],
-                      );
-                    },
-                  ),
-
-                )
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 24),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 18),
-            ),
-            SliverToBoxAdapter(
-              child:
-              Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(bottom: 12),
-                  child:Text(
-                    'We are on SOCIAL',
-                    style: AppTextStyle.h4TitleTextStyle(
-                        color: AppColor.accentColor,
-                        fontWeight: FontWeight.w600
-                    ),
-                    textAlign: TextAlign.start,
-                    textDirection: AppTextDirection.defaultDirection,
-                  )),
-            ),
-            SliverToBoxAdapter(
-              child:Padding(
-                padding: EdgeInsets.only(left: 20,right: 20),
-              child:SocialViews()
-              ),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 24),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 18),
-            ),
-           /* SliverToBoxAdapter(
+          )),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 24),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.divider(
+                thickness: 10, color: AppColor.newDividerColor),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 18),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 12),
+                child: Text(
+                  'We are on SOCIAL',
+                  style: AppTextStyle.h4TitleTextStyle(
+                      color: AppColor.accentColor, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.start,
+                  textDirection: AppTextDirection.defaultDirection,
+                )),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: SocialViews()),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 24),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.divider(
+                thickness: 10, color: AppColor.newDividerColor),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 18),
+          ),
+          /* SliverToBoxAdapter(
               child:
               Container(
                   alignment: Alignment.center,
@@ -428,87 +437,86 @@ class _MainHomePageState extends State<MainHomePage>
                     textDirection: AppTextDirection.defaultDirection,
                   )),
             ),*/
-            SliverToBoxAdapter(
-              child:Container(
-                   height: 67,
-                  padding: EdgeInsets.only(left: 20,right: 20),
-                  child: HallMarkLogo()
-              ),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 24),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.divider(thickness: 10,color: AppColor.newDividerColor),
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 18),
-            ),
+          SliverToBoxAdapter(
+            child: Container(
+                height: 67,
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: HallMarkLogo()),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 24),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.divider(
+                thickness: 10, color: AppColor.newDividerColor),
+          ),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 18),
+          ),
 
-            SliverToBoxAdapter(
-              child:
-              Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(bottom: 12),
-                  child:Text(
-                    'OM on your Phone LIVE',
-                    style: AppTextStyle.h4TitleTextStyle(
-                        color: AppColor.accentColor,
-                        fontWeight: FontWeight.w600
-                    ),
-                    textAlign: TextAlign.start,
-                    textDirection: AppTextDirection.defaultDirection,
-                  )),
-            ),
-            SliverToBoxAdapter(
-                child: Container(
-                  width: double.infinity,
-                  height:280,
-                  child: model.omLiveLoadingState == LoadingState.Loading
-                  //the loadinng shimmer
-                      ? Padding(
+          SliverToBoxAdapter(
+            child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 12),
+                child: Text(
+                  'OM on your Phone LIVE',
+                  style: AppTextStyle.h4TitleTextStyle(
+                      color: AppColor.accentColor, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.start,
+                  textDirection: AppTextDirection.defaultDirection,
+                )),
+          ),
+          SliverToBoxAdapter(
+              child: Container(
+            width: double.infinity,
+            height: 280,
+            child: model.omLiveLoadingState == LoadingState.Loading
+                //the loadinng shimmer
+                ? Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: AppPaddings.contentPaddingSize,
                     ),
                     child: VendorShimmerListViewItem(),
                   )
-                  // the faild view
-                      : model.omLiveLoadingState == LoadingState.Failed
-                      ? LoadingStateDataView(
-                    stateDataModel: StateDataModel(
-                      showActionButton: true,
-                      actionButtonStyle: AppTextStyle.h4TitleTextStyle(
-                        color: Colors.red,
+                // the faild view
+                : model.omLiveLoadingState == LoadingState.Failed
+                    ? LoadingStateDataView(
+                        stateDataModel: StateDataModel(
+                          showActionButton: true,
+                          actionButtonStyle: AppTextStyle.h4TitleTextStyle(
+                            color: Colors.red,
+                          ),
+                          actionFunction: model.getCategories,
+                        ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: model.OMLiveList.length,
+                        padding: EdgeInsets.only(
+                            left: AppPaddings.contentPaddingSize,
+                            right: AppPaddings.contentPaddingSize),
+                        separatorBuilder: (context, index) =>
+                            UiSpacer.horizontalSpace(space: 0),
+                        itemBuilder: (context, index) {
+                          var videoUrl = Api.ProductdownloadUrlPath +
+                              model.OMLiveList[index].videoUrl;
+                          return OMLiveListItems(
+                            videoPlayerController:
+                                VideoPlayerController.network(videoUrl),
+                            autoplay: false,
+                            looping: false,
+                            title: model.OMLiveList[index].title,
+                          );
+                        },
                       ),
-                      actionFunction: model.getCategories,
-                    ),
-                  )
-                      : ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: model.OMLiveList.length,
-                    padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize,right: AppPaddings.contentPaddingSize),
-                    separatorBuilder: (context, index) =>
-                        UiSpacer.horizontalSpace(space: 0),
-                    itemBuilder: (context, index) {
-                      var videoUrl=Api.ProductdownloadUrlPath+model.OMLiveList[index].videoUrl;
-                      return OMLiveListItems(
-                        videoPlayerController: VideoPlayerController.network(videoUrl),
-                        autoplay: false,
-                        looping: false,
-                        title: model.OMLiveList[index].title,
-                      );
-                    },
-                  ),
-
-                )
-            ),
-            SliverToBoxAdapter(
-              child:UiSpacer.verticalSpace(space: 20),
-            ),
-         ]),
-            //
-         // ],
+          )),
+          SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(space: 20),
+          ),
+        ]),
+        //
+        // ],
       ),
     );
   }
@@ -530,10 +538,10 @@ class _MainHomePageState extends State<MainHomePage>
     );
   }
 
-   void callBanner() async {
-     Navigator.pushNamed(
-       context,
-       AppRoutes.categoryVendorsRoute,
-     );
+  void callBanner() async {
+    Navigator.pushNamed(
+      context,
+      AppRoutes.categoryVendorsRoute,
+    );
   }
 }

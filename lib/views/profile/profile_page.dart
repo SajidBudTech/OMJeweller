@@ -52,11 +52,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final dob = AuthBloc.getUserDOB();
     if (dob != "") {
-      _datetimeDOB = DateTime.parse(dob);
+      _datetimeDOB = DateFormat('yyyy-MM-dd').parse(dob);
     }
     final anniver = AuthBloc.getUserAnniversary();
     if (anniver != "") {
-      _datetimeAnniversary = DateTime.parse(anniver);
+      _datetimeAnniversary = DateFormat('yyyy-MM-dd').parse(anniver);
     }
     final geneder = AuthBloc.getUserGender();
     if (geneder != "") {
@@ -139,8 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     bottom: 0,
                     labelText: "Phone Number",
                     labelTextStyle: AppTextStyle.h5TitleTextStyle(
-                      color: AppColor.textColor(context)
-                    ),
+                        color: AppColor.textColor(context)),
                     isReadOnly: false,
                     keyboardType: TextInputType.phone,
                     textStyle: AppTextStyle.h4TitleTextStyle(
@@ -165,8 +164,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       bottom: 0,
                       labelText: "Name",
                       labelTextStyle: AppTextStyle.h5TitleTextStyle(
-                          color: AppColor.textColor(context)
-                      ),
+                          color: AppColor.textColor(context)),
                       keyboardType: TextInputType.name,
                       textStyle: AppTextStyle.h4TitleTextStyle(
                           color: AppColor.textColor(context)),
@@ -292,8 +290,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       bottom: 0,
                       labelText: "Email",
                       labelTextStyle: AppTextStyle.h5TitleTextStyle(
-                          color: AppColor.textColor(context)
-                      ),
+                          color: AppColor.textColor(context)),
                       keyboardType: TextInputType.emailAddress,
                       textStyle: AppTextStyle.h4TitleTextStyle(
                           color: AppColor.textColor(context)),
@@ -417,8 +414,24 @@ class _ProfilePageState extends State<ProfilePage> {
     return InkWell(
         onTap: () => showDatePicker(
                     context: context,
-                    initialDate:
-                        _datetimeDOB == null ? DateTime.now() : _datetimeDOB,
+            builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: AppColor.accentColor, // header background color
+                    onPrimary: Colors.white, // header text color
+                    onSurface: Colors.black, // body text color
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      primary: AppColor.accentColor, // button text color
+                    ),
+                  ),
+                ),
+                child: child,
+              );
+            },
+                    initialDate: _datetimeDOB == null ? DateTime.now() : _datetimeDOB,
                     firstDate: DateTime(1901, 01, 01),
                     lastDate: DateTime.now())
                 .then((date) {
@@ -455,10 +468,27 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     onPressed: () => showDatePicker(
                             context: context,
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  colorScheme: ColorScheme.light(
+                                    primary: AppColor.accentColor, // header background color
+                                    onPrimary: Colors.white, // header text color
+                                    onSurface: Colors.black, // body text color
+                                  ),
+                                  textButtonTheme: TextButtonThemeData(
+                                    style: TextButton.styleFrom(
+                                      primary: AppColor.accentColor, // button text color
+                                    ),
+                                  ),
+                                ),
+                                child: child,
+                              );
+                            },
                             initialDate: _datetimeDOB == null
                                 ? DateTime.now()
                                 : _datetimeDOB,
-                            firstDate: DateTime(1901,01,01),
+                            firstDate: DateTime(1901, 01, 01),
                             lastDate: DateTime.now())
                         .then((date) {
                       if (date != null) {
@@ -481,10 +511,27 @@ class _ProfilePageState extends State<ProfilePage> {
     return InkWell(
         onTap: () => showDatePicker(
                     context: context,
+            builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: AppColor.accentColor, // header background color
+                    onPrimary: Colors.white, // header text color
+                    onSurface: Colors.black, // body text color
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      primary: AppColor.accentColor, // button text color
+                    ),
+                  ),
+                ),
+                child: child,
+              );
+            },
                     initialDate: _datetimeAnniversary == null
                         ? DateTime.now()
                         : _datetimeAnniversary,
-                    firstDate: DateTime(1921,01,01),
+                    firstDate: DateTime(1921, 01, 01),
                     lastDate: DateTime.now())
                 .then((date) {
               if (date != null) {
@@ -521,10 +568,27 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     onPressed: () => showDatePicker(
                             context: context,
+                        builder: (context, child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: ColorScheme.light(
+                                primary: AppColor.accentColor, // header background color
+                                onPrimary: Colors.white, // header text color
+                                onSurface: Colors.black, // body text color
+                              ),
+                              textButtonTheme: TextButtonThemeData(
+                                style: TextButton.styleFrom(
+                                  primary: AppColor.accentColor, // button text color
+                                ),
+                              ),
+                            ),
+                            child: child,
+                          );
+                        },
                             initialDate: _datetimeAnniversary == null
                                 ? DateTime.now()
                                 : _datetimeAnniversary,
-                            firstDate: DateTime(1921,01,01),
+                            firstDate: DateTime(1921, 01, 01),
                             lastDate: DateTime.now())
                         .then((date) {
                       if (date != null) {

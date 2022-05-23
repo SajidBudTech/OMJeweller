@@ -45,11 +45,11 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
     _profileBloc.initBloc();
     final dob=AuthBloc.getUserDOB();
     if(dob!=""){
-      _datetimeDOB=DateTime.parse(dob);
+      _datetimeDOB=DateFormat('yyyy-MM-dd').parse(dob);
     }
     final anniver=AuthBloc.getUserAnniversary();
     if(anniver!=""){
-      _datetimeAnniversary=DateTime.parse(anniver);
+      _datetimeAnniversary=DateFormat('yyyy-MM-dd').parse(anniver);
     }
     final geneder=AuthBloc.getUserGender();
     if(geneder!=""){
@@ -442,6 +442,23 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
     return InkWell(
         onTap: () => showDatePicker(
             context: context,
+            builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: AppColor.accentColor, // header background color
+                    onPrimary: Colors.white, // header text color
+                    onSurface: Colors.black, // body text color
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      primary: AppColor.accentColor, // button text color
+                    ),
+                  ),
+                ),
+                child: child,
+              );
+            },
             initialDate:
             _datetimeDOB == null ? DateTime.now() : _datetimeDOB,
             firstDate: DateTime(1901, 01, 01),
@@ -480,6 +497,23 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                     ),
                     onPressed: () => showDatePicker(
                         context: context,
+                        builder: (context, child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: ColorScheme.light(
+                                primary: AppColor.accentColor, // header background color
+                                onPrimary: Colors.white, // header text color
+                                onSurface: Colors.black, // body text color
+                              ),
+                              textButtonTheme: TextButtonThemeData(
+                                style: TextButton.styleFrom(
+                                  primary: AppColor.accentColor, // button text color
+                                ),
+                              ),
+                            ),
+                            child: child,
+                          );
+                        },
                         initialDate: _datetimeDOB == null
                             ? DateTime.now()
                             : _datetimeDOB,
@@ -507,6 +541,23 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
     return InkWell(
         onTap: () => showDatePicker(
             context: context,
+            builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: AppColor.accentColor, // header background color
+                    onPrimary: Colors.white, // header text color
+                    onSurface: Colors.black, // body text color
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      primary: AppColor.accentColor, // button text color
+                    ),
+                  ),
+                ),
+                child: child,
+              );
+            },
             initialDate: _datetimeAnniversary == null
                 ? DateTime.now()
                 : _datetimeAnniversary,
@@ -547,6 +598,23 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                     ),
                     onPressed: () => showDatePicker(
                         context: context,
+                        builder: (context, child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: ColorScheme.light(
+                                primary: AppColor.accentColor, // header background color
+                                onPrimary: Colors.white, // header text color
+                                onSurface: Colors.black, // body text color
+                              ),
+                              textButtonTheme: TextButtonThemeData(
+                                style: TextButton.styleFrom(
+                                  primary: AppColor.accentColor, // button text color
+                                ),
+                              ),
+                            ),
+                            child: child,
+                          );
+                        },
                         initialDate: _datetimeAnniversary == null
                             ? DateTime.now()
                             : _datetimeAnniversary,

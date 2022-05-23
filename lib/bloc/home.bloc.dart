@@ -34,7 +34,7 @@ class HomeBloc extends BaseBloc {
     }
 
     if(!currentPageIndex.isClosed)
-    currentPageIndex.add(0);
+     currentPageIndex.add(0);
    // notifyListeners();
 
   }

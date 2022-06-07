@@ -67,7 +67,7 @@ class _CardGoldRateState extends State<CardGoldRate> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Current Rate',
+                'Current Gold Rate',
                 style: AppTextStyle.h3TitleTextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600
@@ -94,31 +94,34 @@ class _CardGoldRateState extends State<CardGoldRate> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Expanded(
+                   Expanded(
                     flex: 1,
-                      child:Column(
+                      child:Padding(padding: EdgeInsets.only(left: 10,right: 10),
+                          child:Column(
+                       crossAxisAlignment: CrossAxisAlignment.center,
                        children: [
                          Text(
-                           '18 Karat',
-                           style: AppTextStyle.h5TitleTextStyle(
+                           'For 1 Gram of 22KT BIS HALLMARKED JEWELLERY',
+                           style: AppTextStyle.h6TitleTextStyle(
                              color: Colors.white,
                              fontWeight: FontWeight.w400
                            ),
-                           textAlign: TextAlign.start,
+                           textAlign: TextAlign.center,
                            textDirection: AppTextDirection.defaultDirection,
                          ),
                          Text(
-                           'Rs.'+(model.karate18Price??""),
+                           'Rs.'+(model.karate22Price??""),
                            style: AppTextStyle.h16TitleTextStyle(
                              color: Colors.white,
                            ),
-                           textAlign: TextAlign.start,
+                           textAlign: TextAlign.center,
                            textDirection: AppTextDirection.defaultDirection,
                          ),
                        ],
 
                       )
-                  ),
+                  )),
+                  SizedBox(width: 8,),
                   Padding(padding: EdgeInsets.only(top: 8),
                   child:DottedLine(
                     direction: Axis.vertical,
@@ -129,30 +132,32 @@ class _CardGoldRateState extends State<CardGoldRate> {
                     dashGapLength: 3.0,
                     dashGapColor: Colors.transparent,
                   )),
+                  SizedBox(width: 8,),
                   Expanded(
                       flex: 1,
-                      child:Column(
+                      child:Padding(padding: EdgeInsets.only(left: 10,right: 10),child:Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            '22 Karat',
-                            style: AppTextStyle.h5TitleTextStyle(
+                            'For 1 Gram of 18KT BIS HALLMARKED JEWELLERY',
+                            style: AppTextStyle.h6TitleTextStyle(
                               color: Colors.white,
                                 fontWeight: FontWeight.w400
                             ),
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.center,
                             textDirection: AppTextDirection.defaultDirection,
                           ),
                           Text(
-                            'Rs.'+(model.karate22Price??""),
+                            'Rs.'+(model.karate18Price??""),
                             style: AppTextStyle.h16TitleTextStyle(
                               color: Colors.white,
                             ),
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.center,
                             textDirection: AppTextDirection.defaultDirection,
                           ),
                         ],
                       )
-                  )
+                  ))
 
                 ],
               ),

@@ -25,6 +25,7 @@ import 'package:flutter_om_jeweller/widgets/listItem/shop_by_product_listitem.da
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_om_jeweller/views/home/hallmark_logo.dart';
 import 'package:flutter_om_jeweller/data/models/category.dart';
@@ -412,6 +413,33 @@ class _MainHomePageState extends State<MainHomePage>
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: SocialViews()),
           ),
+          /*SliverToBoxAdapter(
+            child: UiSpacer.verticalSpace(),
+          ),
+          SliverToBoxAdapter(
+            child: InkWell(
+              onTap: ()async{
+                String url = 'https://www.facebook.com/groups/omjewellers';
+                // if (await canLaunch(url)) {
+                await launch(url);
+                //}
+              },
+              child:Container(
+              margin: EdgeInsets.only(left: 40,right: 40),
+              padding: EdgeInsets.only(top: 10,bottom: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),color: Color(0xffd6ddff)
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/face_group.png",width: 42,height: 42,),
+                  SizedBox(width: 20,),
+                  Text("Join Our FB Community",style: AppTextStyle.h3TitleTextStyle(),)
+                ],
+              ),
+            ),
+          )),*/
           SliverToBoxAdapter(
             child: UiSpacer.verticalSpace(space: 24),
           ),

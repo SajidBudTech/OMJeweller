@@ -109,8 +109,7 @@ class _WishlistPageState extends State<WishlistPage> {
                                           (context, index) {
                                         return AnimatedProdcutListViewItem(
                                           index: index,
-                                          product: model
-                                              .productbyWishList[index],
+                                          product: model.productbyWishList[index],
                                           listViewItem:
                                           WishlistListViewItem(
                                             product: model.productbyWishList[index],

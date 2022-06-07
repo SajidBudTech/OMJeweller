@@ -10,6 +10,7 @@ import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/constants/string/app.string.dart';
 import 'package:flutter_om_jeweller/data/models/product.dart';
+import 'package:flutter_om_jeweller/data/models/product_arguments.dart';
 import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/data/models/wishlist_data.dart';
 import 'package:flutter_om_jeweller/widgets/storelocationlist/store_location_content.dart';
@@ -91,7 +92,19 @@ class _WishlistListViewItemState extends State<WishlistListViewItem> {
         child: RaisedButton(
           padding: EdgeInsets.all(0),
           onPressed: () {
+            widget.product.platinumRate=widget.platinumRate;
+            Navigator.pushNamed(
+              context,
+              AppRoutes.productDetailRoute,
+              arguments: ProductArguments(
+                  product: widget.product,
+                  status: true
+              ),
+            ).then((value) {
+              setState(() {
 
+              });
+            });
           },
           // elevation: 3,
           // shape: StadiumBorder(),

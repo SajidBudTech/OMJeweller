@@ -139,9 +139,9 @@ class AppDrawer extends StatelessWidget {
 
   void launchGoogleReview() async {
     String url = 'https://www.google.com/search?q=om+jewellers+mumbai&rlz=1C1CHBD_enIN839IN839&oq=om+jewellers+&aqs=chrome.1.69i57j0l3j46i175i199j69i60l3.3839j0j7&sourceid=chrome&ie=UTF-8#lrd=0x3be7b0e709dc5933:0x9666f484e431ffac,3,,,';
-    if (await canLaunch(url)) {
+   // if (await canLaunch(url)) {
       await launch(url);
-    }
+    //}
   }
 
   void _processLogout(BuildContext context) async {

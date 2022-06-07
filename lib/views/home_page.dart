@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
 
   launchWhatsapp() async {
     const url =
-        "https://wa.me/${AppStrings.defaultWhatsappNumber}?text=Welcome to OM Jewellers, How can we assist you?";
+        "https://wa.me/${AppStrings.defaultWhatsappNumber}?text=Hi there, I need help for a query!";
     var encoded = Uri.encodeFull(url);
     await launch(encoded);
     /*if (await canLaunch(encoded)) {

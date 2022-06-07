@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_om_jeweller/bloc/home.bloc.dart';
 import 'package:flutter_om_jeweller/bloc/login.bloc.dart';
 import 'package:flutter_om_jeweller/bloc/product_search.bloc.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_om_jeweller/constants/app_text_direction.dart';
 import 'package:flutter_om_jeweller/constants/app_text_styles.dart';
 import 'package:flutter_om_jeweller/constants/string/auth.string.dart';
 import 'package:flutter_om_jeweller/constants/string/search.strings.dart';
+import 'package:flutter_om_jeweller/data/models/dialog_data.dart';
 import 'package:flutter_om_jeweller/data/models/loading_state.dart';
 import 'package:flutter_om_jeweller/data/models/state_data_model.dart';
 import 'package:flutter_om_jeweller/data/viewmodels/main_home_viewmodel.dart';
@@ -82,6 +84,12 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: AppColor.accentColor,
           icon: FlutterIcons.profile_ant,
         );
+
+        if(_profileBloc.dialogData.dialogType==DialogType.success){
+          Future.delayed(Duration(milliseconds: 2000),(){
+            HomeBloc.currentPageIndex.add(0);
+          });
+        }
       },
     );
   }
@@ -175,6 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
               )),
               SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
+              SliverToBoxAdapter(child: Visibility(visible: SELECTED_GENDER != "",child:Text("Gender",style: AppTextStyle.h4TitleTextStyle(color: AppColor.hintTextColor(context)),))),
               SliverToBoxAdapter(
                   child: Column(children: [
                 Container(
@@ -301,6 +310,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
               )),
               SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(child: Visibility(visible: _datetimeDOB!=null,child:Text("DOB",style: AppTextStyle.h4TitleTextStyle(color:AppColor.hintTextColor(context)),))),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(child: Visibility(visible: _datetimeAnniversary!=null,child:Text("Date of Anniversary",style: AppTextStyle.h4TitleTextStyle(color:AppColor.hintTextColor(context)),)))
+                  ],
+                ),
+              ),
               SliverToBoxAdapter(
                 child: Row(
                   mainAxisSize: MainAxisSize.max,

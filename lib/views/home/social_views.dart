@@ -19,7 +19,9 @@ class SocialViews extends StatelessWidget {
   SocialViews({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      children: [
+      Row(
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -30,41 +32,17 @@ class SocialViews extends StatelessWidget {
                 luanchFacebook();
               },
               child:Container(
-                padding: EdgeInsets.only(),
-                margin: EdgeInsets.only(right: 8),
-                decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
-                child:SvgPicture.asset(
-                  'assets/images/face_svg.svg',
-                )),
-
-              /*  Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      "assets/images/face_icon.png",
-                      fit: BoxFit.fitHeight,
-                      height: 24,
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(left: 8),
-                        child: Text(
-                          'Facebook',
-                          style: AppTextStyle.h4TitleTextStyle(
-                              color: Color(0xFF475993),
-                              fontWeight: FontWeight.w400),
-                          textAlign: TextAlign.center,
-                          textDirection: AppTextDirection.defaultDirection,
-                        ))
-                  ],
-                )*/
-
+                  padding: EdgeInsets.only(),
+                  margin: EdgeInsets.only(right: 8),
+                  //decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
+                  child:SvgPicture.asset(
+                    'assets/images/face_svg.svg',
+                     height: 44,
+                     width: double.infinity,
+                    fit: BoxFit.fill,
+                  )),
 
             )),
-        /*  Container(
-          color: AppColor.primaryColorDark,
-          height: 65,
-          width: 2,
-        ),*/
         Expanded(
             flex: 1,
             child: InkWell(
@@ -72,85 +50,81 @@ class SocialViews extends StatelessWidget {
                 luanchInstagram();
               },
               child:Container(
-                padding: EdgeInsets.only(),
-                margin: EdgeInsets.only(left: 1),
-                decoration: BoxDecoration(color: Color(0xFFFFEEFA)),
-                child: Image.asset(
-                        'assets/images/insta_png.png',
-                         height: 44,
-                        )
+                  padding: EdgeInsets.only(),
+                  margin: EdgeInsets.only(left: 1),
+                  //decoration: BoxDecoration(color: Color(0xFFFFEEFA)),
+                  child: Image.asset(
+                    'assets/images/insta_png.png',
+                    height: 44,
+                    width: double.infinity,
+                    fit: BoxFit.fill,
+                  )
               ),
 
-               /* Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      "assets/images/insta_icon.png",
-                      fit: BoxFit.fitHeight,
-                      height: 24,
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(left: 8),
-                        child: Text(
-                          'Instagram',
-                          style: AppTextStyle.h4TitleTextStyle(
-                              color: Color(0xFFC74950),
-                              fontWeight: FontWeight.w400),
-                          textAlign: TextAlign.center,
-                          textDirection: AppTextDirection.defaultDirection,
-                        ))
-                  ],
-                )*/
-
             )),
-        /*Container(
-          color: AppColor.primaryColorDark,
-          height: 65,
-          width: 2,
-        ),*/
-        Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: (){
-                luanchPinrest();
-              },
-            child:Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(),
-                margin: EdgeInsets.only(left: 8),
-                decoration: BoxDecoration(color: Color(0xFFFFF2EE)),
-                child:SvgPicture.asset(
-                  'assets/images/p_svg.svg',
-                ))
+      ],
+       ),
+        UiSpacer.verticalSpace(space: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: (){
+                    luanchFacebookGroup();
+                  },
+                  child:Container(
+                      padding: EdgeInsets.only(),
+                      margin: EdgeInsets.only(right: 8),
+                      //decoration: BoxDecoration(color: Color(0xFFEEF2FF)),
+                      child:SvgPicture.asset(
+                        'assets/images/face_group.svg',
+                        height: 44,
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                      )),
 
-/*                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      "assets/images/p_icon.png",
-                      fit: BoxFit.fitHeight,
-                      height: 24,
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(left: 8),
-                        child: Text(
-                          'Pintrest',
-                          style: AppTextStyle.h4TitleTextStyle(
-                              color: Color(0xFFCB2027),
-                              fontWeight: FontWeight.w400),
-                          textAlign: TextAlign.center,
-                          textDirection: AppTextDirection.defaultDirection,
-                        ))
-                  ],
-                )*/
+                )),
+            Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: (){
+                    luanchGoogleReview();
+                  },
+                  child:Container(
+                      padding: EdgeInsets.only(),
+                      margin: EdgeInsets.only(left: 1),
+                      //decoration: BoxDecoration(color: Color(0xFFFFEEFA)),
+                      child: Image.asset(
+                        'assets/images/google_re.png',
+                        height: 44,
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                      )
+                  ),
 
-            )),
+                )),
+          ],
+        ),
       ],
     );
   }
 
   void luanchFacebook() async{
     const url = 'https://www.facebook.com/OmJewellersIndia/';
+    var encoded = Uri.encodeFull(url);
+    await launch(encoded);
+    /*if (await canLaunch(encoded)) {
+        await launch(encoded);
+    } else {
+      throw 'Could not launch $url';
+    }*/
+  }
+
+  void luanchFacebookGroup() async{
+    const url = 'https://www.facebook.com/groups/omjewellers';
     var encoded = Uri.encodeFull(url);
     await launch(encoded);
     /*if (await canLaunch(encoded)) {
@@ -171,8 +145,8 @@ class SocialViews extends StatelessWidget {
     }*/
   }
 
-  void luanchPinrest() async{
-    const url = 'https://in.pinterest.com/om_jewellers/';
+  void luanchGoogleReview() async{
+    const url = 'https://www.google.com/search?q=om+jewellers+mumbai&rlz=1C1CHBD_enIN839IN839&oq=om+jewellers+&aqs=chrome.1.69i57j0l3j46i175i199j69i60l3.3839j0j7&sourceid=chrome&ie=UTF-8#lrd=0x3be7b0e709dc5933:0x9666f484e431ffac,3,,,';
     var encoded = Uri.encodeFull(url);
     await launch(encoded);
    /* if (await canLaunch(encoded)) {

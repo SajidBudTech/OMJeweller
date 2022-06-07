@@ -2,8 +2,7 @@ class SearchStrings {
   static const String title = "Search";
   static const String result = "Result";
   static const String emptyTitle = "Oops! No Search Result Found";
-  static const String emptyBody =
-      "Please try again with another filter or keyword";
+  static const String emptyBody = "No matching products available.";
 
   static const String emptyProductTitle = "Oops! No Search Result Found";
 

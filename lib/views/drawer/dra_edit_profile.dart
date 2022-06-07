@@ -191,8 +191,8 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                                           );
                                         },
                                       )),
-                                  SliverToBoxAdapter(child: UiSpacer
-                                      .verticalSpace()),
+                                  SliverToBoxAdapter(child: UiSpacer.verticalSpace()),
+                                  SliverToBoxAdapter(child: Visibility(visible: SELECTED_GENDER != "",child:Text("Gender",style: AppTextStyle.h4TitleTextStyle(color: AppColor.hintTextColor(context)),))),
                                   SliverToBoxAdapter(
                                       child: Column(
                                           children: [
@@ -361,6 +361,18 @@ class _DrawerEditProfilePageState extends State<DrawerEditProfilePage> {
                                       )),
                                   SliverToBoxAdapter(child: UiSpacer
                                       .verticalSpace()),
+                                  SliverToBoxAdapter(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(child: Visibility(visible: _datetimeDOB!=null,child:Text("DOB",style: AppTextStyle.h4TitleTextStyle(color:AppColor.hintTextColor(context)),))),
+                                        SizedBox(
+                                          width: 16,
+                                        ),
+                                        Expanded(child: Visibility(visible: _datetimeAnniversary!=null,child:Text("Date of Anniversary",style: AppTextStyle.h4TitleTextStyle(color:AppColor.hintTextColor(context)),)))
+                                      ],
+                                    ),
+                                  ),
 
                                   SliverToBoxAdapter(
                                     child: Row(

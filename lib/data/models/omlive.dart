@@ -2,6 +2,7 @@ class OMLive{
   int videoID;
   String title;
   String videoUrl;
+  String videoWebUrl;
   String createdAt;
   String updatedAt;
 
@@ -16,6 +17,7 @@ class OMLive{
     videoID = json['videoID'];
     title = json['title'];
     videoUrl = json['video_url'];
+    videoWebUrl = json['video_web_url'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -25,6 +27,7 @@ class OMLive{
     data['videoID'] = this.videoID;
     data['title'] = this.title;
     data['video_url'] = this.videoUrl;
+    data['video_web_url'] = this.videoWebUrl;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;

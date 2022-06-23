@@ -18,6 +18,7 @@ import 'package:flutter_om_jeweller/widgets/banner_slider.dart';
 import 'package:flutter_om_jeweller/widgets/custome_drawer.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/new_arrival_listitem.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/om_live_listitem.dart';
+import 'package:flutter_om_jeweller/widgets/listItem/omlive_list_item_youtube.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/shop_by_categories_listitem.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/shop_by_collection_bottom_listitem.dart';
 import 'package:flutter_om_jeweller/widgets/listItem/shop_by_collections_listitem.dart';
@@ -26,7 +27,6 @@ import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_it
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
 import 'package:flutter_om_jeweller/views/home/hallmark_logo.dart';
 import 'package:flutter_om_jeweller/data/models/category.dart';
 import 'package:flutter_om_jeweller/data/models/subcategory.dart';
@@ -521,20 +521,16 @@ class _MainHomePageState extends State<MainHomePage>
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemCount: model.OMLiveList.length,
-                        padding: EdgeInsets.only(
-                            left: AppPaddings.contentPaddingSize,
-                            right: AppPaddings.contentPaddingSize),
-                        separatorBuilder: (context, index) =>
-                            UiSpacer.horizontalSpace(space: 0),
+                        padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize, right: AppPaddings.contentPaddingSize),
+                        separatorBuilder: (context, index) => UiSpacer.horizontalSpace(space: 0),
                         itemBuilder: (context, index) {
-                          var videoUrl = Api.ProductdownloadUrlPath +
-                              model.OMLiveList[index].videoUrl;
-                          return OMLiveListItems(
-                            videoPlayerController:
-                                VideoPlayerController.network(videoUrl),
+                          var videoUrl = Api.ProductdownloadUrlPath + model.OMLiveList[index].videoUrl;
+                          return OMLiveYoutubeListItems(
+                          /*  videoPlayerController: VideoPlayerController.network(videoUrl),
                             autoplay: false,
                             looping: false,
-                            title: model.OMLiveList[index].title,
+                            title: model.OMLiveList[index].title,*/
+                            video: model.OMLiveList[index],
                           );
                         },
                       ),

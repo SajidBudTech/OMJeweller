@@ -90,8 +90,7 @@ class _BannerSliderState extends State<BannerSlider> {
   int _current = 0;
   List<Widget> _getImageSliders(List<AdvertismentBanner> banners) {
     return banners
-        .map(
-          (banner) => Container(
+        .map((banner) => Container(
         child: ClipRRect(
           /*borderRadius: BorderRadius.all(
             Radius.circular(

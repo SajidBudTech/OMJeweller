@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_om_jeweller/constants/app_color.dart';
 import 'package:flutter_om_jeweller/constants/app_paddings.dart';
@@ -14,16 +13,16 @@ import 'package:flutter_om_jeweller/utils/ui_spacer.dart';
 import 'package:flutter_om_jeweller/widgets/shimmers/vendor_shimmer_list_view_item.dart';
 import 'package:flutter_om_jeweller/widgets/state/state_loading_data.dart';
 import 'package:stacked/stacked.dart';
-import 'package:video_player/video_player.dart';
+
 
 class OMLiveListItems extends StatefulWidget {
-  final VideoPlayerController videoPlayerController;
+  //final VideoPlayerController videoPlayerController;
   final bool looping;
   final bool autoplay;
   final String title;
 
   OMLiveListItems(
-      {@required this.videoPlayerController,
+      {
       this.looping,
       this.autoplay,
       this.title,
@@ -35,13 +34,13 @@ class OMLiveListItems extends StatefulWidget {
 }
 
 class _OMLiveListItemsState extends State<OMLiveListItems> {
-  ChewieController _chewieController;
+  //ChewieController _chewieController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _chewieController = ChewieController(
+   /* _chewieController = ChewieController(
       videoPlayerController: widget.videoPlayerController,
       aspectRatio: 16/9,
       autoInitialize: true,
@@ -55,13 +54,13 @@ class _OMLiveListItemsState extends State<OMLiveListItems> {
           ),
         );
       },
-    );
+    );*/
   }
 
   @override
   void dispose() {
     super.dispose();
-    _chewieController.dispose();
+    //_chewieController.dispose();
   }
 
   @override
@@ -107,10 +106,10 @@ class _OMLiveListItemsState extends State<OMLiveListItems> {
                                               topRight: Radius.circular(16))),
                                       child: Padding(
                                           padding: EdgeInsets.only(top: 0, bottom: 0),
-                                          child: Chewie(
+                                          child: Container()/*Chewie(
                                             controller: _chewieController,
                                             key: widget.key,
-                                          )))),
+                                          )*/))),
                         Expanded(
                           flex: 2,
                      child:Container(

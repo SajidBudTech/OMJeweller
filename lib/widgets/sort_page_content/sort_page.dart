@@ -86,7 +86,6 @@ class _SortProductPageState extends State<SortProductPage> {
                       );
                     },
                   ),
-
                 ),
                 UiSpacer.verticalSpace(space: 40)
                 /*StreamBuilder<UiState>(

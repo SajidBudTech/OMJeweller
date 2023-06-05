@@ -135,12 +135,9 @@ class _FilterProductPageState extends State<FilterProductPage> {
                   ],
                 ),
                 UiSpacer.verticalSpace(),
-                UiSpacer.divider(
-                    thickness: 0.3, color: AppColor.hintTextColor(context)),
+                UiSpacer.divider(thickness: 0.3, color: AppColor.hintTextColor(context)),
                 Container(
-                  padding: EdgeInsets.only(
-                      left: AppPaddings.contentPaddingSize,
-                      right: AppPaddings.contentPaddingSize),
+                  padding: EdgeInsets.only(left: AppPaddings.contentPaddingSize, right: AppPaddings.contentPaddingSize),
                   height: 360,
                   child: VerticalTabs(
                     tabsWidth: 150,
